@@ -1,0 +1,242 @@
+[
+  {
+    "id": 89,
+    "count": 67,
+    "description": "",
+    "link": "https://yeshinnorbu.se/calendar/category/buddhism/",
+    "name": "Buddhism",
+    "slug": "buddhism",
+    "taxonomy": "tribe_events_cat",
+    "parent": 0,
+    "meta": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tribe_events_cat/89",
+          "targetHints": {
+            "allow": [
+              "GET"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tribe_events_cat"
+        }
+      ],
+      "about": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/taxonomies/tribe_events_cat"
+        }
+      ],
+      "wp:post_type": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tribe_events?tribe_events_cat=89"
+        },
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tec_calendar_embed?tribe_events_cat=89"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https://api.w.org/{rel}",
+          "templated": true
+        }
+      ]
+    }
+  },
+  {
+    "id": 2190,
+    "count": 16,
+    "description": "",
+    "link": "https://yeshinnorbu.se/calendar/category/featured/",
+    "name": "Featured",
+    "slug": "featured",
+    "taxonomy": "tribe_events_cat",
+    "parent": 0,
+    "meta": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tribe_events_cat/2190",
+          "targetHints": {
+            "allow": [
+              "GET"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tribe_events_cat"
+        }
+      ],
+      "about": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/taxonomies/tribe_events_cat"
+        }
+      ],
+      "wp:post_type": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tribe_events?tribe_events_cat=2190"
+        },
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tec_calendar_embed?tribe_events_cat=2190"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https://api.w.org/{rel}",
+          "templated": true
+        }
+      ]
+    }
+  },
+  {
+    "id": 90,
+    "count": 16,
+    "description": "",
+    "link": "https://yeshinnorbu.se/calendar/category/meditation/",
+    "name": "Meditation",
+    "slug": "meditation",
+    "taxonomy": "tribe_events_cat",
+    "parent": 0,
+    "meta": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tribe_events_cat/90",
+          "targetHints": {
+            "allow": [
+              "GET"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tribe_events_cat"
+        }
+      ],
+      "about": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/taxonomies/tribe_events_cat"
+        }
+      ],
+      "wp:post_type": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tribe_events?tribe_events_cat=90"
+        },
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tec_calendar_embed?tribe_events_cat=90"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https://api.w.org/{rel}",
+          "templated": true
+        }
+      ]
+    }
+  },
+  {
+    "id": 77,
+    "count": 21,
+    "description": "",
+    "link": "https://yeshinnorbu.se/calendar/category/mindfulness/",
+    "name": "Mindfulness",
+    "slug": "mindfulness",
+    "taxonomy": "tribe_events_cat",
+    "parent": 0,
+    "meta": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tribe_events_cat/77",
+          "targetHints": {
+            "allow": [
+              "GET"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tribe_events_cat"
+        }
+      ],
+      "about": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/taxonomies/tribe_events_cat"
+        }
+      ],
+      "wp:post_type": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tribe_events?tribe_events_cat=77"
+        },
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tec_calendar_embed?tribe_events_cat=77"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https://api.w.org/{rel}",
+          "templated": true
+        }
+      ]
+    }
+  },
+  {
+    "id": 78,
+    "count": 6,
+    "description": "",
+    "link": "https://yeshinnorbu.se/calendar/category/yoga/",
+    "name": "Yoga",
+    "slug": "yoga",
+    "taxonomy": "tribe_events_cat",
+    "parent": 0,
+    "meta": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tribe_events_cat/78",
+          "targetHints": {
+            "allow": [
+              "GET"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tribe_events_cat"
+        }
+      ],
+      "about": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/taxonomies/tribe_events_cat"
+        }
+      ],
+      "wp:post_type": [
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tribe_events?tribe_events_cat=78"
+        },
+        {
+          "href": "https://yeshinnorbu.se/wp-json/wp/v2/tec_calendar_embed?tribe_events_cat=78"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https://api.w.org/{rel}",
+          "templated": true
+        }
+      ]
+    }
+  }
+]
