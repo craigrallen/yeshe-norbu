@@ -1,14 +1,15 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 const SALT_ROUNDS = 12;
 
 /**
- * Hash a plaintext password using bcrypt.
+ * Hash a plaintext password using bcryptjs (pure JS, no native deps).
  * @param password - The plaintext password to hash
  * @returns The hashed password string
  */
 export async function hash(password: string): Promise<string> {
-  return bcrypt.hash(password, SALT_ROUNDS);
+  const salt = await bcrypt.genSalt(SALT_ROUNDS);
+  return bcrypt.hash(password, salt);
 }
 
 /**

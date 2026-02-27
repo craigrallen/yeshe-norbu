@@ -14,9 +14,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   transpilePackages: ['@yeshe/ui', '@yeshe/db', '@yeshe/auth', '@yeshe/payments', '@yeshe/email'],
-  experimental: {
-    serverComponentsExternalPackages: ['bcrypt'],
-  },
+
   images: {
     formats: ['image/avif', 'image/webp'],
   },
