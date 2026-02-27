@@ -17,11 +17,15 @@ RUN pnpm install --frozen-lockfile
 
 FROM base AS builder
 WORKDIR /app
+# Install build dependencies for native modules (argon2)
+RUN apk add --no-cache python3 make g++
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/apps/web/node_modules ./apps/web/node_modules
 COPY . .
 # Install again to ensure workspace package symlinks are created
 RUN pnpm install --frozen-lockfile
+# Rebuild all native modules for alpine linux
+RUN pnpm -r rebuild
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm --filter @yeshe/web build
 
