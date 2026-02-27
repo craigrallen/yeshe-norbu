@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #C8A951;
+  --color-primary-light: #E0CB7E;
+  --color-primary-dark: #A08530;
+  --color-secondary: #2D2D2D;
+  --color-accent: #B8763C;
+  --color-surface: #FFFFFF;
+  --color-background: #F9F7F4;
+  --color-text-primary: #1A1A1A;
+  --color-text-muted: #6B6B6B;
+  --color-border: #E5E1DC;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+/* Swedish hyphenation for long compound words */
+[lang="sv"] {
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}

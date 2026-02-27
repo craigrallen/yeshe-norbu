@@ -1,0 +1,109 @@
+{
+  "common": {
+    "siteName": "Yeshe Norbu",
+    "tagline": "Buddhist centre in Stockholm",
+    "login": "Log in",
+    "register": "Register",
+    "logout": "Log out",
+    "myAccount": "My account",
+    "language": "Language",
+    "search": "Search",
+    "readMore": "Read more",
+    "backToHome": "Back to home",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "currency": "kr"
+  },
+  "nav": {
+    "home": "Home",
+    "program": "Program",
+    "courses": "Courses",
+    "donate": "Donate",
+    "membership": "Become a member",
+    "about": "About us",
+    "library": "Library",
+    "venueHire": "Venue hire",
+    "contact": "Contact"
+  },
+  "home": {
+    "heroTitle": "Yeshe Norbu",
+    "heroSubtitle": "Buddhist centre in the heart of Stockholm",
+    "heroDescription": "We offer meditation courses, retreats and teachings in Tibetan Buddhism in a warm and welcoming environment.",
+    "upcomingEvents": "Upcoming events",
+    "viewAll": "View all",
+    "ourMission": "Our mission",
+    "missionText": "Yeshe Norbu is affiliated with FPMT (Foundation for the Preservation of the Mahayana Tradition) and works to make Buddhist wisdom accessible to everyone.",
+    "getInvolved": "Get involved",
+    "supportUs": "Support us"
+  },
+  "events": {
+    "title": "Program",
+    "filterByCategory": "Filter by category",
+    "allCategories": "All categories",
+    "noEvents": "No upcoming events at the moment.",
+    "tickets": "Tickets",
+    "soldOut": "Sold out",
+    "free": "Free",
+    "online": "Online",
+    "register": "Register",
+    "when": "When",
+    "where": "Where",
+    "teacher": "Teacher"
+  },
+  "donate": {
+    "title": "Donate",
+    "description": "Your donation enables us to offer teachings, meditation and a peaceful space in Stockholm.",
+    "oneTime": "One-time donation",
+    "monthly": "Monthly donor",
+    "customAmount": "Other amount",
+    "dedication": "Dedication (optional)",
+    "anonymous": "Donate anonymously",
+    "stripeButton": "Pay by card",
+    "swishButton": "Pay with Swish",
+    "thankYou": "Thank you for your donation!"
+  },
+  "membership": {
+    "title": "Become a member",
+    "description": "Support Yeshe Norbu and gain access to exclusive benefits.",
+    "choosePlan": "Choose membership",
+    "perMonth": "month",
+    "perYear": "year",
+    "signUp": "Sign up",
+    "currentMember": "You are already a member"
+  },
+  "auth": {
+    "loginTitle": "Log in",
+    "registerTitle": "Create account",
+    "email": "Email address",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "loginButton": "Log in",
+    "registerButton": "Create account",
+    "invalidCredentials": "Invalid email or password",
+    "passwordMismatch": "Passwords do not match"
+  },
+  "account": {
+    "title": "My account",
+    "orders": "My orders",
+    "membership": "Membership",
+    "courses": "My courses",
+    "settings": "Settings",
+    "exportData": "Export my data",
+    "deleteAccount": "Delete my account"
+  },
+  "footer": {
+    "address": "Yeshe Norbu, Stockholm",
+    "privacy": "Privacy policy",
+    "cookies": "Cookie policy",
+    "terms": "Terms",
+    "copyright": "© {year} Yeshe Norbu. All rights reserved."
+  }
+}
