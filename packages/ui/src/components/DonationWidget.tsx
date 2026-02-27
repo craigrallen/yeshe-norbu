@@ -1,9 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import { Button } from './Button.js';
-import { Input } from './Input.js';
-import { cn } from '../lib/cn.js';
+import { Button } from './Button';
+import { Input } from './Input';
+import { cn } from '../lib/cn';
 
 const SUGGESTED_AMOUNTS = [100, 250, 500, 1000];
 

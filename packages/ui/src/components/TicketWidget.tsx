@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { Button } from './Button.js';
-import { cn } from '../lib/cn.js';
+import { Button } from './Button';
+import { cn } from '../lib/cn';
 
 export interface TicketType {
   id: string;

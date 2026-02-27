@@ -1,2 +1,2 @@
-export * as stripe from './stripe.js';
-export * as swish from './swish.js';
+export * as stripe from './stripe';
+export * as swish from './swish';

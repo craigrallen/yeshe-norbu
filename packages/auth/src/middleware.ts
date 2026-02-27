@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { verifyToken, type TokenPayload } from './jwt.js';
+import { verifyToken, type TokenPayload } from './jwt';
 
 /**
  * Extract and verify the JWT from the Authorization header or cookie.

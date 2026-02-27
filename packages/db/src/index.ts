@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import * as schema from './schema/index.js';
+import * as schema from './schema/index';
 
 /**
  * Create a database client connected to the given PostgreSQL URL.
@@ -13,4 +13,4 @@ export function createDb(url: string) {
 
 export type Database = ReturnType<typeof createDb>;
 
-export * from './schema/index.js';
+export * from './schema/index';

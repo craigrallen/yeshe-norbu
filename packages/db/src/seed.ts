@@ -1,4 +1,4 @@
-import { createDb, membershipPlans, eventCategories, users, userRoles } from './index.js';
+import { createDb, membershipPlans, eventCategories, users, userRoles } from './index';
 import { hash } from '@yeshe/auth/password';
 
 async function seed() {

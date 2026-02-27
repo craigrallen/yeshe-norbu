@@ -1,9 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import { Card } from './Card.js';
-import { Badge } from './Badge.js';
-import { cn } from '../lib/cn.js';
+import { Card } from './Card';
+import { Badge } from './Badge';
+import { cn } from '../lib/cn';
 
 export interface CourseCardProps {
   title: string;

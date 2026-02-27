@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import * as ToastPrimitive from '@radix-ui/react-toast';
-import { cn } from '../lib/cn.js';
+import { cn } from '../lib/cn';
 
 export const ToastProvider = ToastPrimitive.Provider;
 

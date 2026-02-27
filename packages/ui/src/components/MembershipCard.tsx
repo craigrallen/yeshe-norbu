@@ -1,9 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import { Card } from './Card.js';
-import { Button } from './Button.js';
-import { cn } from '../lib/cn.js';
+import { Card } from './Card';
+import { Button } from './Button';
+import { cn } from '../lib/cn';
 
 export interface MembershipCardProps {
   name: string;
