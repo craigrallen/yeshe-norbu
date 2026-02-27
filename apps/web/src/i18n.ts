@@ -4,6 +4,10 @@ export const locales = ['sv', 'en'] as const;
 export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = 'sv';
 
-export default getRequestConfig(async ({ locale }) => ({
-  messages: (await import(`../messages/${locale}.json`)).default,
-}));
+export default getRequestConfig(async ({ requestLocale }) => {
+  const locale = await requestLocale;
+  return {
+    locale: locale ?? defaultLocale,
+    messages: (await import(`../messages/${(locale ?? defaultLocale)}.json`)).default,
+  };
+});
