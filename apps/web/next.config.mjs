@@ -15,7 +15,7 @@ const nextConfig = {
   },
   transpilePackages: ['@yeshe/ui', '@yeshe/db', '@yeshe/auth', '@yeshe/payments', '@yeshe/email'],
   experimental: {
-    serverComponentsExternalPackages: ['argon2'],
+    serverComponentsExternalPackages: ['bcrypt'],
   },
   images: {
     formats: ['image/avif', 'image/webp'],
