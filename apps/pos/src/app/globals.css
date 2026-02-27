@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #C8A951;
+  --color-background: #F9F7F4;
+  --color-surface: #FFFFFF;
+  --color-text-primary: #1A1A1A;
+  --color-text-muted: #6B6B6B;
+  --color-border: #E5E1DC;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  overflow: hidden; /* POS is full-screen */
+}
