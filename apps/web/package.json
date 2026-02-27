@@ -15,7 +15,7 @@
     "@yeshe/email": "workspace:*",
     "@yeshe/payments": "workspace:*",
     "@yeshe/ui": "workspace:*",
-    "next": "^14.2.0",
+    "next": "^15.5.10",
     "next-intl": "^3.11.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
