@@ -4,16 +4,17 @@ on:
   push:
     branches: [main]
 
+# Railway auto-deploys from GitHub when connected via Railway dashboard.
+# This workflow exists as a placeholder and will be replaced once
+# RAILWAY_TOKEN (an API token from railway.com/account/tokens) is
+# added as a GitHub secret.
+#
+# To fix: go to https://railway.com/account/tokens → create token →
+# add as RAILWAY_TOKEN in https://github.com/craigrallen/yeshe-norbu/settings/secrets
+
 jobs:
-  deploy:
+  notify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli
-
-      - name: Deploy to Railway (Amsterdam)
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: railway up --service yeshe-norbu --detach
+      - name: Deploy triggered
+        run: echo "Push to main — Railway auto-deploy handles deployment (see railway.com dashboard)"
