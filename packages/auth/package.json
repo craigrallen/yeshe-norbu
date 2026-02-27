@@ -1,0 +1,26 @@
+{
+  "name": "@yeshe/auth",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./password": "./src/password.ts",
+    "./jwt": "./src/jwt.ts",
+    "./totp": "./src/totp.ts",
+    "./middleware": "./src/middleware.ts",
+    "./rbac": "./src/rbac.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "argon2": "^0.40.0",
+    "jose": "^5.2.0",
+    "otplib": "^12.0.1",
+    "qrcode": "^1.5.3"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.5",
+    "typescript": "^5.4.0"
+  }
+}
