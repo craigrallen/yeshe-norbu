@@ -1,7 +1,23 @@
-import { createDb, users, userRoles, memberships, membershipPlans, orders, payments, courseEnrollments, courses } from '@yeshe/db';
+import { createHash } from 'crypto';
+import {
+  createDb,
+  users,
+  userRoles,
+  memberships,
+  membershipPlans,
+  orders,
+  payments,
+  courseEnrollments,
+  courses,
+  eventRegistrations,
+  events,
+  eventCategories,
+} from '@yeshe/db';
 import { eq, desc, sql } from 'drizzle-orm';
 import { requireAdmin } from '@/lib/authz';
 import { revalidatePath } from 'next/cache';
+
+const PAGE_SIZE = 12;
 
 async function saveUser(formData: FormData) {
   'use server';
@@ -42,10 +58,65 @@ async function saveUser(formData: FormData) {
   revalidatePath(`/${locale}/admin/orders`);
 }
 
-export default async function UserDetailPage({ params: { locale, id } }: { params: { locale: string; id: string } }) {
+function buildPageHref(locale: string, id: string, patch: Record<string, number | string>) {
+  const p = new URLSearchParams();
+  for (const [k, v] of Object.entries(patch)) p.set(k, String(v));
+  return `/${locale}/admin/users/${id}?${p.toString()}`;
+}
+
+async function getMailchimpData(email: string) {
+  const key = process.env.MAILCHIMP_API_KEY || '';
+  const audience = process.env.MAILCHIMP_AUDIENCE_ID || '';
+  const server = process.env.MAILCHIMP_SERVER_PREFIX || (key.includes('-') ? key.split('-').pop() : '');
+  if (!key || !audience || !server) return { configured: false as const };
+
+  const hash = createHash('md5').update(email.trim().toLowerCase()).digest('hex');
+  const base = `https://${server}.api.mailchimp.com/3.0/lists/${audience}/members/${hash}`;
+
+  try {
+    const [memberRes, tagsRes] = await Promise.all([
+      fetch(base, { headers: { Authorization: `apikey ${key}` }, cache: 'no-store' }),
+      fetch(`${base}/tags`, { headers: { Authorization: `apikey ${key}` }, cache: 'no-store' }),
+    ]);
+
+    if (!memberRes.ok) return { configured: true as const, found: false as const };
+
+    const member = await memberRes.json();
+    const tagsJson = tagsRes.ok ? await tagsRes.json() : { tags: [] };
+
+    return {
+      configured: true as const,
+      found: true as const,
+      status: member.status,
+      emailType: member.email_type,
+      memberRating: member.member_rating,
+      language: member.language,
+      vip: member.vip,
+      lastChanged: member.last_changed,
+      timestampSignup: member.timestamp_signup,
+      timestampOpt: member.timestamp_opt,
+      tags: (tagsJson.tags || []).filter((t: any) => t.status === 'active').map((t: any) => t.name),
+      stats: member.stats || null,
+    };
+  } catch {
+    return { configured: true as const, found: false as const, error: true as const };
+  }
+}
+
+export default async function UserDetailPage({
+  params: { locale, id },
+  searchParams,
+}: {
+  params: { locale: string; id: string };
+  searchParams?: Record<string, string | string[] | undefined>;
+}) {
   const sv = locale === 'sv';
   await requireAdmin(locale);
   const db = createDb(process.env.DATABASE_URL!);
+
+  const ordersPage = Math.max(1, Number(searchParams?.ordersPage || 1));
+  const paymentsPage = Math.max(1, Number(searchParams?.paymentsPage || 1));
+  const eventsPage = Math.max(1, Number(searchParams?.eventsPage || 1));
 
   const [user] = await db.select().from(users).where(eq(users.id, id)).limit(1);
   if (!user) return <div className="p-6"><h1 className="text-xl font-bold text-red-600">{sv ? 'Användare hittades inte' : 'User not found'}</h1></div>;
@@ -61,35 +132,86 @@ export default async function UserDetailPage({ params: { locale, id } }: { param
     .orderBy(desc(memberships.createdAt));
   const isMember = mems.some(m => m.status === 'active');
 
+  const [ordersCountRow] = await db.select({ count: sql<number>`count(*)::int` }).from(orders).where(eq(orders.userId, id));
+  const ordersCount = ordersCountRow?.count || 0;
   const userOrders = await db
     .select({ id: orders.id, orderNumber: orders.orderNumber, totalSek: orders.totalSek, status: orders.status, channel: orders.channel, createdAt: orders.createdAt })
-    .from(orders).where(eq(orders.userId, id)).orderBy(desc(orders.createdAt)).limit(100);
+    .from(orders)
+    .where(eq(orders.userId, id))
+    .orderBy(desc(orders.createdAt))
+    .limit(PAGE_SIZE)
+    .offset((ordersPage - 1) * PAGE_SIZE);
 
+  const [paymentsCountRow] = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(payments)
+    .leftJoin(orders, eq(payments.orderId, orders.id))
+    .where(eq(orders.userId, id));
+  const paymentsCount = paymentsCountRow?.count || 0;
   const userPayments = await db
     .select({ id: payments.id, orderId: payments.orderId, method: payments.method, status: payments.status, amountSek: payments.amountSek, gatewayReference: payments.gatewayReference, createdAt: payments.createdAt, orderNumber: orders.orderNumber })
-    .from(payments).leftJoin(orders, eq(payments.orderId, orders.id)).where(eq(orders.userId, id)).orderBy(desc(payments.createdAt)).limit(100);
+    .from(payments)
+    .leftJoin(orders, eq(payments.orderId, orders.id))
+    .where(eq(orders.userId, id))
+    .orderBy(desc(payments.createdAt))
+    .limit(PAGE_SIZE)
+    .offset((paymentsPage - 1) * PAGE_SIZE);
 
-  const [stats] = await db.select({ totalOrders: sql<number>`count(*)::int`, totalSpend: sql<string>`coalesce(sum(${orders.totalSek}), 0)::text`, avgOrder: sql<string>`coalesce(avg(${orders.totalSek}), 0)::text` }).from(orders).where(eq(orders.userId, id));
+  const [eventsCountRow] = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(eventRegistrations)
+    .where(eq(eventRegistrations.userId, id));
+  const eventsCount = eventsCountRow?.count || 0;
+  const attendedEvents = await db
+    .select({
+      id: eventRegistrations.id,
+      attendeeName: eventRegistrations.attendeeName,
+      attendeeEmail: eventRegistrations.attendeeEmail,
+      checkedInAt: eventRegistrations.checkedInAt,
+      createdAt: eventRegistrations.createdAt,
+      eventSlug: events.slug,
+      eventTitleSv: events.titleSv,
+      eventTitleEn: events.titleEn,
+      categorySv: eventCategories.nameSv,
+      categoryEn: eventCategories.nameEn,
+      startsAt: events.startsAt,
+      orderId: eventRegistrations.orderId,
+    })
+    .from(eventRegistrations)
+    .leftJoin(events, eq(eventRegistrations.eventId, events.id))
+    .leftJoin(eventCategories, eq(events.categoryId, eventCategories.id))
+    .where(eq(eventRegistrations.userId, id))
+    .orderBy(desc(eventRegistrations.createdAt))
+    .limit(PAGE_SIZE)
+    .offset((eventsPage - 1) * PAGE_SIZE);
 
   const enrolledCourses = await db
-    .select({
-      id: courseEnrollments.id,
-      courseId: courseEnrollments.courseId,
-      orderId: courseEnrollments.orderId,
-      completedAt: courseEnrollments.completedAt,
-      createdAt: courseEnrollments.createdAt,
-      titleSv: courses.titleSv,
-      titleEn: courses.titleEn,
-      slug: courses.slug,
-    })
+    .select({ id: courseEnrollments.id, orderId: courseEnrollments.orderId, completedAt: courseEnrollments.completedAt, createdAt: courseEnrollments.createdAt, titleSv: courses.titleSv, titleEn: courses.titleEn })
     .from(courseEnrollments)
     .leftJoin(courses, eq(courseEnrollments.courseId, courses.id))
     .where(eq(courseEnrollments.userId, id))
     .orderBy(desc(courseEnrollments.createdAt));
 
+  const [stats] = await db.select({ totalOrders: sql<number>`count(*)::int`, totalSpend: sql<string>`coalesce(sum(${orders.totalSek}), 0)::text`, avgOrder: sql<string>`coalesce(avg(${orders.totalSek}), 0)::text` }).from(orders).where(eq(orders.userId, id));
+
+  const lastOrderAt = userOrders[0]?.createdAt || null;
+  const lastCourseAt = enrolledCourses[0]?.createdAt || null;
+  const lastEventAt = attendedEvents[0]?.createdAt || null;
+  const lastActivity = [lastOrderAt, lastCourseAt, lastEventAt].filter(Boolean).sort((a: any, b: any) => +new Date(b) - +new Date(a))[0];
+  const inactiveDays = lastActivity ? Math.floor((Date.now() - +new Date(lastActivity)) / (1000 * 60 * 60 * 24)) : null;
+
+  const topCategoryMap = new Map<string, number>();
+  attendedEvents.forEach((e: any) => {
+    const key = (sv ? e.categorySv : e.categoryEn) || (sv ? 'Okategoriserat' : 'Uncategorized');
+    topCategoryMap.set(key, (topCategoryMap.get(key) || 0) + 1);
+  });
+  const topCategories = Array.from(topCategoryMap.entries()).sort((a, b) => b[1] - a[1]).slice(0, 4);
+
+  const mailchimp = await getMailchimpData(user.email);
+
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6">
-      <a href={`/${locale}/admin/users`} className="text-sm text-blue-600 hover:underline">&larr; {sv ? 'Alla användare' : 'All users'}</a>
+    <div className="p-6 max-w-6xl mx-auto space-y-6">
+      <a href={`/${locale}/admin/users`} className="text-sm text-blue-600 hover:underline">&larr; {sv ? 'Alla kunder' : 'All customers'}</a>
 
       <form action={saveUser} className="bg-white rounded-xl border p-6 space-y-4">
         <input type="hidden" name="id" value={user.id} />
@@ -121,65 +243,105 @@ export default async function UserDetailPage({ params: { locale, id } }: { param
           <label className="flex items-center gap-2"><input type="checkbox" name="isAdmin" defaultChecked={isAdmin} /> Admin</label>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-3">
+        <div className="grid md:grid-cols-4 gap-3">
           <div className="rounded-lg border bg-gray-50 px-4 py-3"><p className="text-xs text-gray-500 uppercase">{sv ? 'Totala ordrar' : 'Total Orders'}</p><p className="text-xl font-semibold">{stats?.totalOrders || 0}</p></div>
           <div className="rounded-lg border bg-gray-50 px-4 py-3"><p className="text-xs text-gray-500 uppercase">{sv ? 'Total omsättning' : 'Lifetime Spend'}</p><p className="text-xl font-semibold">{Math.round(Number(stats?.totalSpend || 0))} kr</p></div>
           <div className="rounded-lg border bg-gray-50 px-4 py-3"><p className="text-xs text-gray-500 uppercase">{sv ? 'Snittorder' : 'Avg Order'}</p><p className="text-xl font-semibold">{Math.round(Number(stats?.avgOrder || 0))} kr</p></div>
+          <div className="rounded-lg border bg-gray-50 px-4 py-3"><p className="text-xs text-gray-500 uppercase">{sv ? 'Inaktiv' : 'Inactive'}</p><p className="text-xl font-semibold">{inactiveDays === null ? '—' : `${inactiveDays} ${sv ? 'dagar' : 'days'}`}</p></div>
         </div>
 
-        <button className="px-5 py-2 rounded-lg bg-[#58595b] text-white">{sv ? 'Spara användare' : 'Save user'}</button>
+        <button className="px-5 py-2 rounded-lg bg-[#58595b] text-white">{sv ? 'Spara kund' : 'Save customer'}</button>
       </form>
 
-
       <div className="bg-white rounded-xl border p-6">
-        <h2 className="font-semibold text-lg mb-3">CRM</h2>
-        <div className="grid md:grid-cols-2 gap-3 text-sm">
-          <div className="rounded border p-3">
-            <div className="text-gray-500">{sv ? 'Marknadsföring' : 'Marketing'}</div>
-            <div className="font-medium">{user.consentMarketing ? (sv ? 'Samtycke: Ja' : 'Consent: Yes') : (sv ? 'Samtycke: Nej' : 'Consent: No')}</div>
-            <div className="text-gray-500 text-xs">{user.consentMarketingAt ? new Date(user.consentMarketingAt).toLocaleString('sv-SE') : '—'}</div>
+        <h2 className="font-semibold text-lg mb-3">{sv ? 'B2C-marknadshistorik' : 'B2C engagement history'}</h2>
+        <div className="grid md:grid-cols-3 gap-4 text-sm">
+          <div>
+            <p className="text-gray-500">{sv ? 'Senaste aktivitet' : 'Last activity'}</p>
+            <p className="font-medium">{lastActivity ? new Date(lastActivity).toLocaleString('sv-SE') : '—'}</p>
           </div>
-          <div className="rounded border p-3">
-            <div className="text-gray-500">Mailchimp</div>
-            <a className="text-blue-600 hover:underline" target="_blank" rel="noreferrer" href={`https://admin.mailchimp.com/?q=${encodeURIComponent(user.email)}`}>
-              {sv ? 'Öppna i Mailchimp (sök e-post)' : 'Open in Mailchimp (search email)'}
-            </a>
+          <div>
+            <p className="text-gray-500">{sv ? 'Senaste bokning' : 'Last booking'}</p>
+            <p className="font-medium">{lastOrderAt ? new Date(lastOrderAt).toLocaleDateString('sv-SE') : '—'}</p>
+          </div>
+          <div>
+            <p className="text-gray-500">{sv ? 'Senaste eventregistrering' : 'Last event registration'}</p>
+            <p className="font-medium">{lastEventAt ? new Date(lastEventAt).toLocaleDateString('sv-SE') : '—'}</p>
+          </div>
+        </div>
+        <div className="mt-4 text-sm">
+          <p className="text-gray-500 mb-1">{sv ? 'Intressekategorier (från eventhistorik)' : 'Interest categories (from event history)'}</p>
+          <div className="flex flex-wrap gap-2">
+            {topCategories.length ? topCategories.map(([k, n]) => <span key={k} className="px-2 py-1 rounded-full bg-blue-100 text-blue-800 text-xs">{k} · {n}</span>) : <span className="text-gray-500">{sv ? 'Ingen historik ännu' : 'No history yet'}</span>}
           </div>
         </div>
       </div>
 
       <div className="bg-white rounded-xl border p-6">
-        <h2 className="font-semibold text-lg mb-3">{sv ? 'Ordrar' : 'Orders'} ({userOrders.length})</h2>
-        <div className="space-y-1 text-sm">{userOrders.map(o => <a key={o.id} href={`/${locale}/admin/orders/${o.id}`} className="block text-blue-600 hover:underline">#{o.orderNumber} · {Math.round(Number(o.totalSek))} kr · {o.status}</a>)}</div>
-      </div>
-
-
-      <div className="bg-white rounded-xl border p-6">
-        <h2 className="font-semibold text-lg mb-3">{sv ? 'Kurser' : 'Courses attended'} ({enrolledCourses.length})</h2>
-        {enrolledCourses.length === 0 ? (
-          <p className="text-sm text-gray-500">{sv ? 'Inga kursregistreringar' : 'No course enrollments'}</p>
-        ) : (
-          <div className="space-y-1 text-sm">
-            {enrolledCourses.map(c => (
-              <div key={c.id} className="flex flex-wrap items-center gap-2">
-                <span className="font-medium">{sv ? c.titleSv : c.titleEn}</span>
-                {c.completedAt ? <span className="px-1.5 py-0.5 rounded text-[10px] bg-green-100 text-green-800">{sv ? 'Klar' : 'Completed'}</span> : <span className="px-1.5 py-0.5 rounded text-[10px] bg-yellow-100 text-yellow-800">{sv ? 'Pågår' : 'In progress'}</span>}
-                <span className="text-gray-500">{new Date(c.createdAt).toLocaleDateString('sv-SE')}</span>
-                {c.orderId && <a href={`/${locale}/admin/orders/${c.orderId}`} className="text-blue-600 hover:underline">#{sv ? 'Order' : 'Order'}</a>}
-              </div>
-            ))}
+        <h2 className="font-semibold text-lg mb-3">Mailchimp</h2>
+        {!mailchimp.configured && <p className="text-sm text-gray-500">{sv ? 'Mailchimp API ej konfigurerad (MAILCHIMP_API_KEY / MAILCHIMP_AUDIENCE_ID).' : 'Mailchimp API not configured (MAILCHIMP_API_KEY / MAILCHIMP_AUDIENCE_ID).'}</p>}
+        {mailchimp.configured && !mailchimp.found && <p className="text-sm text-gray-500">{sv ? 'Medlem hittades inte i audience ännu.' : 'Member not found in audience yet.'}</p>}
+        {mailchimp.configured && mailchimp.found && (
+          <div className="space-y-2 text-sm">
+            <div className="flex gap-4 flex-wrap">
+              <span><span className="text-gray-500">Status:</span> {mailchimp.status}</span>
+              <span><span className="text-gray-500">Rating:</span> {mailchimp.memberRating}</span>
+              <span><span className="text-gray-500">Language:</span> {mailchimp.language || '—'}</span>
+              <span><span className="text-gray-500">VIP:</span> {mailchimp.vip ? 'yes' : 'no'}</span>
+            </div>
+            <div><span className="text-gray-500">{sv ? 'Senast ändrad:' : 'Last changed:'}</span> {mailchimp.lastChanged ? new Date(mailchimp.lastChanged).toLocaleString('sv-SE') : '—'}</div>
+            <div className="flex flex-wrap gap-2">{(mailchimp.tags || []).length ? mailchimp.tags.map((t: string) => <span key={t} className="px-2 py-1 rounded-full bg-amber-100 text-amber-800 text-xs">{t}</span>) : <span className="text-gray-500">{sv ? 'Inga aktiva tags' : 'No active tags'}</span>}</div>
           </div>
         )}
       </div>
 
       <div className="bg-white rounded-xl border p-6">
-        <h2 className="font-semibold text-lg mb-3">{sv ? 'Medlemskap' : 'Memberships'} ({mems.length})</h2>
-        <div className="space-y-1 text-sm">{mems.map(m => <div key={m.id}>{sv ? m.planName : m.planNameEn} · {m.status}</div>)}{mems.length===0&&<div className="text-gray-500">{sv?'Inga medlemskap':'No memberships'}</div>}</div>
+        <h2 className="font-semibold text-lg mb-3">{sv ? 'Ordrar' : 'Orders'} ({ordersCount})</h2>
+        <div className="space-y-1 text-sm">{userOrders.map(o => <a key={o.id} href={`/${locale}/admin/orders/${o.id}`} className="block text-blue-600 hover:underline">#{o.orderNumber} · {Math.round(Number(o.totalSek))} kr · {o.status}</a>)}</div>
+        <div className="mt-3 flex gap-3 text-sm">
+          {ordersPage > 1 && <a className="text-blue-600 hover:underline" href={buildPageHref(locale, id, { ordersPage: ordersPage - 1, paymentsPage, eventsPage })}>← {sv ? 'Föregående' : 'Previous'}</a>}
+          {ordersPage * PAGE_SIZE < ordersCount && <a className="text-blue-600 hover:underline" href={buildPageHref(locale, id, { ordersPage: ordersPage + 1, paymentsPage, eventsPage })}>{sv ? 'Nästa' : 'Next'} →</a>}
+        </div>
       </div>
 
       <div className="bg-white rounded-xl border p-6">
-        <h2 className="font-semibold text-lg mb-3">{sv ? 'Betalningar' : 'Payments'} ({userPayments.length})</h2>
+        <h2 className="font-semibold text-lg mb-3">{sv ? 'Medlemskap' : 'Memberships'} ({mems.length})</h2>
+        <div className="space-y-1 text-sm">{mems.map(m => <div key={m.id}>{sv ? m.planName : m.planNameEn} · {m.status} · {new Date(m.periodStart).toLocaleDateString('sv-SE')}–{new Date(m.periodEnd).toLocaleDateString('sv-SE')}</div>)}{mems.length===0&&<div className="text-gray-500">{sv?'Inga medlemskap':'No memberships'}</div>}</div>
+      </div>
+
+      <div className="bg-white rounded-xl border p-6">
+        <h2 className="font-semibold text-lg mb-3">{sv ? 'Betalningar' : 'Payments'} ({paymentsCount})</h2>
         <div className="space-y-1 text-sm">{userPayments.map(p => <a key={p.id} href={`/${locale}/admin/orders/${p.orderId}`} className="block text-blue-600 hover:underline">#{p.orderNumber} · {Math.round(Number(p.amountSek))} kr · {p.method} · {p.status}</a>)}</div>
+        <div className="mt-3 flex gap-3 text-sm">
+          {paymentsPage > 1 && <a className="text-blue-600 hover:underline" href={buildPageHref(locale, id, { ordersPage, paymentsPage: paymentsPage - 1, eventsPage })}>← {sv ? 'Föregående' : 'Previous'}</a>}
+          {paymentsPage * PAGE_SIZE < paymentsCount && <a className="text-blue-600 hover:underline" href={buildPageHref(locale, id, { ordersPage, paymentsPage: paymentsPage + 1, eventsPage })}>{sv ? 'Nästa' : 'Next'} →</a>}
+        </div>
+      </div>
+
+      <div className="bg-white rounded-xl border p-6">
+        <h2 className="font-semibold text-lg mb-3">{sv ? 'Eventhistorik' : 'Event attendance history'} ({eventsCount})</h2>
+        <div className="space-y-2 text-sm">
+          {attendedEvents.map((e: any) => (
+            <div key={e.id} className="border-b pb-2 last:border-0">
+              <div className="font-medium">{sv ? e.eventTitleSv : e.eventTitleEn}</div>
+              <div className="text-gray-500">{(sv ? e.categorySv : e.categoryEn) || (sv ? 'Okategoriserat' : 'Uncategorized')} · {e.startsAt ? new Date(e.startsAt).toLocaleDateString('sv-SE') : '—'}</div>
+              <div className="text-gray-500">{sv ? 'Registrerad:' : 'Registered:'} {new Date(e.createdAt).toLocaleDateString('sv-SE')} {e.checkedInAt ? `· ${sv ? 'Incheckad' : 'Checked in'}` : ''}</div>
+              {e.orderId && <a href={`/${locale}/admin/orders/${e.orderId}`} className="text-blue-600 hover:underline">{sv ? 'Öppna order' : 'Open order'}</a>}
+            </div>
+          ))}
+          {attendedEvents.length === 0 && <div className="text-gray-500">{sv ? 'Ingen eventhistorik' : 'No event history'}</div>}
+        </div>
+        <div className="mt-3 flex gap-3 text-sm">
+          {eventsPage > 1 && <a className="text-blue-600 hover:underline" href={buildPageHref(locale, id, { ordersPage, paymentsPage, eventsPage: eventsPage - 1 })}>← {sv ? 'Föregående' : 'Previous'}</a>}
+          {eventsPage * PAGE_SIZE < eventsCount && <a className="text-blue-600 hover:underline" href={buildPageHref(locale, id, { ordersPage, paymentsPage, eventsPage: eventsPage + 1 })}>{sv ? 'Nästa' : 'Next'} →</a>}
+        </div>
+      </div>
+
+      <div className="bg-white rounded-xl border p-6">
+        <h2 className="font-semibold text-lg mb-3">{sv ? 'Kurser' : 'Courses attended'} ({enrolledCourses.length})</h2>
+        {enrolledCourses.length === 0 ? <p className="text-sm text-gray-500">{sv ? 'Inga kursregistreringar' : 'No course enrollments'}</p> : (
+          <div className="space-y-1 text-sm">{enrolledCourses.map(c => <div key={c.id}><span className="font-medium">{sv ? c.titleSv : c.titleEn}</span> · {c.completedAt ? (sv ? 'Klar' : 'Completed') : (sv ? 'Pågår' : 'In progress')} · {new Date(c.createdAt).toLocaleDateString('sv-SE')}</div>)}</div>
+        )}
       </div>
     </div>
   );
