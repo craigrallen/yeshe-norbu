@@ -68,7 +68,7 @@ export default async function AdminProducts({ params: { locale }, searchParams }
                   {p.featured_image_url ? <img src={p.featured_image_url} alt="" className="w-10 h-10 object-cover rounded" /> : <div className="w-10 h-10 bg-gray-100 rounded" />}
                 </td>
                 <td className="px-4 py-3 text-sm">
-                  <p className="font-medium text-gray-900">{sv ? p.name_sv : p.name_en}</p>
+                  <p className="font-medium text-gray-900"><a href={`/${locale}/admin/products/${p.id}`} className="text-blue-600 hover:underline">{sv ? p.name_sv : p.name_en}</a></p>
                   <p className="text-xs text-gray-400">/{p.slug}</p>
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-500">{p.sku || '\u2014'}</td>
