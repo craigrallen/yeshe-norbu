@@ -26,13 +26,13 @@ function baseTemplate(content: string) {
 <style>
   body { margin:0; padding:0; background:#f7f7f7; font-family:Helvetica,Arial,sans-serif; color:#3c3c3c; }
   .wrap { max-width:600px; margin:0 auto; background:#fff; }
-  .header { background:#2C2C2C; padding:24px 32px; }
+  .header { background:#58595b; padding:24px 32px; }
   .header img { height:48px; }
-  .header-text { color:#F5A623; font-size:20px; font-weight:bold; }
+  .header-text { color:#f5ca00; font-size:20px; font-weight:bold; }
   .body { padding:32px; }
   .footer { background:#f7f7f7; padding:24px 32px; font-size:12px; color:#888; border-top:1px solid #eee; }
-  .btn { display:inline-block; background:#F5A623; color:#fff !important; text-decoration:none; padding:14px 28px; border-radius:8px; font-weight:bold; font-size:16px; margin:16px 0; }
-  h1 { font-size:24px; color:#2C2C2C; margin:0 0 16px; }
+  .btn { display:inline-block; background:#f5ca00; color:#fff !important; text-decoration:none; padding:14px 28px; border-radius:8px; font-weight:bold; font-size:16px; margin:16px 0; }
+  h1 { font-size:24px; color:#58595b; margin:0 0 16px; }
   p { line-height:1.6; margin:0 0 16px; }
 </style>
 </head>

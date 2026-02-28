@@ -33,7 +33,7 @@ export default function RegistreraPage({ params: { locale } }: { params: { local
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="text-4xl mb-3">🙏</div>
-          <h1 className="text-3xl font-bold text-[#2C2C2C]">{sv ? 'Skapa konto' : 'Create account'}</h1>
+          <h1 className="text-3xl font-bold text-[#58595b]">{sv ? 'Skapa konto' : 'Create account'}</h1>
           <p className="text-gray-500 mt-2">{sv ? 'Gå med i vår gemenskap' : 'Join our community'}</p>
         </div>
 
@@ -43,34 +43,34 @@ export default function RegistreraPage({ params: { locale } }: { params: { local
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{sv ? 'Förnamn' : 'First name'}</label>
                 <input type="text" value={form.firstName} onChange={set('firstName')} required
-                  className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F5A623]"
+                  className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00]"
                   placeholder={sv ? 'Anna' : 'Anna'} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{sv ? 'Efternamn' : 'Last name'}</label>
                 <input type="text" value={form.lastName} onChange={set('lastName')}
-                  className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F5A623]"
+                  className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00]"
                   placeholder={sv ? 'Svensson' : 'Svensson'} />
               </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{sv ? 'E-postadress' : 'Email'}</label>
               <input type="email" value={form.email} onChange={set('email')} required autoComplete="email"
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F5A623]"
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00]"
                 placeholder="din@email.se" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{sv ? 'Lösenord' : 'Password'}</label>
               <input type="password" value={form.password} onChange={set('password')} required minLength={8}
                 autoComplete="new-password"
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F5A623]"
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00]"
                 placeholder={sv ? 'Minst 8 tecken' : 'At least 8 characters'} />
             </div>
 
             {error && <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm">{error}</div>}
 
             <button type="submit" disabled={loading}
-              className="w-full bg-[#F5A623] text-white font-semibold py-3.5 rounded-xl hover:bg-[#e09520] disabled:opacity-50 transition-colors">
+              className="w-full bg-[#f5ca00] text-white font-semibold py-3.5 rounded-xl hover:bg-[#d4af00] disabled:opacity-50 transition-colors">
               {loading ? (sv ? 'Skapar konto...' : 'Creating...') : (sv ? 'Skapa konto' : 'Create account')}
             </button>
           </form>
@@ -83,7 +83,7 @@ export default function RegistreraPage({ params: { locale } }: { params: { local
 
           <div className="mt-4 text-center text-sm text-gray-500">
             {sv ? 'Har du redan ett konto?' : 'Already have an account?'}{' '}
-            <Link href={`/${locale}/logga-in`} className="text-[#F5A623] font-medium hover:underline">
+            <Link href={`/${locale}/logga-in`} className="text-[#f5ca00] font-medium hover:underline">
               {sv ? 'Logga in' : 'Sign in'}
             </Link>
           </div>

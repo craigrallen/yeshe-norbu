@@ -29,23 +29,19 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Standalone output (includes server.js + node_modules)
+# Standalone output
 COPY --from=builder /app/apps/web/.next/standalone ./
-
-# Static assets (JS chunks, CSS)
+# Static assets
 COPY --from=builder /app/apps/web/.next/static ./apps/web/.next/static
-
-# Public folder (favicon, images, robots.txt etc)
+# Public folder (logo, favicon, images)
 COPY --from=builder /app/apps/web/public ./apps/web/public
-
-# Full .next/server directory — needed for favicon.ico.json and other server metadata
+# Full server dir (metadata files etc)
 COPY --from=builder /app/apps/web/.next/server ./apps/web/.next/server
 
-# DB migrations
+# DB migrations — use the db package's own node_modules for drizzle
 COPY --from=builder /app/packages/db/src/migrations ./packages/db/src/migrations
 COPY --from=builder /app/packages/db/drizzle.config.ts ./packages/db/
-COPY --from=builder /app/node_modules/drizzle-kit ./node_modules/drizzle-kit
-COPY --from=builder /app/node_modules/drizzle-orm ./node_modules/drizzle-orm
+COPY --from=builder /app/packages/db/node_modules ./packages/db/node_modules
 
 COPY apps/web/docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh

@@ -32,7 +32,7 @@ export default function LoggaInPage({ params: { locale } }: { params: { locale: 
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="text-4xl mb-3">🙏</div>
-          <h1 className="text-3xl font-bold text-[#2C2C2C]">{sv ? 'Logga in' : 'Sign in'}</h1>
+          <h1 className="text-3xl font-bold text-[#58595b]">{sv ? 'Logga in' : 'Sign in'}</h1>
           <p className="text-gray-500 mt-2">{sv ? 'Välkommen tillbaka' : 'Welcome back'}</p>
         </div>
 
@@ -45,21 +45,21 @@ export default function LoggaInPage({ params: { locale } }: { params: { locale: 
               <input
                 type="email" value={email} onChange={e => setEmail(e.target.value)}
                 required autoComplete="email"
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F5A623] focus:border-transparent"
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00] focus:border-transparent"
                 placeholder="din@email.se"
               />
             </div>
             <div>
               <div className="flex justify-between items-center mb-1">
                 <label className="text-sm font-medium text-gray-700">{sv ? 'Lösenord' : 'Password'}</label>
-                <Link href={`/${locale}/glomt-losenord`} className="text-xs text-[#F5A623] hover:underline">
+                <Link href={`/${locale}/glomt-losenord`} className="text-xs text-[#f5ca00] hover:underline">
                   {sv ? 'Glömt lösenord?' : 'Forgot password?'}
                 </Link>
               </div>
               <input
                 type="password" value={password} onChange={e => setPassword(e.target.value)}
                 required autoComplete="current-password"
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F5A623] focus:border-transparent"
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00] focus:border-transparent"
                 placeholder="••••••••"
               />
             </div>
@@ -72,7 +72,7 @@ export default function LoggaInPage({ params: { locale } }: { params: { locale: 
 
             <button
               type="submit" disabled={loading}
-              className="w-full bg-[#2C2C2C] text-white font-semibold py-3.5 rounded-xl hover:bg-[#3a3a3a] disabled:opacity-50 transition-colors"
+              className="w-full bg-[#58595b] text-white font-semibold py-3.5 rounded-xl hover:bg-[#6b6c6e] disabled:opacity-50 transition-colors"
             >
               {loading ? (sv ? 'Loggar in...' : 'Signing in...') : (sv ? 'Logga in' : 'Sign in')}
             </button>
@@ -80,7 +80,7 @@ export default function LoggaInPage({ params: { locale } }: { params: { locale: 
 
           <div className="mt-6 text-center text-sm text-gray-500">
             {sv ? 'Har du inget konto?' : "Don't have an account?"}{' '}
-            <Link href={`/${locale}/registrera`} className="text-[#F5A623] font-medium hover:underline">
+            <Link href={`/${locale}/registrera`} className="text-[#f5ca00] font-medium hover:underline">
               {sv ? 'Skapa konto' : 'Create account'}
             </Link>
           </div>

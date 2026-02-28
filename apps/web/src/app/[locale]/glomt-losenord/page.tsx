@@ -25,19 +25,19 @@ export default function GlomdLosenordPage({ params: { locale } }: { params: { lo
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="text-4xl mb-3">🔑</div>
-          <h1 className="text-3xl font-bold text-[#2C2C2C]">{sv ? 'Glömt lösenord?' : 'Forgot password?'}</h1>
+          <h1 className="text-3xl font-bold text-[#58595b]">{sv ? 'Glömt lösenord?' : 'Forgot password?'}</h1>
         </div>
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
           {sent ? (
             <div className="text-center">
               <div className="text-4xl mb-4">📧</div>
-              <h2 className="text-xl font-semibold text-[#2C2C2C] mb-3">{sv ? 'E-post skickad!' : 'Email sent!'}</h2>
+              <h2 className="text-xl font-semibold text-[#58595b] mb-3">{sv ? 'E-post skickad!' : 'Email sent!'}</h2>
               <p className="text-gray-500 mb-6">
                 {sv
                   ? `Om det finns ett konto med ${email} har vi skickat en länk för att återställa ditt lösenord. Kolla din inkorg (och skräppost).`
                   : `If an account exists for ${email}, we've sent a password reset link. Check your inbox and spam folder.`}
               </p>
-              <Link href={`/${locale}/logga-in`} className="text-[#F5A623] font-medium hover:underline">
+              <Link href={`/${locale}/logga-in`} className="text-[#f5ca00] font-medium hover:underline">
                 {sv ? '← Tillbaka till inloggning' : '← Back to sign in'}
               </Link>
             </div>
@@ -51,15 +51,15 @@ export default function GlomdLosenordPage({ params: { locale } }: { params: { lo
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{sv ? 'E-postadress' : 'Email'}</label>
                 <input type="email" value={email} onChange={e => setEmail(e.target.value)} required
-                  className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F5A623]"
+                  className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00]"
                   placeholder="din@email.se" />
               </div>
               <button type="submit" disabled={loading}
-                className="w-full bg-[#2C2C2C] text-white font-semibold py-3.5 rounded-xl hover:bg-[#3a3a3a] disabled:opacity-50 transition-colors">
+                className="w-full bg-[#58595b] text-white font-semibold py-3.5 rounded-xl hover:bg-[#6b6c6e] disabled:opacity-50 transition-colors">
                 {loading ? (sv ? 'Skickar...' : 'Sending...') : (sv ? 'Skicka återställningslänk' : 'Send reset link')}
               </button>
               <div className="text-center text-sm">
-                <Link href={`/${locale}/logga-in`} className="text-[#F5A623] hover:underline">
+                <Link href={`/${locale}/logga-in`} className="text-[#f5ca00] hover:underline">
                   {sv ? '← Tillbaka' : '← Back'}
                 </Link>
               </div>

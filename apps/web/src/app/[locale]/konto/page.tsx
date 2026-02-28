@@ -43,7 +43,7 @@ export default function KontoPage({ params: { locale } }: { params: { locale: st
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-[#2C2C2C]">
+            <h1 className="text-3xl font-bold text-[#58595b]">
               {sv ? `Hej, ${user.first_name}! 🙏` : `Hello, ${user.first_name}! 🙏`}
             </h1>
             <p className="text-gray-500 mt-1">{user.email}</p>
@@ -57,20 +57,20 @@ export default function KontoPage({ params: { locale } }: { params: { locale: st
         <div className="grid md:grid-cols-2 gap-6">
           {/* Membership card */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h2 className="font-semibold text-[#2C2C2C] mb-4">{sv ? 'Ditt medlemskap' : 'Your membership'}</h2>
+            <h2 className="font-semibold text-[#58595b] mb-4">{sv ? 'Ditt medlemskap' : 'Your membership'}</h2>
             {user.membership_status === 'active' ? (
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <span className="w-2 h-2 rounded-full bg-green-400 inline-block"></span>
                   <span className="text-green-600 font-medium text-sm">{sv ? 'Aktivt' : 'Active'}</span>
                 </div>
-                <p className="text-xl font-bold text-[#2C2C2C]">{user.plan_name}</p>
+                <p className="text-xl font-bold text-[#58595b]">{user.plan_name}</p>
               </div>
             ) : (
               <div>
                 <p className="text-gray-500 text-sm mb-4">{sv ? 'Du har inget aktivt medlemskap.' : 'No active membership.'}</p>
                 <Link href={`/${locale}/bli-medlem`}
-                  className="inline-block bg-[#F5A623] text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-[#e09520] transition-colors text-sm">
+                  className="inline-block bg-[#f5ca00] text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-[#d4af00] transition-colors text-sm">
                   {sv ? 'Bli medlem' : 'Become a member'}
                 </Link>
               </div>
@@ -79,7 +79,7 @@ export default function KontoPage({ params: { locale } }: { params: { locale: st
 
           {/* Quick links */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h2 className="font-semibold text-[#2C2C2C] mb-4">{sv ? 'Snabblänkar' : 'Quick links'}</h2>
+            <h2 className="font-semibold text-[#58595b] mb-4">{sv ? 'Snabblänkar' : 'Quick links'}</h2>
             <div className="space-y-2">
               {[
                 { href: `/${locale}/events`, label: sv ? '📅 Kommande evenemang' : '📅 Upcoming events' },
@@ -87,7 +87,7 @@ export default function KontoPage({ params: { locale } }: { params: { locale: st
                 { href: `/${locale}/blog`, label: sv ? '📝 Blogg & teachings' : '📝 Blog & teachings' },
               ].map(link => (
                 <Link key={link.href} href={link.href}
-                  className="flex items-center gap-3 p-3 rounded-xl hover:bg-[#F9F7F4] transition-colors text-[#2C2C2C]">
+                  className="flex items-center gap-3 p-3 rounded-xl hover:bg-[#F9F7F4] transition-colors text-[#58595b]">
                   {link.label}
                 </Link>
               ))}
@@ -96,7 +96,7 @@ export default function KontoPage({ params: { locale } }: { params: { locale: st
 
           {/* Account info */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:col-span-2">
-            <h2 className="font-semibold text-[#2C2C2C] mb-4">{sv ? 'Kontoinformation' : 'Account info'}</h2>
+            <h2 className="font-semibold text-[#58595b] mb-4">{sv ? 'Kontoinformation' : 'Account info'}</h2>
             <div className="grid md:grid-cols-3 gap-4 text-sm">
               <div>
                 <p className="text-gray-400 mb-1">{sv ? 'Namn' : 'Name'}</p>
@@ -113,7 +113,7 @@ export default function KontoPage({ params: { locale } }: { params: { locale: st
             </div>
             <div className="mt-4 pt-4 border-t border-gray-100">
               <Link href={`/${locale}/glomt-losenord`}
-                className="text-sm text-[#F5A623] hover:underline">
+                className="text-sm text-[#f5ca00] hover:underline">
                 {sv ? 'Ändra lösenord' : 'Change password'}
               </Link>
             </div>

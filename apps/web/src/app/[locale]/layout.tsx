@@ -65,8 +65,8 @@ async function Header({ locale }: { locale: Locale }) {
   return (
     <header className="border-b border-border bg-surface sticky top-0 z-40">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-        <a href={`/${locale}`} className="text-xl font-bold text-primary flex items-center gap-2">
-          {tc('siteName')}
+        <a href={`/${locale}`} className="flex items-center">
+          <img src="/logo.png" alt="Yeshin Norbu" className="h-10 w-auto" />
         </a>
 
         {/* Desktop nav */}

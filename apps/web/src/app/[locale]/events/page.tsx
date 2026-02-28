@@ -126,7 +126,7 @@ export default async function EventsPage({
   return (
     <div className="min-h-screen bg-[#F9F7F4]">
       {/* Hero */}
-      <div className="bg-[#2C2C2C] text-white py-16 px-4">
+      <div className="bg-[#58595b] text-white py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             {isSv ? 'Evenemang & Retreatter' : 'Events & Retreats'}
@@ -146,7 +146,7 @@ export default async function EventsPage({
             <div key={event.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow flex flex-col">
               {/* Color bar by category */}
               <div className={`h-1.5 ${
-                event.category === 'Retreatt' ? 'bg-[#F5A623]' :
+                event.category === 'Retreatt' ? 'bg-[#f5ca00]' :
                 event.category === 'Nybörjare' ? 'bg-green-500' :
                 event.category === 'Studier' ? 'bg-blue-500' : 'bg-purple-500'
               }`} />
@@ -154,14 +154,14 @@ export default async function EventsPage({
               <div className="p-5 flex flex-col flex-1">
                 {/* Category + date */}
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-semibold uppercase tracking-wide text-[#F5A623] bg-[#FFF9EE] px-2 py-1 rounded-full">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-[#f5ca00] bg-[#FFF9EE] px-2 py-1 rounded-full">
                     {event.category}
                   </span>
                   <span className="text-xs text-gray-400">{formatDate(event.date)}</span>
                 </div>
 
                 {/* Title */}
-                <h2 className="font-bold text-[#2C2C2C] text-lg mb-2 leading-snug">
+                <h2 className="font-bold text-[#58595b] text-lg mb-2 leading-snug">
                   {isSv ? event.title : event.titleEn}
                 </h2>
 
@@ -192,7 +192,7 @@ export default async function EventsPage({
 
                 {/* Price + CTA */}
                 <div className="mt-auto flex items-center justify-between">
-                  <p className="text-xl font-bold text-[#2C2C2C]">
+                  <p className="text-xl font-bold text-[#58595b]">
                     {event.priceSek === 0 ? (isSv ? 'Gratis' : 'Free') : `${event.priceSek} kr`}
                   </p>
                   <a
@@ -200,7 +200,7 @@ export default async function EventsPage({
                     className={`px-4 py-2 rounded-xl font-semibold text-sm transition-colors ${
                       event.spotsLeft === 0
                         ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        : 'bg-[#F5A623] text-white hover:bg-[#e09520]'
+                        : 'bg-[#f5ca00] text-white hover:bg-[#d4af00]'
                     }`}
                   >
                     {event.spotsLeft === 0
@@ -214,7 +214,7 @@ export default async function EventsPage({
         </div>
 
         {/* Donate CTA */}
-        <div className="mt-16 bg-[#2C2C2C] rounded-2xl p-8 md:p-12 text-white text-center">
+        <div className="mt-16 bg-[#58595b] rounded-2xl p-8 md:p-12 text-white text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-3">
             {isSv ? 'Stöd vårt arbete' : 'Support our work'}
           </h2>
@@ -228,14 +228,14 @@ export default async function EventsPage({
               <a
                 key={amt}
                 href={`/${locale}/checkout?name=${encodeURIComponent(isSv ? 'Donation till Yeshin Norbu' : 'Donation to Yeshin Norbu')}&amount=${amt}&type=donation`}
-                className="bg-[#F5A623] text-white font-semibold px-6 py-3 rounded-xl hover:bg-[#e09520] transition-colors"
+                className="bg-[#f5ca00] text-white font-semibold px-6 py-3 rounded-xl hover:bg-[#d4af00] transition-colors"
               >
                 {amt} kr
               </a>
             ))}
             <a
               href={`/${locale}/checkout?name=${encodeURIComponent(isSv ? 'Valfri donation' : 'Custom donation')}&amount=200&type=donation`}
-              className="border border-white text-white font-semibold px-6 py-3 rounded-xl hover:bg-white hover:text-[#2C2C2C] transition-colors"
+              className="border border-white text-white font-semibold px-6 py-3 rounded-xl hover:bg-white hover:text-[#58595b] transition-colors"
             >
               {isSv ? 'Valfritt belopp' : 'Custom amount'}
             </a>

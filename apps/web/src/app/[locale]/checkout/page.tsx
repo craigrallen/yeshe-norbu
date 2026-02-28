@@ -78,8 +78,8 @@ function CheckoutContent() {
     return (
       <div className="min-h-screen bg-[#F9F7F4] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-semibold text-[#2C2C2C]">Ingen betalning vald</h1>
-          <button onClick={() => router.push('/')} className="mt-4 text-[#F5A623] hover:underline">
+          <h1 className="text-2xl font-semibold text-[#58595b]">Ingen betalning vald</h1>
+          <button onClick={() => router.push('/')} className="mt-4 text-[#f5ca00] hover:underline">
             Tillbaka till startsidan
           </button>
         </div>
@@ -92,13 +92,13 @@ function CheckoutContent() {
       <div className="max-w-2xl mx-auto px-4 py-16">
         {/* Header */}
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-[#2C2C2C] mb-2">Kassa</h1>
+          <h1 className="text-3xl font-bold text-[#58595b] mb-2">Kassa</h1>
           <p className="text-gray-500">Säker betalning</p>
         </div>
 
         {/* Order summary */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="font-semibold text-[#2C2C2C] mb-4">Din beställning</h2>
+          <h2 className="font-semibold text-[#58595b] mb-4">Din beställning</h2>
           <div className="flex justify-between items-start">
             <div>
               <p className="font-medium">{item.name}</p>
@@ -109,18 +109,18 @@ function CheckoutContent() {
           </div>
           <div className="border-t mt-4 pt-4 flex justify-between">
             <span className="font-semibold">Totalt</span>
-            <span className="font-bold text-xl text-[#2C2C2C]">{total.toLocaleString('sv-SE')} kr</span>
+            <span className="font-bold text-xl text-[#58595b]">{total.toLocaleString('sv-SE')} kr</span>
           </div>
         </div>
 
         {/* Payment method selector */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="font-semibold text-[#2C2C2C] mb-4">Välj betalmetod</h2>
+          <h2 className="font-semibold text-[#58595b] mb-4">Välj betalmetod</h2>
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={() => setMethod('stripe')}
               className={`p-4 rounded-xl border-2 transition-all text-center ${
-                method === 'stripe' ? 'border-[#F5A623] bg-[#FFF9EE]' : 'border-gray-200 hover:border-gray-300'
+                method === 'stripe' ? 'border-[#f5ca00] bg-[#FFF9EE]' : 'border-gray-200 hover:border-gray-300'
               }`}
             >
               <div className="text-2xl mb-1">💳</div>
@@ -130,7 +130,7 @@ function CheckoutContent() {
             <button
               onClick={() => setMethod('swish')}
               className={`p-4 rounded-xl border-2 transition-all text-center ${
-                method === 'swish' ? 'border-[#F5A623] bg-[#FFF9EE]' : 'border-gray-200 hover:border-gray-300'
+                method === 'swish' ? 'border-[#f5ca00] bg-[#FFF9EE]' : 'border-gray-200 hover:border-gray-300'
               }`}
             >
               <div className="text-2xl mb-1">📱</div>
@@ -144,7 +144,7 @@ function CheckoutContent() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
           {method === 'stripe' ? (
             <div>
-              <h2 className="font-semibold text-[#2C2C2C] mb-4">Kortbetalning</h2>
+              <h2 className="font-semibold text-[#58595b] mb-4">Kortbetalning</h2>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">E-postadress</label>
                 <input
@@ -152,7 +152,7 @@ function CheckoutContent() {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   placeholder="din@email.se"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#F5A623] focus:border-transparent"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#f5ca00] focus:border-transparent"
                 />
               </div>
               <p className="text-sm text-gray-500 mb-4">
@@ -162,7 +162,7 @@ function CheckoutContent() {
               <button
                 onClick={handleStripe}
                 disabled={loading || !email}
-                className="w-full bg-[#2C2C2C] text-white font-semibold py-3.5 rounded-xl hover:bg-[#3a3a3a] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-full bg-[#58595b] text-white font-semibold py-3.5 rounded-xl hover:bg-[#6b6c6e] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {loading ? 'Behandlar...' : `Betala ${total.toLocaleString('sv-SE')} kr`}
               </button>
@@ -170,10 +170,10 @@ function CheckoutContent() {
             </div>
           ) : swishData ? (
             <div className="text-center">
-              <h2 className="font-semibold text-[#2C2C2C] mb-4">Swish-betalning</h2>
+              <h2 className="font-semibold text-[#58595b] mb-4">Swish-betalning</h2>
               <div className="bg-[#FFF9EE] rounded-xl p-6 mb-4">
                 <p className="text-sm text-gray-600 mb-2">Swishnummer:</p>
-                <p className="text-3xl font-bold text-[#2C2C2C] mb-2">{swishData.swishNumber}</p>
+                <p className="text-3xl font-bold text-[#58595b] mb-2">{swishData.swishNumber}</p>
                 <p className="text-lg font-semibold">{swishData.amount.toLocaleString('sv-SE')} kr</p>
               </div>
               <a
@@ -188,7 +188,7 @@ function CheckoutContent() {
             </div>
           ) : (
             <div>
-              <h2 className="font-semibold text-[#2C2C2C] mb-4">Swish</h2>
+              <h2 className="font-semibold text-[#58595b] mb-4">Swish</h2>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Ditt mobilnummer</label>
                 <input
@@ -196,7 +196,7 @@ function CheckoutContent() {
                   value={phone}
                   onChange={e => setPhone(e.target.value)}
                   placeholder="07X XXX XX XX"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#F5A623] focus:border-transparent"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#f5ca00] focus:border-transparent"
                 />
                 <p className="text-xs text-gray-400 mt-1">Det nummer du betalar med via Swish</p>
               </div>

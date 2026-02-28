@@ -3,30 +3,59 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #C8A951;
-  --color-primary-light: #E0CB7E;
-  --color-primary-dark: #A08530;
-  --color-secondary: #2D2D2D;
-  --color-accent: #B8763C;
-  --color-surface: #FFFFFF;
-  --color-background: #F9F7F4;
-  --color-text-primary: #1A1A1A;
-  --color-text-muted: #6B6B6B;
-  --color-border: #E5E1DC;
+  /* Yeshin Norbu brand colors (from Divi theme) */
+  --brand: #f5ca00;
+  --brand-dark: #d4af00;
+  --charcoal: #58595b;
+  --charcoal-dark: #3d3e40;
+  --surface: #edeae6;
+  --background: #f4f4f4;
+  --white: #ffffff;
+  --text: #58595b;
+  --muted: #888888;
+  --border: #ddd8d3;
+
+  /* Aliases */
+  --color-primary: var(--charcoal);
+  --color-brand: var(--brand);
+  --color-surface: var(--surface);
+  --color-background: var(--background);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
 }
 
-html {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@layer base {
+  body {
+    background-color: var(--background);
+    color: var(--text);
+  }
+  
+  a {
+    color: inherit;
+  }
 
-body {
-  background-color: var(--color-background);
-  color: var(--color-text-primary);
-}
-
-/* Swedish hyphenation for long compound words */
-[lang="sv"] {
-  hyphens: auto;
-  -webkit-hyphens: auto;
+  /* Brand button utility */
+  .btn-brand {
+    background-color: var(--brand);
+    color: var(--charcoal);
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 12px 24px;
+    transition: background-color 0.2s;
+  }
+  .btn-brand:hover {
+    background-color: var(--brand-dark);
+  }
+  
+  .btn-dark {
+    background-color: var(--charcoal);
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 12px 24px;
+    transition: background-color 0.2s;
+  }
+  .btn-dark:hover {
+    background-color: var(--charcoal-dark);
+  }
 }
