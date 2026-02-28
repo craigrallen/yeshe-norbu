@@ -10,6 +10,7 @@ async function saveDefaults(formData: FormData) {
 
   const categories = formData.getAll('defaultCategory').map(String);
   const plans = formData.getAll('planSlug').map(String);
+  const featuredIds = formData.getAll('featuredEventId').map(String);
 
   await pool.query(
     `INSERT INTO app_settings (key, value, updated_at)
@@ -23,6 +24,13 @@ async function saveDefaults(formData: FormData) {
      VALUES ('events.member_included_plan_slugs', $1::jsonb, now())
      ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = now()`,
     [JSON.stringify(plans)]
+  );
+
+  await pool.query(
+    `INSERT INTO app_settings (key, value, updated_at)
+     VALUES ('events.featured_ids', $1::jsonb, now())
+     ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = now()`,
+    [JSON.stringify(featuredIds)]
   );
 
   revalidatePath('/sv/admin/events');
@@ -58,9 +66,12 @@ export default async function EventSettingsPage({ params: { locale } }: { params
 
   const { rows: defaultRows } = await pool.query("SELECT value FROM app_settings WHERE key='events.member_included_default_categories' LIMIT 1");
   const { rows: planRows } = await pool.query("SELECT value FROM app_settings WHERE key='events.member_included_plan_slugs' LIMIT 1");
+  const { rows: featuredRows } = await pool.query("SELECT value FROM app_settings WHERE key='events.featured_ids' LIMIT 1");
+  const { rows: eventsRows } = await pool.query("SELECT id, title_sv, title_en, starts_at FROM events WHERE published = true ORDER BY starts_at ASC LIMIT 200");
 
   const defaults: string[] = defaultRows?.[0]?.value || [];
   const eligiblePlans: string[] = planRows?.[0]?.value || [];
+  const featuredIds: string[] = featuredRows?.[0]?.value || [];
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
@@ -87,6 +98,19 @@ export default async function EventSettingsPage({ params: { locale } }: { params
               <label key={p.slug} className="flex items-center gap-2 text-sm">
                 <input type="checkbox" name="planSlug" value={p.slug} defaultChecked={eligiblePlans.includes(p.slug)} />
                 <span>{sv ? p.name_sv : p.name_en} <span className="text-gray-400">({p.slug})</span></span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+
+        <div>
+          <h2 className="font-semibold mb-2">{sv ? 'Utvalda event på startsidan' : 'Featured events on homepage'}</h2>
+          <div className="max-h-80 overflow-auto border rounded-lg p-3 space-y-2">
+            {eventsRows.map((e: any) => (
+              <label key={e.id} className="flex items-center gap-2 text-sm">
+                <input type="checkbox" name="featuredEventId" value={e.id} defaultChecked={featuredIds.includes(e.id)} />
+                <span>{sv ? e.title_sv : e.title_en} <span className="text-gray-400">({new Date(e.starts_at).toLocaleDateString('sv-SE')})</span></span>
               </label>
             ))}
           </div>

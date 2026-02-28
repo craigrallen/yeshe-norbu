@@ -1,7 +1,7 @@
 import { requireAdmin } from '@/lib/authz';
 import { SiteIcon } from '@/components/site-icon';
 
-type IconName = 'dashboard'|'users'|'member'|'events'|'venue'|'organizer'|'settings'|'orders'|'products'|'blog';
+type IconName = 'dashboard'|'users'|'member'|'events'|'venue'|'organizer'|'settings'|'orders'|'products'|'blog'|'media';
 type NavItem = { href: string; label: string; labelEn: string; icon: IconName; children?: NavItem[] };
 
 const adminNav: NavItem[] = [
@@ -17,6 +17,8 @@ const adminNav: NavItem[] = [
   { href: '/admin/orders', label: 'Beställningar', labelEn: 'Orders', icon: 'orders' },
   { href: '/admin/products', label: 'Produkter', labelEn: 'Products', icon: 'products' },
   { href: '/admin/blog', label: 'Blogg', labelEn: 'Blog', icon: 'blog' },
+  { href: '/admin/media', label: 'Media', labelEn: 'Media', icon: 'blog' as any },
+  { href: '/admin/settings', label: 'Inställningar', labelEn: 'Settings', icon: 'settings' },
 ];
 
 function SidebarItem({ item, locale, sv }: { item: NavItem; locale: string; sv: boolean }) {

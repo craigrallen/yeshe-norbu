@@ -26,6 +26,8 @@ async function updateEvent(formData: FormData) {
   const venueId = String(formData.get('venueId') || '').trim() || null;
   const organizerId = String(formData.get('organizerId') || '').trim() || null;
   let memberIncluded = formData.get('memberIncluded') === 'on';
+  const featured = formData.get('featuredEvent') === 'on';
+  const extraCategoryIds = formData.getAll('extraCategoryIds').map(String).filter(Boolean);
 
   if (!titleSv || !startsAt) return;
 
@@ -52,6 +54,27 @@ async function updateEvent(formData: FormData) {
   }).where(eq(events.id, id));
 
   await pool.query(`UPDATE events SET venue_id = $1, organizer_id = $2, member_included = $3 WHERE id = $4`, [venueId, organizerId, memberIncluded, id]);
+
+  // featured list in app_settings
+  const fr = await pool.query("SELECT value FROM app_settings WHERE key='events.featured_ids' LIMIT 1");
+  const featuredIds: string[] = fr.rows?.[0]?.value || [];
+  const nextFeatured = new Set(featuredIds);
+  if (featured) nextFeatured.add(id); else nextFeatured.delete(id);
+  await pool.query(
+    `INSERT INTO app_settings (key, value, updated_at) VALUES ('events.featured_ids', $1::jsonb, now())
+     ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = now()`,
+    [JSON.stringify(Array.from(nextFeatured))]
+  );
+
+  // additional categories map in app_settings
+  const er = await pool.query("SELECT value FROM app_settings WHERE key='events.extra_categories' LIMIT 1");
+  const extraMap: Record<string, string[]> = er.rows?.[0]?.value || {};
+  extraMap[id] = extraCategoryIds;
+  await pool.query(
+    `INSERT INTO app_settings (key, value, updated_at) VALUES ('events.extra_categories', $1::jsonb, now())
+     ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = now()`,
+    [JSON.stringify(extraMap)]
+  );
 
   revalidatePath('/sv/admin/events');
   revalidatePath('/en/admin/events');
@@ -92,6 +115,11 @@ export default async function EventDetailPage({ params: { locale, id } }: { para
 
   const { rows: defaultsRows } = await pool.query("SELECT value FROM app_settings WHERE key='events.member_included_default_categories' LIMIT 1");
   const defaultCategorySlugs: string[] = defaultsRows?.[0]?.value || [];
+  const { rows: featuredRows } = await pool.query("SELECT value FROM app_settings WHERE key='events.featured_ids' LIMIT 1");
+  const featuredIds: string[] = featuredRows?.[0]?.value || [];
+  const { rows: extraRows } = await pool.query("SELECT value FROM app_settings WHERE key='events.extra_categories' LIMIT 1");
+  const extraMap: Record<string, string[]> = extraRows?.[0]?.value || {};
+  const selectedExtra = extraMap[id] || [];
   const currentCategory = cats.find((c: any) => c.id === event.categoryId);
   const categoryDefaultOn = currentCategory?.slug ? defaultCategorySlugs.includes(currentCategory.slug) : false;
 
@@ -127,6 +155,10 @@ export default async function EventDetailPage({ params: { locale, id } }: { para
             {orgRows.map((o: any) => <option key={o.id} value={o.id}>{o.name}</option>)}
           </select>
         </div>
+        <div>
+          <label className="block text-xs text-gray-500 mb-1">{sv ? 'Extra kategorier (valfritt)' : 'Extra categories (optional)'}</label>
+          <select name="extraCategoryIds" multiple defaultValue={selectedExtra} className="w-full border rounded-lg px-3 py-2 min-h-[120px]">{cats.map((c: any) => <option key={c.id} value={c.id}>{sv ? c.nameSv : c.nameEn}</option>)}</select>
+        </div>
         <input name="venue" defaultValue={event.venue || ''} placeholder={sv ? 'Plats' : 'Venue'} className="w-full border rounded-lg px-3 py-2" />
         <input name="venueAddress" defaultValue={event.venueAddress || ''} placeholder={sv ? 'Adress' : 'Address'} className="w-full border rounded-lg px-3 py-2" />
         <input name="featuredImageUrl" defaultValue={event.featuredImageUrl || ''} placeholder="Image URL" className="w-full border rounded-lg px-3 py-2" />
@@ -136,7 +168,8 @@ export default async function EventDetailPage({ params: { locale, id } }: { para
           <label className="flex items-center gap-2"><input type="checkbox" name="isOnline" defaultChecked={event.isOnline} /> {sv ? 'Online-evenemang' : 'Online event'}</label>
           <label className="flex items-center gap-2"><input type="checkbox" name="published" defaultChecked={event.published} /> {sv ? 'Publicerad' : 'Published'}</label>
           <label className="flex items-center gap-2"><input type="checkbox" name="memberIncluded" defaultChecked={Boolean(eventExtra.member_included) || (!eventExtra.member_included && categoryDefaultOn)} /> {sv ? 'Gratis för berättigade medlemmar' : 'Free for eligible members'}</label>
-          <a className="text-xs text-blue-600 hover:underline" href={`/${locale}/admin/events/settings`}>{sv ? 'Hantera standardkategorier' : 'Manage default categories'}</a>
+          <label className="flex items-center gap-2"><input type="checkbox" name="featuredEvent" defaultChecked={featuredIds.includes(id)} /> {sv ? 'Utvalt event' : 'Featured event'}</label>
+          <a className="text-xs text-blue-600 hover:underline" href={`/${locale}/admin/events/settings`}>{sv ? 'Hantera standardkategorier + utvalda event' : 'Manage default categories + featured events'}</a>
         </div>
         <div className="flex justify-between pt-4 border-t">
           <button type="submit" className="px-6 py-2 bg-[#58595b] text-white rounded-lg">{sv ? 'Spara ändringar' : 'Save changes'}</button>

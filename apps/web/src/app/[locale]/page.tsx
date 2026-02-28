@@ -13,24 +13,22 @@ export default async function HomePage({ params: { locale } }: { params: { local
   const t = await getTranslations({ locale, namespace: 'home' });
   const sv = locale === 'sv';
 
-  const { rows: featuredEvents } = await pool.query(
-    `SELECT id, slug,
-            COALESCE(NULLIF(title_sv,''), title_en) as title_sv_fallback,
-            COALESCE(NULLIF(title_en,''), title_sv) as title_en_fallback,
-            starts_at, venue, featured_image_url
-     FROM events
-     WHERE published = true
-       AND starts_at >= now()
-       AND coalesce(
-         nullif(to_jsonb(events)->>'featured','')::boolean,
-         nullif(to_jsonb(events)->>'is_featured','')::boolean,
-         nullif(to_jsonb(events)->>'wp_featured','')::boolean,
-         nullif(to_jsonb(events)->>'tribe_featured','')::boolean,
-         false
-       ) = true
-     ORDER BY starts_at ASC
-     LIMIT 3`
-  );
+  const { rows: featuredSettingRows } = await pool.query("SELECT value FROM app_settings WHERE key='events.featured_ids' LIMIT 1");
+  const featuredIds: string[] = featuredSettingRows?.[0]?.value || [];
+
+  const featuredEvents = featuredIds.length
+    ? (await pool.query(
+      `SELECT id, slug,
+              COALESCE(NULLIF(title_sv,''), title_en) as title_sv_fallback,
+              COALESCE(NULLIF(title_en,''), title_sv) as title_en_fallback,
+              starts_at, venue, featured_image_url
+       FROM events
+       WHERE published = true AND starts_at >= now() AND id = ANY($1::uuid[])
+       ORDER BY starts_at ASC
+       LIMIT 3`,
+      [featuredIds]
+    )).rows
+    : [];
 
   const upcomingEvents = featuredEvents.length
     ? featuredEvents

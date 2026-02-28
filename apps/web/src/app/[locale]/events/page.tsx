@@ -9,18 +9,13 @@ export default async function EventsPage({ params: { locale }, searchParams }: {
 
   // Categories
   const { rows: categories } = await pool.query('SELECT id, slug, name_sv, name_en FROM event_categories ORDER BY name_sv');
+  const { rows: featuredRows } = await pool.query("SELECT value FROM app_settings WHERE key='events.featured_ids' LIMIT 1");
+  const featuredIds: string[] = featuredRows?.[0]?.value || [];
 
   // Events
   let query = `
     SELECT e.id, e.slug, e.title_sv, e.title_en, e.starts_at, e.ends_at, e.venue, e.featured_image_url, e.is_online,
-           ec.name_sv as cat_sv, ec.name_en as cat_en, ec.slug as cat_slug,
-           coalesce(
-             nullif(to_jsonb(e)->>'featured','')::boolean,
-             nullif(to_jsonb(e)->>'is_featured','')::boolean,
-             nullif(to_jsonb(e)->>'wp_featured','')::boolean,
-             nullif(to_jsonb(e)->>'tribe_featured','')::boolean,
-             false
-           ) as featured
+           ec.name_sv as cat_sv, ec.name_en as cat_en, ec.slug as cat_slug
     FROM events e
     LEFT JOIN event_categories ec ON e.category_id = ec.id
     WHERE e.published = true
@@ -41,7 +36,7 @@ export default async function EventsPage({ params: { locale }, searchParams }: {
 
   const { rows: events } = await pool.query(query, params);
 
-  const featuredEvents = events.filter((e: any) => e.featured).slice(0, 3);
+  const featuredEvents = events.filter((e: any) => featuredIds.includes(e.id)).slice(0, 3);
 
   function formatDate(d: string) {
     return new Date(d).toLocaleDateString('sv-SE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
