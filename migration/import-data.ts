@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * Import all extracted WordPress data into the new Yeshe Norbu database.
+ * Import all extracted WordPress data into the new Yeshin Norbu database.
  * 
  * Imports (in order):
  * 1. Users (from WC customers)
@@ -33,7 +33,7 @@ function load<T = any>(name: string): T[] {
 }
 
 async function main() {
-  console.log('=== Yeshe Norbu Data Import ===\n');
+  console.log('=== Yeshin Norbu Data Import ===\n');
 
   // 1. Import users from WC customers
   console.log('1. Importing users from WC customers...');

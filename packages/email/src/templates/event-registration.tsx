@@ -24,7 +24,7 @@ const t = {
     where: 'Plats',
     ref: 'Bokningsreferens',
     qr: 'Visa din QR-kod vid incheckning.',
-    footer: 'Yeshe Norbu — Buddhistiskt center i Stockholm',
+    footer: 'Yeshin Norbu — Buddhistiskt center i Stockholm',
   },
   en: {
     preview: 'Your registration is confirmed!',
@@ -35,7 +35,7 @@ const t = {
     where: 'Venue',
     ref: 'Booking reference',
     qr: 'Show your QR code at check-in.',
-    footer: 'Yeshe Norbu — Buddhist centre in Stockholm',
+    footer: 'Yeshin Norbu — Buddhist centre in Stockholm',
   },
 };
 

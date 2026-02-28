@@ -52,7 +52,7 @@ export default function POSPage() {
     <div className="flex h-screen">
       {/* Product grid */}
       <div className="flex-1 p-4 overflow-y-auto">
-        <h1 className="text-lg font-bold text-primary mb-4">Kassa — Yeshe Norbu</h1>
+        <h1 className="text-lg font-bold text-primary mb-4">Kassa — Yeshin Norbu</h1>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {QUICK_PRODUCTS.map((product) => (
             <button

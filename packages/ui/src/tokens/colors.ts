@@ -1,4 +1,4 @@
-/** Brand color tokens for Yeshe Norbu. */
+/** Brand color tokens for Yeshin Norbu. */
 export const colors = {
   primary: {
     DEFAULT: '#C8A951',

@@ -23,7 +23,7 @@ const UPCOMING_EVENTS = [
     date: '2025-03-14',
     endDate: '2025-03-16',
     time: '18:00',
-    location: 'Yeshe Norbu, Stockholm',
+    location: 'Yeshin Norbu, Stockholm',
     category: 'Retreatt',
     priceSek: 1200,
     spotsLeft: 12,
@@ -37,7 +37,7 @@ const UPCOMING_EVENTS = [
     date: '2025-03-21',
     endDate: '2025-03-21',
     time: '18:30',
-    location: 'Yeshe Norbu, Stockholm',
+    location: 'Yeshin Norbu, Stockholm',
     category: 'Nybörjare',
     priceSek: 150,
     spotsLeft: 28,
@@ -51,7 +51,7 @@ const UPCOMING_EVENTS = [
     date: '2025-03-28',
     endDate: '2025-03-28',
     time: '18:30',
-    location: 'Yeshe Norbu, Stockholm',
+    location: 'Yeshin Norbu, Stockholm',
     category: 'Veckomeditation',
     priceSek: 100,
     spotsLeft: 35,
@@ -65,7 +65,7 @@ const UPCOMING_EVENTS = [
     date: '2025-04-05',
     endDate: '2025-04-05',
     time: '10:00',
-    location: 'Yeshe Norbu, Stockholm',
+    location: 'Yeshin Norbu, Stockholm',
     category: 'Studier',
     priceSek: 250,
     spotsLeft: 20,
@@ -79,7 +79,7 @@ const UPCOMING_EVENTS = [
     date: '2025-04-12',
     endDate: '2025-04-12',
     time: '09:00',
-    location: 'Yeshe Norbu, Stockholm',
+    location: 'Yeshin Norbu, Stockholm',
     category: 'Retreatt',
     priceSek: 500,
     spotsLeft: 8,
@@ -93,7 +93,7 @@ const UPCOMING_EVENTS = [
     date: '2025-04-19',
     endDate: '2025-04-19',
     time: '14:00',
-    location: 'Yeshe Norbu, Stockholm',
+    location: 'Yeshin Norbu, Stockholm',
     category: 'Studier',
     priceSek: 200,
     spotsLeft: 22,
@@ -220,14 +220,14 @@ export default async function EventsPage({
           </h2>
           <p className="text-gray-300 mb-6 max-w-xl mx-auto">
             {isSv
-              ? 'Yeshe Norbu är en ideell organisation. Dina bidrag gör det möjligt för oss att erbjuda undervisning och retreatter.'
-              : 'Yeshe Norbu is a non-profit. Your donations make it possible for us to offer teachings and retreats.'}
+              ? 'Yeshin Norbu är en ideell organisation. Dina bidrag gör det möjligt för oss att erbjuda undervisning och retreatter.'
+              : 'Yeshin Norbu is a non-profit. Your donations make it possible for us to offer teachings and retreats.'}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             {[100, 250, 500].map(amt => (
               <a
                 key={amt}
-                href={`/${locale}/checkout?name=${encodeURIComponent(isSv ? 'Donation till Yeshe Norbu' : 'Donation to Yeshe Norbu')}&amount=${amt}&type=donation`}
+                href={`/${locale}/checkout?name=${encodeURIComponent(isSv ? 'Donation till Yeshin Norbu' : 'Donation to Yeshin Norbu')}&amount=${amt}&type=donation`}
                 className="bg-[#F5A623] text-white font-semibold px-6 py-3 rounded-xl hover:bg-[#e09520] transition-colors"
               >
                 {amt} kr

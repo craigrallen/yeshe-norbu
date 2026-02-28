@@ -87,7 +87,7 @@
 - **Live publishable key**: `pk_live_***REDACTED***`
 - **Live secret key**: `sk_live_***REDACTED***`
 - **Webhook secret**: `whsec_***REDACTED***`
-- Statement descriptor: "Yeshe Norbu Mind Training"
+- Statement descriptor: "Yeshin Norbu Mind Training"
 - Features: Apple Pay ✅, Google Pay ✅, 3D Secure ✅, Saved cards ✅
 
 ## Swish Config (from WP)

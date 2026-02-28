@@ -23,7 +23,7 @@ export default function AdminLayout({
         <div className="flex items-center gap-3">
           <span className="text-sm font-medium text-gray-400">{sv ? 'Administrationspanel' : 'Admin Panel'}</span>
           <span className="text-gray-600">|</span>
-          <span className="text-sm text-white font-semibold">Yeshe Norbu</span>
+          <span className="text-sm text-white font-semibold">Yeshin Norbu</span>
         </div>
         <div className="flex items-center gap-4">
           <a href={`/${locale}`} className="text-xs text-gray-400 hover:text-white">{sv ? '← Tillbaka till sajten' : '← Back to site'}</a>

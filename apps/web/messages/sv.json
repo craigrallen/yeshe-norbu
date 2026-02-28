@@ -1,6 +1,6 @@
 {
   "common": {
-    "siteName": "Yeshe Norbu",
+    "siteName": "Yeshin Norbu",
     "tagline": "Buddhistiskt center i Stockholm",
     "login": "Logga in",
     "register": "Registrera",
@@ -29,13 +29,13 @@
     "contact": "Kontakt"
   },
   "home": {
-    "heroTitle": "Yeshe Norbu",
+    "heroTitle": "Yeshin Norbu",
     "heroSubtitle": "Buddhistiskt center i hjärtat av Stockholm",
     "heroDescription": "Vi erbjuder meditationskurser, retreater och undervisning i tibetansk buddhism i en varm och välkomnande miljö.",
     "upcomingEvents": "Kommande evenemang",
     "viewAll": "Se alla",
     "ourMission": "Vårt uppdrag",
-    "missionText": "Yeshe Norbu är affilierat med FPMT (Foundation for the Preservation of the Mahayana Tradition) och arbetar för att göra buddhistisk visdom tillgänglig för alla.",
+    "missionText": "Yeshin Norbu är affilierat med FPMT (Foundation for the Preservation of the Mahayana Tradition) och arbetar för att göra buddhistisk visdom tillgänglig för alla.",
     "getInvolved": "Engagera dig",
     "supportUs": "Stöd oss"
   },
@@ -67,7 +67,7 @@
   },
   "membership": {
     "title": "Bli medlem",
-    "description": "Stöd Yeshe Norbu och få tillgång till exklusiva förmåner.",
+    "description": "Stöd Yeshin Norbu och få tillgång till exklusiva förmåner.",
     "choosePlan": "Välj medlemskap",
     "perMonth": "mån",
     "perYear": "år",
@@ -100,10 +100,10 @@
     "deleteAccount": "Radera mitt konto"
   },
   "footer": {
-    "address": "Yeshe Norbu, Stockholm",
+    "address": "Yeshin Norbu, Stockholm",
     "privacy": "Integritetspolicy",
     "cookies": "Cookiepolicy",
     "terms": "Villkor",
-    "copyright": "© {year} Yeshe Norbu. Alla rättigheter förbehållna."
+    "copyright": "© {year} Yeshin Norbu. Alla rättigheter förbehållna."
   }
 }

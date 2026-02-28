@@ -14,26 +14,26 @@ interface DonationReceiptProps {
 
 const t = {
   sv: {
-    preview: 'Tack för din gåva till Yeshe Norbu',
+    preview: 'Tack för din gåva till Yeshin Norbu',
     heading: 'Tack för din gåva!',
     greeting: (name: string) => `Hej ${name},`,
     oneTime: (amount: string, date: string) => `Vi har mottagit din gåva på ${amount} kr den ${date}.`,
     recurring: (amount: string) => `Din månatliga gåva på ${amount} kr har registrerats.`,
     dedication: 'Tillägnan',
-    org: 'Yeshe Norbu (MindfulnessApps Sweden AB)',
+    org: 'Yeshin Norbu (MindfulnessApps Sweden AB)',
     orgNum: 'Organisationsnummer: 559192-2448',
-    footer: 'Yeshe Norbu — Buddhistiskt center i Stockholm',
+    footer: 'Yeshin Norbu — Buddhistiskt center i Stockholm',
   },
   en: {
-    preview: 'Thank you for your donation to Yeshe Norbu',
+    preview: 'Thank you for your donation to Yeshin Norbu',
     heading: 'Thank you for your donation!',
     greeting: (name: string) => `Hi ${name},`,
     oneTime: (amount: string, date: string) => `We have received your donation of ${amount} kr on ${date}.`,
     recurring: (amount: string) => `Your monthly donation of ${amount} kr has been registered.`,
     dedication: 'Dedication',
-    org: 'Yeshe Norbu (MindfulnessApps Sweden AB)',
+    org: 'Yeshin Norbu (MindfulnessApps Sweden AB)',
     orgNum: 'Organisation number: 559192-2448',
-    footer: 'Yeshe Norbu — Buddhist centre in Stockholm',
+    footer: 'Yeshin Norbu — Buddhist centre in Stockholm',
   },
 };
 

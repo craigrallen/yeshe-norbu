@@ -37,7 +37,7 @@ export default function POSLoginPage() {
   return (
     <div className="flex h-screen items-center justify-center bg-background">
       <div className="w-full max-w-sm rounded-lg border border-border bg-surface p-8 shadow-sm">
-        <h1 className="text-2xl font-bold text-primary text-center mb-2">Yeshe Norbu</h1>
+        <h1 className="text-2xl font-bold text-primary text-center mb-2">Yeshin Norbu</h1>
         <p className="text-sm text-muted text-center mb-6">Kassa</p>
 
         <form onSubmit={handleLogin} className="space-y-4">

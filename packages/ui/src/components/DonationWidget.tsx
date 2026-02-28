@@ -15,7 +15,7 @@ export interface DonationWidgetProps {
 
 const t = {
   sv: {
-    title: 'Stöd Yeshe Norbu',
+    title: 'Stöd Yeshin Norbu',
     oneTime: 'Engångsgåva',
     monthly: 'Månadsgivare',
     custom: 'Annat belopp',
@@ -23,7 +23,7 @@ const t = {
     currency: 'kr',
   },
   en: {
-    title: 'Support Yeshe Norbu',
+    title: 'Support Yeshin Norbu',
     oneTime: 'One-time',
     monthly: 'Monthly',
     custom: 'Other amount',

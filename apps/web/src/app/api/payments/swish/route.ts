@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     const swishPayment = await createECommercePayment({
       amount: totalSek,
       payerAlias: data.payerAlias,
-      message: data.message ?? 'Yeshe Norbu',
+      message: data.message ?? 'Yeshin Norbu',
       payeePaymentReference: order.id,
     });
 

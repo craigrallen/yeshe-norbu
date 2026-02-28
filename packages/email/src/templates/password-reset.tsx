@@ -17,7 +17,7 @@ const t = {
     body: 'Klicka på knappen nedan för att återställa ditt lösenord. Länken är giltig i 1 timme.',
     cta: 'Återställ lösenord',
     ignore: 'Om du inte begärde detta kan du ignorera detta meddelande.',
-    footer: 'Yeshe Norbu — Buddhistiskt center i Stockholm',
+    footer: 'Yeshin Norbu — Buddhistiskt center i Stockholm',
   },
   en: {
     preview: 'Reset your password',
@@ -26,7 +26,7 @@ const t = {
     body: 'Click the button below to reset your password. The link is valid for 1 hour.',
     cta: 'Reset password',
     ignore: 'If you did not request this, you can safely ignore this email.',
-    footer: 'Yeshe Norbu — Buddhist centre in Stockholm',
+    footer: 'Yeshin Norbu — Buddhist centre in Stockholm',
   },
 };
 

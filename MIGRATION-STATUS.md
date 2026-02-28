@@ -1,4 +1,4 @@
-# Yeshe Norbu Migration Status
+# Yeshin Norbu Migration Status
 
 ## Data Extraction Complete ✅
 

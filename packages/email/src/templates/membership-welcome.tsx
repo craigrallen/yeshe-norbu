@@ -12,20 +12,20 @@ interface MembershipWelcomeProps {
 
 const t = {
   sv: {
-    preview: 'Välkommen som medlem i Yeshe Norbu!',
+    preview: 'Välkommen som medlem i Yeshin Norbu!',
     heading: 'Välkommen!',
     greeting: (name: string) => `Hej ${name},`,
     body: (plan: string) => `Tack för att du blivit medlem! Du är nu registrerad som ${plan}-medlem.`,
     includes: 'Ditt medlemskap inkluderar:',
-    footer: 'Yeshe Norbu — Buddhistiskt center i Stockholm',
+    footer: 'Yeshin Norbu — Buddhistiskt center i Stockholm',
   },
   en: {
-    preview: 'Welcome to Yeshe Norbu!',
+    preview: 'Welcome to Yeshin Norbu!',
     heading: 'Welcome!',
     greeting: (name: string) => `Hi ${name},`,
     body: (plan: string) => `Thank you for becoming a member! You are now registered as a ${plan} member.`,
     includes: 'Your membership includes:',
-    footer: 'Yeshe Norbu — Buddhist centre in Stockholm',
+    footer: 'Yeshin Norbu — Buddhist centre in Stockholm',
   },
 };
 

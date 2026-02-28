@@ -1,8 +1,8 @@
 const events = [
-  { id: 1, title: 'Introduktion till Mindfulness', date: '2026-03-04', time: '18:30', location: 'Yeshe Norbu Center', capacity: 20, registered: 12, status: 'Publicerad' },
+  { id: 1, title: 'Introduktion till Mindfulness', date: '2026-03-04', time: '18:30', location: 'Yeshin Norbu Center', capacity: 20, registered: 12, status: 'Publicerad' },
   { id: 2, title: 'Lam Rim – vecka 3', date: '2026-03-06', time: '19:00', location: 'Online', capacity: 15, registered: 8, status: 'Publicerad' },
   { id: 3, title: 'Retreat: Tystnadens kraft', date: '2026-03-14', time: 'Helg', location: 'Utanför Stockholm', capacity: 10, registered: 7, status: 'Publicerad' },
-  { id: 4, title: 'Meditation och hjärnforskning', date: '2026-03-20', time: '18:00', location: 'Yeshe Norbu Center', capacity: 30, registered: 0, status: 'Utkast' },
+  { id: 4, title: 'Meditation och hjärnforskning', date: '2026-03-20', time: '18:00', location: 'Yeshin Norbu Center', capacity: 30, registered: 0, status: 'Utkast' },
 ];
 
 export default function AdminEvents({ params: { locale } }: { params: { locale: string } }) {

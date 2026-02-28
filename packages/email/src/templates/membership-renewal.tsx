@@ -18,7 +18,7 @@ const t = {
     greeting: (name: string) => `Hej ${name},`,
     body: (plan: string, date: string) => `Ditt ${plan}-medlemskap löper ut den ${date}.`,
     cta: 'Förnya ditt medlemskap',
-    footer: 'Yeshe Norbu — Buddhistiskt center i Stockholm',
+    footer: 'Yeshin Norbu — Buddhistiskt center i Stockholm',
   },
   en: {
     preview: 'Your membership is renewing soon',
@@ -26,7 +26,7 @@ const t = {
     greeting: (name: string) => `Hi ${name},`,
     body: (plan: string, date: string) => `Your ${plan} membership expires on ${date}.`,
     cta: 'Renew your membership',
-    footer: 'Yeshe Norbu — Buddhist centre in Stockholm',
+    footer: 'Yeshin Norbu — Buddhist centre in Stockholm',
   },
 };
 

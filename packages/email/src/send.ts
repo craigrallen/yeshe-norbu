@@ -13,8 +13,8 @@ function getResend(): Resend {
 }
 
 const FROM_ADDRESS = {
-  sv: 'Yeshe Norbu <noreply@yeshinnorbu.se>',
-  en: 'Yeshe Norbu <noreply@yeshinnorbu.se>',
+  sv: 'Yeshin Norbu <noreply@yeshinnorbu.se>',
+  en: 'Yeshin Norbu <noreply@yeshinnorbu.se>',
 } as const;
 
 export interface SendEmailParams {

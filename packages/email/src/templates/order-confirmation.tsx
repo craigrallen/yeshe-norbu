@@ -31,7 +31,7 @@ interface OrderConfirmationProps {
 
 const t = {
   sv: {
-    preview: 'Orderbekräftelse från Yeshe Norbu',
+    preview: 'Orderbekräftelse från Yeshin Norbu',
     heading: 'Tack för din beställning!',
     greeting: (name: string) => `Hej ${name},`,
     orderRef: 'Ordernummer',
@@ -41,10 +41,10 @@ const t = {
     price: 'Pris',
     total: 'Totalt',
     payment: 'Betalmetod',
-    footer: 'Yeshe Norbu — Buddhistiskt center i Stockholm',
+    footer: 'Yeshin Norbu — Buddhistiskt center i Stockholm',
   },
   en: {
-    preview: 'Order confirmation from Yeshe Norbu',
+    preview: 'Order confirmation from Yeshin Norbu',
     heading: 'Thank you for your order!',
     greeting: (name: string) => `Hi ${name},`,
     orderRef: 'Order number',
@@ -54,7 +54,7 @@ const t = {
     price: 'Price',
     total: 'Total',
     payment: 'Payment method',
-    footer: 'Yeshe Norbu — Buddhist centre in Stockholm',
+    footer: 'Yeshin Norbu — Buddhist centre in Stockholm',
   },
 };
 

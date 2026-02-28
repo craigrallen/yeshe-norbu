@@ -1,6 +1,6 @@
-# Yeshe Norbu
+# Yeshin Norbu
 
-Modern web platform for [Yeshe Norbu](https://yeshinnorbu.se) — an FPMT-affiliated Buddhist centre in Stockholm.
+Modern web platform for [Yeshin Norbu](https://yeshinnorbu.se) — an FPMT-affiliated Buddhist centre in Stockholm.
 
 ## Tech Stack
 
@@ -87,4 +87,4 @@ docker compose up -d
 
 ## License
 
-Private — Yeshe Norbu / MindfulnessApps Sweden AB
+Private — Yeshin Norbu / MindfulnessApps Sweden AB

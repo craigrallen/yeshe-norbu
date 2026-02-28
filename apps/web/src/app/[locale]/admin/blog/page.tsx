@@ -1,9 +1,9 @@
 const posts = [
-  { slug: 'fpmt-och-yeshe-norbu', title: 'FPMT och Yeshe Norbu', category: 'Undervisning', date: '2026-02-28', status: 'Publicerad', views: 0 },
+  { slug: 'fpmt-och-yeshe-norbu', title: 'FPMT och Yeshin Norbu', category: 'Undervisning', date: '2026-02-28', status: 'Publicerad', views: 0 },
   { slug: 'mindfulness-i-vardagen', title: 'Mindfulness i vardagen', category: 'Mindfulness', date: '2026-02-28', status: 'Publicerad', views: 0 },
   { slug: 'vad-ar-meditation', title: 'Vad är meditation?', category: 'Undervisning', date: '2026-02-28', status: 'Publicerad', views: 0 },
   { slug: 'mindfulness-och-hjarnforskning', title: 'Mindfulness och hjärnforskning', category: 'Mindfulness', date: '2026-02-28', status: 'Publicerad', views: 0 },
-  { slug: 'valkomna-till-yeshe-norbu', title: 'Välkommen till Yeshe Norbu', category: 'Gemenskap', date: '2026-02-28', status: 'Publicerad', views: 0 },
+  { slug: 'valkomna-till-yeshe-norbu', title: 'Välkommen till Yeshin Norbu', category: 'Gemenskap', date: '2026-02-28', status: 'Publicerad', views: 0 },
 ];
 
 export default function AdminBlog({ params: { locale } }: { params: { locale: string } }) {

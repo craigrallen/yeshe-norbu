@@ -1,13 +1,13 @@
 import { getTranslations } from 'next-intl/server';
 
 const upcomingEvents = [
-  { id: 1, title: 'Introduktion till Mindfulness', titleEn: 'Introduction to Mindfulness', date: '4 mars', dateEn: '4 March', time: '18:30', location: 'Yeshe Norbu Center', price: 'Gratis', priceEn: 'Free', emoji: '🧘' },
+  { id: 1, title: 'Introduktion till Mindfulness', titleEn: 'Introduction to Mindfulness', date: '4 mars', dateEn: '4 March', time: '18:30', location: 'Yeshin Norbu Center', price: 'Gratis', priceEn: 'Free', emoji: '🧘' },
   { id: 2, title: 'Lam Rim – vecka 3', titleEn: 'Lam Rim – week 3', date: '6 mars', dateEn: '6 March', time: '19:00', location: 'Online', price: '150 kr', priceEn: '150 SEK', emoji: '📿' },
   { id: 3, title: 'Retreat: Tystnadens kraft', titleEn: 'Retreat: The Power of Silence', date: '14–16 mars', dateEn: '14–16 March', time: 'Helg', location: 'Utanför Stockholm', price: '2 500 kr', priceEn: '2,500 SEK', emoji: '🌿' },
 ];
 
 const blogPosts = [
-  { slug: 'fpmt-och-yeshe-norbu', title: 'FPMT och Yeshe Norbu', titleEn: 'FPMT and Yeshe Norbu', excerpt: 'Lär dig om FPMT och hur Yeshe Norbu i Stockholm är en del av detta globala andliga nätverk.', excerptEn: 'Learn about FPMT and Yeshe Norbu Stockholm as part of this global spiritual network.', category: 'Undervisning', categoryEn: 'Teaching' },
+  { slug: 'fpmt-och-yeshe-norbu', title: 'FPMT och Yeshin Norbu', titleEn: 'FPMT and Yeshin Norbu', excerpt: 'Lär dig om FPMT och hur Yeshin Norbu i Stockholm är en del av detta globala andliga nätverk.', excerptEn: 'Learn about FPMT and Yeshin Norbu Stockholm as part of this global spiritual network.', category: 'Undervisning', categoryEn: 'Teaching' },
   { slug: 'mindfulness-i-vardagen', title: 'Mindfulness i vardagen', titleEn: 'Mindfulness in Daily Life', excerpt: 'Fem konkreta mindfulnessövningar för dig som vill skapa mer närvaro i vardagen.', excerptEn: 'Five practical mindfulness exercises for creating more presence in daily life.', category: 'Mindfulness', categoryEn: 'Mindfulness' },
   { slug: 'vad-ar-meditation', title: 'Vad är meditation?', titleEn: 'What is Meditation?', excerpt: 'Meditation är inte att tömma sinnet. Det är att träna uppmärksamheten.', excerptEn: 'Meditation is not emptying the mind. It is training attention.', category: 'Undervisning', categoryEn: 'Teaching' },
 ];

@@ -1,7 +1,7 @@
 import { authenticator } from 'otplib';
 import QRCode from 'qrcode';
 
-const ISSUER = 'Yeshe Norbu';
+const ISSUER = 'Yeshin Norbu';
 
 /**
  * Generate a new TOTP secret for a user.

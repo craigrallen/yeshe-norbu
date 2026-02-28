@@ -112,7 +112,7 @@ async function Footer({ locale }: { locale: Locale }) {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div>
-            <h3 className="font-semibold text-primary mb-3">Yeshe Norbu</h3>
+            <h3 className="font-semibold text-primary mb-3">Yeshin Norbu</h3>
             <p className="text-sm text-muted leading-relaxed">
               {locale === 'sv' ? 'Buddhistiskt center i Stockholm, affilierat med FPMT.' : 'Buddhist centre in Stockholm, affiliated with FPMT.'}
             </p>

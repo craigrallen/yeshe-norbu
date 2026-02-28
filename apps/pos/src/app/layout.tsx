@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Yeshe Norbu POS',
-  description: 'Point of Sale — Yeshe Norbu',
+  title: 'Yeshin Norbu POS',
+  description: 'Point of Sale — Yeshin Norbu',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

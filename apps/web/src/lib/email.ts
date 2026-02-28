@@ -14,7 +14,7 @@ function getTransporter() {
   });
 }
 
-const FROM = `"${process.env.GMAIL_FROM_NAME || 'Yeshe Norbu'}" <${process.env.GMAIL_FROM_EMAIL || 'hello@yeshinnorbu.se'}>`;
+const FROM = `"${process.env.GMAIL_FROM_NAME || 'Yeshin Norbu'}" <${process.env.GMAIL_FROM_EMAIL || 'hello@yeshinnorbu.se'}>`;
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://yeshinnorbu.se';
 
 function baseTemplate(content: string) {
@@ -39,11 +39,11 @@ function baseTemplate(content: string) {
 <body>
 <div class="wrap">
   <div class="header">
-    <div class="header-text">🙏 Yeshe Norbu Mind Training Centre</div>
+    <div class="header-text">🙏 Yeshin Norbu Mind Training Centre</div>
   </div>
   <div class="body">${content}</div>
   <div class="footer">
-    <p>Yeshe Norbu Mind Training Centre<br>
+    <p>Yeshin Norbu Mind Training Centre<br>
     Roslagsgatan 62, 113 54 Stockholm<br>
     <a href="tel:+46855008575">+46 855 008 575</a> · <a href="mailto:hello@yeshinnorbu.se">hello@yeshinnorbu.se</a></p>
     <p>Org nr: 802512-5629 · Bankgiro: 649-6137</p>
@@ -59,35 +59,35 @@ export async function sendPasswordResetEmail(to: string, firstName: string, toke
   const html = baseTemplate(`
     <h1>Återställ ditt lösenord</h1>
     <p>Hej ${firstName},</p>
-    <p>Vi fick en begäran om att återställa lösenordet för ditt konto på Yeshe Norbu.</p>
+    <p>Vi fick en begäran om att återställa lösenordet för ditt konto på Yeshin Norbu.</p>
     <p>Klicka på knappen nedan för att skapa ett nytt lösenord. Länken är giltig i <strong>1 timme</strong>.</p>
     <p><a href="${resetUrl}" class="btn">Återställ lösenord</a></p>
     <p>Om du inte begärde detta kan du ignorera det här e-postmeddelandet. Ditt lösenord ändras inte.</p>
-    <p>Med vänliga hälsningar,<br>Yeshe Norbu</p>
+    <p>Med vänliga hälsningar,<br>Yeshin Norbu</p>
   `);
 
   await getTransporter().sendMail({
     from: FROM,
     to,
-    subject: 'Återställ ditt lösenord – Yeshe Norbu',
+    subject: 'Återställ ditt lösenord – Yeshin Norbu',
     html,
   });
 }
 
 export async function sendWelcomeEmail(to: string, firstName: string) {
   const html = baseTemplate(`
-    <h1>Välkommen till Yeshe Norbu! 🙏</h1>
+    <h1>Välkommen till Yeshin Norbu! 🙏</h1>
     <p>Hej ${firstName},</p>
     <p>Ditt konto har skapats. Du kan nu logga in och boka evenemang, hantera ditt medlemskap och ta del av våra kurser.</p>
     <p><a href="${BASE_URL}/sv/logga-in" class="btn">Logga in</a></p>
     <p>Om du har frågor är du alltid välkommen att höra av dig till <a href="mailto:hello@yeshinnorbu.se">hello@yeshinnorbu.se</a>.</p>
-    <p>Med vänliga hälsningar,<br>Yeshe Norbu Mind Training Centre</p>
+    <p>Med vänliga hälsningar,<br>Yeshin Norbu Mind Training Centre</p>
   `);
 
   await getTransporter().sendMail({
     from: FROM,
     to,
-    subject: 'Välkommen till Yeshe Norbu',
+    subject: 'Välkommen till Yeshin Norbu',
     html,
   });
 }
@@ -117,7 +117,7 @@ export async function sendOrderConfirmationEmail(
     </table>
     <p>Har du frågor? Kontakta oss på <a href="mailto:hello@yeshinnorbu.se">hello@yeshinnorbu.se</a>.</p>
     <p>Vi ser fram emot att träffa dig!</p>
-    <p>Med vänliga hälsningar,<br>Yeshe Norbu Mind Training Centre</p>
+    <p>Med vänliga hälsningar,<br>Yeshin Norbu Mind Training Centre</p>
   `);
 
   await getTransporter().sendMail({

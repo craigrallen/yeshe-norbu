@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       payerAlias: formattedPhone,
       amount: String(Math.round(amountSek)),
       currency: 'SEK',
-      message: message || 'Yeshe Norbu',
+      message: message || 'Yeshin Norbu',
     };
 
     // NOTE: Swish production requires mTLS with the cert at migration/swish.pem
@@ -44,9 +44,9 @@ export async function POST(req: NextRequest) {
       paymentRef,
       swishNumber: SWISH_NUMBER,
       amount: amountSek,
-      message: message || 'Yeshe Norbu',
+      message: message || 'Yeshin Norbu',
       // For deep link / QR code
-      swishUrl: `swish://payment?data={"version":1,"payee":{"value":"${SWISH_NUMBER}","editable":false},"amount":{"value":${Math.round(amountSek)},"editable":false},"message":{"value":"${encodeURIComponent(message || 'Yeshe Norbu')}","editable":false}}`,
+      swishUrl: `swish://payment?data={"version":1,"payee":{"value":"${SWISH_NUMBER}","editable":false},"amount":{"value":${Math.round(amountSek)},"editable":false},"message":{"value":"${encodeURIComponent(message || 'Yeshin Norbu')}","editable":false}}`,
     });
   } catch (err: any) {
     console.error('Swish error:', err);

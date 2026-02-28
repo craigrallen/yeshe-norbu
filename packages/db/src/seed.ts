@@ -13,8 +13,8 @@ async function seed() {
       slug: 'friend-annual',
       nameSv: 'Vän — Årsmedlemskap',
       nameEn: 'Friend — Annual Membership',
-      descriptionSv: 'Stöd Yeshe Norbu som vän. Tillgång till medlemsevenemang.',
-      descriptionEn: 'Support Yeshe Norbu as a friend. Access to member events.',
+      descriptionSv: 'Stöd Yeshin Norbu som vän. Tillgång till medlemsevenemang.',
+      descriptionEn: 'Support Yeshin Norbu as a friend. Access to member events.',
       priceSek: '300.00',
       intervalMonths: 12,
       features: ['Medlemsevenemang', 'Nyhetsbrev', '10% rabatt på kurser'],
@@ -57,7 +57,7 @@ async function seed() {
     emailVerified: true,
     passwordHash,
     firstName: 'Admin',
-    lastName: 'Yeshe Norbu',
+    lastName: 'Yeshin Norbu',
     locale: 'sv',
   }).onConflictDoNothing().returning();
 

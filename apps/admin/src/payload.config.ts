@@ -2,7 +2,7 @@ import { buildConfig } from 'payload';
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 
-/** Payload CMS v3 configuration for Yeshe Norbu admin. */
+/** Payload CMS v3 configuration for Yeshin Norbu admin. */
 export default buildConfig({
   admin: {
     user: 'admins',
@@ -88,7 +88,7 @@ export default buildConfig({
     {
       slug: 'site-settings',
       fields: [
-        { name: 'siteName', type: 'text', defaultValue: 'Yeshe Norbu' },
+        { name: 'siteName', type: 'text', defaultValue: 'Yeshin Norbu' },
         { name: 'taglineSv', type: 'text' },
         { name: 'taglineEn', type: 'text' },
         { name: 'footerTextSv', type: 'textarea' },

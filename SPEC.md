@@ -1,4 +1,4 @@
-# Yeshe Norbu — Full Site Rebuild Specification
+# Yeshin Norbu — Full Site Rebuild Specification
 **Version:** 1.0  
 **Date:** 2026-02-26  
 **Status:** Draft for review  
@@ -9,10 +9,10 @@
 ## 1. Project Overview
 
 ### 1.1 Mission
-Rebuild yeshinnorbu.se as a modern, fast, beautiful, and fully custom web platform for Yeshe Norbu — an FPMT-affiliated Buddhist centre in Stockholm. The new site must feel unmistakably Scandinavian in its clarity and restraint, while carrying the warmth and spirit of FPMT Buddhist tradition.
+Rebuild yeshinnorbu.se as a modern, fast, beautiful, and fully custom web platform for Yeshin Norbu — an FPMT-affiliated Buddhist centre in Stockholm. The new site must feel unmistakably Scandinavian in its clarity and restraint, while carrying the warmth and spirit of FPMT Buddhist tradition.
 
 ### 1.2 Hard Constraints (Non-Negotiable)
-- **Branding**: Logo, organisation name ("Yeshe Norbu"), and brand colours stay exactly as-is
+- **Branding**: Logo, organisation name ("Yeshin Norbu"), and brand colours stay exactly as-is
 - **Payments**: Stripe (cards, Apple/Google Pay) and Swish (Swedish mobile payments) are the only permitted payment gateways — for both online AND in-person sales
 - **Language**: Swedish is the primary language; English is an automated secondary option
 - **Hosting**: EU-based data residency required
@@ -107,7 +107,7 @@ Build with modern, maintainable tools. Prefer custom-built where it gives us ful
 **Custom-built** event and ticketing system (not The Events Calendar). Reasons:
 - Full control over UX, ticket types, pricing rules, and discount logic
 - No plugin licensing fees
-- Can model exactly what Yeshe Norbu needs (retreats, day teachings, multi-session courses, live streaming events)
+- Can model exactly what Yeshin Norbu needs (retreats, day teachings, multi-session courses, live streaming events)
 - Tightly integrated with Stripe + Swish from the ground up
 
 ### 3.6 Courses / Learning (LMS)
@@ -417,7 +417,7 @@ Access control:
 ## 6. Admin Console
 
 ### 6.1 Design Principles
-- Clean, fast, purpose-built for Yeshe Norbu staff
+- Clean, fast, purpose-built for Yeshin Norbu staff
 - Role-based access: Admin, Editor, Finance, Support
 - Swedish UI (with English toggle)
 - Mobile-friendly for on-the-go event management

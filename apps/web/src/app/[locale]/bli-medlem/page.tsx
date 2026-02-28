@@ -89,8 +89,8 @@ export default async function BliMedlemPage({
           </h1>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto">
             {isSv
-              ? 'Stöd Yeshe Norbu och fördjupa din praksis med ett av våra medlemskap.'
-              : 'Support Yeshe Norbu and deepen your practice with one of our memberships.'}
+              ? 'Stöd Yeshin Norbu och fördjupa din praksis med ett av våra medlemskap.'
+              : 'Support Yeshin Norbu and deepen your practice with one of our memberships.'}
           </p>
         </div>
       </div>
@@ -189,7 +189,7 @@ export default async function BliMedlemPage({
               },
               {
                 q: isSv ? 'Är centret FPMT-anslutet?' : 'Is the center FPMT-affiliated?',
-                a: isSv ? 'Ja, Yeshe Norbu är ett FPMT-center (Foundation for the Preservation of the Mahayana Tradition).' : 'Yes, Yeshe Norbu is an FPMT center (Foundation for the Preservation of the Mahayana Tradition).',
+                a: isSv ? 'Ja, Yeshin Norbu är ett FPMT-center (Foundation for the Preservation of the Mahayana Tradition).' : 'Yes, Yeshin Norbu is an FPMT center (Foundation for the Preservation of the Mahayana Tradition).',
               },
             ].map((item, i) => (
               <div key={i} className="bg-white rounded-xl p-5 border border-gray-100">

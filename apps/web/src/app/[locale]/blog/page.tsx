@@ -1,9 +1,9 @@
 const posts = [
-  { slug: 'fpmt-och-yeshe-norbu', title: 'FPMT och Yeshe Norbu', excerpt: 'Lär dig om FPMT och hur Yeshe Norbu i Stockholm är en del av detta globala andliga nätverk.', date: '28 feb 2026', category: 'Undervisning' },
+  { slug: 'fpmt-och-yeshe-norbu', title: 'FPMT och Yeshin Norbu', excerpt: 'Lär dig om FPMT och hur Yeshin Norbu i Stockholm är en del av detta globala andliga nätverk.', date: '28 feb 2026', category: 'Undervisning' },
   { slug: 'mindfulness-i-vardagen', title: 'Mindfulness i vardagen', excerpt: 'Fem konkreta mindfulnessövningar för dig som vill skapa mer närvaro i vardagen.', date: '28 feb 2026', category: 'Mindfulness' },
   { slug: 'vad-ar-meditation', title: 'Vad är meditation?', excerpt: 'Meditation är inte att tömma sinnet. Det är att träna uppmärksamheten. En nybörjarguide.', date: '28 feb 2026', category: 'Undervisning' },
   { slug: 'mindfulness-och-hjarnforskning', title: 'Mindfulness och hjärnforskning', excerpt: 'Vad säger vetenskapen om mindfulness? En översikt över den senaste forskningen.', date: '28 feb 2026', category: 'Mindfulness' },
-  { slug: 'valkomna-till-yeshe-norbu', title: 'Välkommen till Yeshe Norbu', excerpt: 'Ett öppet och inkluderande center i Stockholm för alla som är intresserade av meditation och buddhism.', date: '28 feb 2026', category: 'Gemenskap' },
+  { slug: 'valkomna-till-yeshe-norbu', title: 'Välkommen till Yeshin Norbu', excerpt: 'Ett öppet och inkluderande center i Stockholm för alla som är intresserade av meditation och buddhism.', date: '28 feb 2026', category: 'Gemenskap' },
 ];
 
 export default function BlogPage({ params: { locale } }: { params: { locale: string } }) {
