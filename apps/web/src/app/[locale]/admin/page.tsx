@@ -1,97 +1,133 @@
-import { getTranslations } from 'next-intl/server';
-
-const stats = [
-  { label: 'Aktiva medlemmar', labelEn: 'Active members', value: '852', icon: '👥', trend: '+12%', color: 'bg-blue-50 border-blue-200' },
-  { label: 'Kommande evenemang', labelEn: 'Upcoming events', value: '12', icon: '📅', trend: 'nästa 30 dagar', color: 'bg-green-50 border-green-200' },
-  { label: 'Beställningar denna månad', labelEn: 'Orders this month', value: '47', icon: '🛍️', trend: '+8%', color: 'bg-yellow-50 border-yellow-200' },
-  { label: 'Totalt antal användare', labelEn: 'Total users', value: '1,191', icon: '🧑‍🤝‍🧑', trend: 'registrerade', color: 'bg-purple-50 border-purple-200' },
-];
-
-const recentOrders = [
-  { id: '#4821', customer: 'Anna Lindström', amount: '350 kr', status: 'Betald', date: '2026-02-28', statusColor: 'text-green-600' },
-  { id: '#4820', customer: 'Erik Johansson', amount: '890 kr', status: 'Betald', date: '2026-02-27', statusColor: 'text-green-600' },
-  { id: '#4819', customer: 'Maria Svensson', amount: '350 kr', status: 'Väntar', date: '2026-02-27', statusColor: 'text-yellow-600' },
-  { id: '#4818', customer: 'Lars Petersson', amount: '1 250 kr', status: 'Betald', date: '2026-02-26', statusColor: 'text-green-600' },
-  { id: '#4817', customer: 'Sofia Nilsson', amount: '350 kr', status: 'Återbetald', date: '2026-02-25', statusColor: 'text-red-600' },
-];
-
-const upcomingEvents = [
-  { title: 'Introduktion till Mindfulness', date: '4 mars', attendees: 12, capacity: 20 },
-  { title: 'Lam Rim – vecka 3', date: '6 mars', attendees: 8, capacity: 15 },
-  { title: 'Retreat: Tystnadens kraft', date: '14–16 mars', attendees: 7, capacity: 10 },
-];
+import { createDb, users, events, orders, memberships } from '@yeshe/db';
+import { sql, eq, gte, and } from 'drizzle-orm';
 
 export default async function AdminDashboard({ params: { locale } }: { params: { locale: string } }) {
   const sv = locale === 'sv';
+  const db = createDb(process.env.DATABASE_URL!);
+
+  const now = new Date();
+  const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+  const [userCount] = await db.select({ count: sql<number>`count(*)::int` }).from(users).where(sql`deleted_at IS NULL`);
+  const [memberCount] = await db.select({ count: sql<number>`count(*)::int` }).from(memberships).where(eq(memberships.status, 'active'));
+  const [eventCount] = await db.select({ count: sql<number>`count(*)::int` }).from(events).where(gte(events.startsAt, now));
+  const [orderCount] = await db.select({ count: sql<number>`count(*)::int` }).from(orders).where(gte(orders.createdAt, thirtyDaysAgo));
+
+  const recentOrders = await db
+    .select({
+      id: orders.id,
+      orderNumber: orders.orderNumber,
+      totalSek: orders.totalSek,
+      status: orders.status,
+      createdAt: orders.createdAt,
+      firstName: users.firstName,
+      lastName: users.lastName,
+    })
+    .from(orders)
+    .leftJoin(users, eq(orders.userId, users.id))
+    .orderBy(sql`${orders.createdAt} DESC`)
+    .limit(10);
+
+  const upcomingEvents = await db
+    .select({
+      id: events.id,
+      titleSv: events.titleSv,
+      titleEn: events.titleEn,
+      startsAt: events.startsAt,
+      venue: events.venue,
+    })
+    .from(events)
+    .where(gte(events.startsAt, now))
+    .orderBy(events.startsAt)
+    .limit(5);
+
+  const statusMap: Record<string, string> = {
+    pending: sv ? 'Väntar' : 'Pending',
+    confirmed: sv ? 'Betald' : 'Paid',
+    failed: sv ? 'Misslyckad' : 'Failed',
+    refunded: sv ? 'Återbetald' : 'Refunded',
+    cancelled: sv ? 'Avbruten' : 'Cancelled',
+  };
+  const statusColor: Record<string, string> = {
+    pending: 'text-yellow-600',
+    confirmed: 'text-green-600',
+    failed: 'text-red-600',
+    refunded: 'text-red-600',
+    cancelled: 'text-gray-500',
+  };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-8">
+    <div className="p-6 max-w-7xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">{sv ? 'Översikt' : 'Dashboard'}</h1>
-        <p className="text-gray-500 text-sm mt-1">{sv ? 'Välkommen tillbaka. Här är en sammanfattning.' : 'Welcome back. Here is a summary.'}</p>
+        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+        <p className="text-gray-500 text-sm mt-1">{sv ? 'Data från databasen i realtid.' : 'Real-time data from the database.'}</p>
       </div>
 
-      {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((s) => (
-          <div key={s.label} className={`rounded-xl border p-5 ${s.color}`}>
-            <div className="text-3xl mb-2">{s.icon}</div>
-            <div className="text-2xl font-bold text-gray-900">{s.value}</div>
-            <div className="text-sm font-medium text-gray-700 mt-1">{sv ? s.label : s.labelEn}</div>
-            <div className="text-xs text-gray-500 mt-1">{s.trend}</div>
-          </div>
-        ))}
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+          <p className="text-3xl font-bold text-blue-900">{memberCount.count}</p>
+          <p className="text-sm text-blue-700">{sv ? 'Aktiva medlemmar' : 'Active members'}</p>
+        </div>
+        <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+          <p className="text-3xl font-bold text-green-900">{eventCount.count}</p>
+          <p className="text-sm text-green-700">{sv ? 'Kommande evenemang' : 'Upcoming events'}</p>
+        </div>
+        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+          <p className="text-3xl font-bold text-yellow-900">{orderCount.count}</p>
+          <p className="text-sm text-yellow-700">{sv ? 'Ordrar (30 dagar)' : 'Orders (30 days)'}</p>
+        </div>
+        <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
+          <p className="text-3xl font-bold text-purple-900">{userCount.count}</p>
+          <p className="text-sm text-purple-700">{sv ? 'Totalt användare' : 'Total users'}</p>
+        </div>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
-        {/* Recent Orders */}
-        <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
-          <div className="px-5 py-4 border-b border-gray-100 flex justify-between items-center">
-            <h2 className="font-semibold text-gray-900">{sv ? 'Senaste beställningar' : 'Recent Orders'}</h2>
-            <a href={`/${locale}/admin/orders`} className="text-xs text-blue-600 hover:underline">{sv ? 'Visa alla' : 'View all'}</a>
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+            <h2 className="font-semibold text-gray-900">{sv ? 'Senaste ordrar' : 'Recent Orders'}</h2>
+            <a href={`/${locale}/admin/orders`} className="text-sm text-blue-600 hover:underline">{sv ? 'Visa alla' : 'View all'}</a>
           </div>
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-xs text-gray-500 uppercase">
-              <tr>
-                <th className="px-4 py-2 text-left">ID</th>
-                <th className="px-4 py-2 text-left">{sv ? 'Kund' : 'Customer'}</th>
-                <th className="px-4 py-2 text-right">{sv ? 'Belopp' : 'Amount'}</th>
-                <th className="px-4 py-2 text-left">{sv ? 'Status' : 'Status'}</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {recentOrders.map((o) => (
-                <tr key={o.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 font-mono text-gray-500">{o.id}</td>
-                  <td className="px-4 py-3 text-gray-900">{o.customer}</td>
-                  <td className="px-4 py-3 text-right font-medium">{o.amount}</td>
-                  <td className={`px-4 py-3 font-medium ${o.statusColor}`}>{o.status}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {recentOrders.length === 0 ? (
+            <p className="px-6 py-8 text-center text-gray-400">{sv ? 'Inga ordrar ännu' : 'No orders yet'}</p>
+          ) : (
+            <table className="w-full">
+              <tbody className="divide-y divide-gray-50">
+                {recentOrders.map((o) => (
+                  <tr key={o.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-3 text-sm text-gray-500">#{o.orderNumber}</td>
+                    <td className="px-6 py-3 text-sm text-gray-900">{o.firstName} {o.lastName}</td>
+                    <td className="px-6 py-3 text-sm text-gray-600">{Math.round(Number(o.totalSek))} kr</td>
+                    <td className={"px-6 py-3 text-sm font-medium " + (statusColor[o.status] || 'text-gray-500')}>
+                      {statusMap[o.status] || o.status}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
 
-        {/* Upcoming Events */}
-        <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
-          <div className="px-5 py-4 border-b border-gray-100 flex justify-between items-center">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
             <h2 className="font-semibold text-gray-900">{sv ? 'Kommande evenemang' : 'Upcoming Events'}</h2>
-            <a href={`/${locale}/admin/events`} className="text-xs text-blue-600 hover:underline">{sv ? 'Visa alla' : 'View all'}</a>
+            <a href={`/${locale}/admin/events`} className="text-sm text-blue-600 hover:underline">{sv ? 'Visa alla' : 'View all'}</a>
           </div>
-          <div className="divide-y divide-gray-50">
-            {upcomingEvents.map((e) => (
-              <div key={e.title} className="px-5 py-4 flex justify-between items-center">
-                <div>
-                  <div className="font-medium text-gray-900 text-sm">{e.title}</div>
-                  <div className="text-xs text-gray-500 mt-0.5">{e.date}</div>
+          {upcomingEvents.length === 0 ? (
+            <p className="px-6 py-8 text-center text-gray-400">{sv ? 'Inga kommande evenemang' : 'No upcoming events'}</p>
+          ) : (
+            <div className="divide-y divide-gray-50">
+              {upcomingEvents.map((e) => (
+                <div key={e.id} className="px-6 py-3 flex justify-between items-center hover:bg-gray-50">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">{sv ? e.titleSv : e.titleEn}</p>
+                    <p className="text-xs text-gray-500">{e.venue || ''}</p>
+                  </div>
+                  <p className="text-sm text-gray-500">{new Date(e.startsAt).toLocaleDateString('sv-SE')}</p>
                 </div>
-                <div className="text-right">
-                  <div className="text-sm font-medium text-gray-900">{e.attendees}/{e.capacity}</div>
-                  <div className="text-xs text-gray-500">{sv ? 'deltagare' : 'attendees'}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

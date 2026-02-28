@@ -1,78 +1,72 @@
-const users = [
-  { id: 1, name: 'Anna Lindström', email: 'anna@example.com', role: 'Medlem', joined: '2023-05-14', status: 'Aktiv' },
-  { id: 2, name: 'Erik Johansson', email: 'erik@example.com', role: 'Admin', joined: '2022-11-02', status: 'Aktiv' },
-  { id: 3, name: 'Maria Svensson', email: 'maria@example.com', role: 'Medlem', joined: '2024-01-18', status: 'Aktiv' },
-  { id: 4, name: 'Lars Petersson', email: 'lars@example.com', role: 'Lärare', joined: '2023-08-22', status: 'Aktiv' },
-  { id: 5, name: 'Sofia Nilsson', email: 'sofia@example.com', role: 'Medlem', joined: '2025-12-01', status: 'Inaktiv' },
-];
+import { createDb, users, userRoles } from '@yeshe/db';
+import { sql, eq, desc } from 'drizzle-orm';
 
-export default function AdminUsers({ params: { locale } }: { params: { locale: string } }) {
+export default async function AdminUsers({ params: { locale } }: { params: { locale: string } }) {
   const sv = locale === 'sv';
+  const db = createDb(process.env.DATABASE_URL!);
+
+  const rows = await db
+    .select({
+      id: users.id,
+      email: users.email,
+      firstName: users.firstName,
+      lastName: users.lastName,
+      locale: users.locale,
+      createdAt: users.createdAt,
+      deletedAt: users.deletedAt,
+    })
+    .from(users)
+    .where(sql`${users.deletedAt} IS NULL`)
+    .orderBy(desc(users.createdAt))
+    .limit(200);
+
+  const roleRows = await db
+    .select({ userId: userRoles.userId, role: userRoles.role })
+    .from(userRoles);
+
+  const roleMap = new Map<string, string[]>();
+  for (const r of roleRows) {
+    const existing = roleMap.get(r.userId) || [];
+    existing.push(r.role);
+    roleMap.set(r.userId, existing);
+  }
+
+  const [total] = await db.select({ count: sql<number>`count(*)::int` }).from(users).where(sql`deleted_at IS NULL`);
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{sv ? 'Användare' : 'Users'}</h1>
-          <p className="text-gray-500 text-sm mt-1">{sv ? 'Hantera användare och roller' : 'Manage users and roles'}</p>
+          <p className="text-gray-500 text-sm mt-1">{total.count} {sv ? 'användare totalt' : 'total users'} ({sv ? 'visar senaste 200' : 'showing latest 200'})</p>
         </div>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
-          {sv ? 'Ny användare' : 'New User'}
-        </button>
       </div>
-
-      <div className="flex gap-4">
-        <input type="search" placeholder={sv ? 'Sök användare...' : 'Search users...'} className="flex-1 px-4 py-2 border border-gray-200 rounded-lg" />
-        <select className="px-4 py-2 border border-gray-200 rounded-lg">
-          <option value="all">{sv ? 'Alla roller' : 'All roles'}</option>
-          <option value="admin">Admin</option>
-          <option value="member">{sv ? 'Medlem' : 'Member'}</option>
-          <option value="teacher">{sv ? 'Lärare' : 'Teacher'}</option>
-        </select>
-      </div>
-
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <table className="w-full">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Namn' : 'Name'}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'E-post' : 'Email'}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Roll' : 'Role'}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Registrerad' : 'Joined'}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-              <th className="px-6 py-3"></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {users.map((u) => (
+            {rows.map((u) => (
               <tr key={u.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm font-medium text-gray-900">{u.name}</td>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">{u.firstName} {u.lastName}</td>
                 <td className="px-6 py-4 text-sm text-gray-600">{u.email}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{u.role}</td>
-                <td className="px-6 py-4 text-sm text-gray-500">{u.joined}</td>
-                <td className="px-6 py-4">
-                  <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${u.status === 'Aktiv' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
-                    {u.status}
-                  </span>
+                <td className="px-6 py-4 text-sm">
+                  {(roleMap.get(u.id) || []).map((r) => (
+                    <span key={r} className="inline-block mr-1 px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800">{r}</span>
+                  ))}
+                  {!(roleMap.get(u.id) || []).length && <span className="text-gray-400 text-xs">{sv ? 'användare' : 'user'}</span>}
                 </td>
-                <td className="px-6 py-4 text-right">
-                  <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">{sv ? 'Redigera' : 'Edit'}</button>
-                </td>
+                <td className="px-6 py-4 text-sm text-gray-500">{new Date(u.createdAt).toLocaleDateString('sv-SE')}</td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
-
-      <div className="flex justify-between items-center text-sm text-gray-500">
-        <div>{sv ? 'Visar 5 av 1,191 användare' : 'Showing 5 of 1,191 users'}</div>
-        <div className="flex gap-2">
-          <button className="px-3 py-1 border border-gray-200 rounded hover:bg-gray-50">{sv ? 'Föregående' : 'Previous'}</button>
-          <button className="px-3 py-1 bg-blue-600 text-white rounded">1</button>
-          <button className="px-3 py-1 border border-gray-200 rounded hover:bg-gray-50">2</button>
-          <button className="px-3 py-1 border border-gray-200 rounded hover:bg-gray-50">3</button>
-          <button className="px-3 py-1 border border-gray-200 rounded hover:bg-gray-50">{sv ? 'Nästa' : 'Next'}</button>
-        </div>
       </div>
     </div>
   );
