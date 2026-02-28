@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function LoggaInPage({ params: { locale } }: { params: { locale: string } }) {
   const router = useRouter();
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -18,11 +18,12 @@ export default function LoggaInPage({ params: { locale } }: { params: { locale: 
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ identifier, password }),
       });
       const data = await res.json();
       if (!res.ok) { setError(data.error); return; }
       router.push(`/${locale}/konto`);
+      router.refresh();
     } catch { setError(sv ? 'Serverfel, försök igen' : 'Server error, try again'); }
     finally { setLoading(false); }
   }
@@ -40,13 +41,13 @@ export default function LoggaInPage({ params: { locale } }: { params: { locale: 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {sv ? 'E-postadress' : 'Email'}
+                {sv ? 'E-post eller användarnamn' : 'Email or username'}
               </label>
               <input
-                type="email" value={email} onChange={e => setEmail(e.target.value)}
-                required autoComplete="email"
+                type="text" value={identifier} onChange={e => setIdentifier(e.target.value)}
+                required autoComplete="username"
                 className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00] focus:border-transparent"
-                placeholder="din@email.se"
+                placeholder={sv ? 'din@email.se eller användarnamn' : 'your@email.com or username'}
               />
             </div>
             <div>
