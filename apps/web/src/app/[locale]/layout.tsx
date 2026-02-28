@@ -88,6 +88,9 @@ async function Header({ locale }: { locale: Locale }) {
           >
             {tc('login')}
           </a>
+          <a href={`/${locale}/admin`} className="hidden md:inline-block text-xs text-gray-400 hover:text-gray-600 border border-gray-200 px-2 py-1 rounded ml-2">
+            Admin
+          </a>
         </nav>
 
         {/* Mobile hamburger */}

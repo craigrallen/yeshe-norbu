@@ -22,7 +22,7 @@ export default function KontoPage({ params: { locale } }: { params: { locale: st
         else setUser(d.user);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [locale, router]);
 
   async function handleLogout() {
     await fetch('/api/auth/logout', { method: 'POST' });
@@ -85,6 +85,7 @@ export default function KontoPage({ params: { locale } }: { params: { locale: st
                 { href: `/${locale}/events`, label: sv ? '📅 Kommande evenemang' : '📅 Upcoming events' },
                 { href: `/${locale}/bli-medlem`, label: sv ? '🌟 Uppgradera medlemskap' : '🌟 Upgrade membership' },
                 { href: `/${locale}/blog`, label: sv ? '📝 Blogg & teachings' : '📝 Blog & teachings' },
+                { href: `/${locale}/admin`, label: sv ? '⚙️ Adminpanel' : '⚙️ Admin panel' },
               ].map(link => (
                 <Link key={link.href} href={link.href}
                   className="flex items-center gap-3 p-3 rounded-xl hover:bg-[#F9F7F4] transition-colors text-[#58595b]">
