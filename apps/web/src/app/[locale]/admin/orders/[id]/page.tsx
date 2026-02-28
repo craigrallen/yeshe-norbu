@@ -1,5 +1,5 @@
-import { createDb, orders, users, orderItems, payments } from '@yeshe/db';
-import { eq, desc } from 'drizzle-orm';
+import { createDb, orders, users, orderItems, payments, userRoles, memberships } from '@yeshe/db';
+import { eq, desc, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { requireAdmin } from '@/lib/authz';
 
@@ -47,6 +47,11 @@ export default async function OrderDetailPage({ params: { locale, id } }: { para
 
   const items = await db.select().from(orderItems).where(eq(orderItems.orderId, id));
 
+  const roleRows = order.userId ? await db.select().from(userRoles).where(eq(userRoles.userId, order.userId)) : [];
+  const isAdmin = roleRows.some(r => r.role === 'admin');
+  const memRows = order.userId ? await db.select().from(memberships).where(sql`${memberships.userId} = ${order.userId} AND ${memberships.status} = 'active'`).limit(1) : [];
+  const isMember = memRows.length > 0;
+
   const paymentRows = await db.select().from(payments).where(eq(payments.orderId, id)).orderBy(desc(payments.createdAt));
 
   const statusLabel: Record<string, string> = {
@@ -81,6 +86,7 @@ export default async function OrderDetailPage({ params: { locale, id } }: { para
           <div className="text-sm space-y-1">
             <p className="font-medium">{order.firstName} {order.lastName}</p>
             <p className="text-gray-500">{order.email || '\u2014'}</p>
+            <div className="mt-1 flex gap-1">{isAdmin && <span className="px-1.5 py-0.5 rounded text-[10px] bg-purple-100 text-purple-800">admin</span>}{isMember && <span className="px-1.5 py-0.5 rounded text-[10px] bg-green-100 text-green-800">member</span>}</div>
             {order.userId && <a href={`/${locale}/admin/users/${order.userId}`} className="text-blue-600 hover:underline text-xs">{sv ? 'Visa användare' : 'View user'} &rarr;</a>}
           </div>
         </div>
