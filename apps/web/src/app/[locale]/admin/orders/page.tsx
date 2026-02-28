@@ -64,7 +64,7 @@ export default async function AdminOrders({ params: { locale } }: { params: { lo
           <tbody className="divide-y divide-gray-100">
             {rows.map((o) => (
               <tr key={o.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm text-gray-500">#{o.orderNumber}</td>
+                <td className="px-6 py-4 text-sm"><a href={`/${locale}/admin/orders/${o.id}`} className="text-blue-600 hover:underline">#{o.orderNumber}</a></td>
                 <td className="px-6 py-4 text-sm font-medium text-gray-900">{o.firstName} {o.lastName}</td>
                 <td className="px-6 py-4 text-sm text-gray-500">{o.email || '\u2014'}</td>
                 <td className="px-6 py-4 text-sm text-gray-900">{Math.round(Number(o.totalSek))} kr</td>

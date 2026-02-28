@@ -131,7 +131,7 @@ export default async function AdminEvents({ params: { locale } }: { params: { lo
             {rows.map((e) => (
               <tr key={e.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 text-sm">
-                  <div className="font-medium text-gray-900">{sv ? e.titleSv : e.titleEn}</div>
+                  <a href={`/${locale}/admin/events/${e.id}`} className="font-medium text-blue-600 hover:underline">{sv ? e.titleSv : e.titleEn}</a>
                   <div className="text-xs text-gray-400">/{e.slug}</div>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">{new Date(e.startsAt).toLocaleString('sv-SE')}</td>

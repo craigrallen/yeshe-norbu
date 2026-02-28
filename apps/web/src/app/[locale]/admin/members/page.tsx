@@ -62,7 +62,7 @@ export default async function AdminMembers({ params: { locale } }: { params: { l
           <tbody className="divide-y divide-gray-100">
             {rows.map((m) => (
               <tr key={m.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm font-medium text-gray-900">{m.firstName} {m.lastName}</td>
+                <td className="px-6 py-4 text-sm font-medium"><a href={`/${locale}/admin/members/${m.id}`} className="text-blue-600 hover:underline">{m.firstName} {m.lastName}</a></td>
                 <td className="px-6 py-4 text-sm text-gray-500">{m.email || '\u2014'}</td>
                 <td className="px-6 py-4 text-sm text-gray-600">{(sv ? m.planNameSv : m.planNameEn) || '\u2014'}</td>
                 <td className="px-6 py-4">

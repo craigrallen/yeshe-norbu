@@ -54,7 +54,7 @@ export default async function AdminUsers({ params: { locale } }: { params: { loc
           <tbody className="divide-y divide-gray-100">
             {rows.map((u) => (
               <tr key={u.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm font-medium text-gray-900">{u.firstName} {u.lastName}</td>
+                <td className="px-6 py-4 text-sm font-medium"><a href={`/${locale}/admin/users/${u.id}`} className="text-blue-600 hover:underline">{u.firstName} {u.lastName}</a></td>
                 <td className="px-6 py-4 text-sm text-gray-600">{u.email}</td>
                 <td className="px-6 py-4 text-sm">
                   {(roleMap.get(u.id) || []).map((r) => (
