@@ -19,6 +19,9 @@ async function updateEvent(formData: FormData) {
   const isOnline = formData.get('isOnline') === 'on';
   const published = formData.get('published') === 'on';
   const featuredImageUrl = String(formData.get('featuredImageUrl') || '').trim();
+  const categoryId = String(formData.get('categoryId') || '').trim() || null;
+  const venueId = String(formData.get('venueId') || '').trim() || null;
+  const organizerId = String(formData.get('organizerId') || '').trim() || null;
 
   if (!titleSv || !startsAt) return;
 
@@ -30,6 +33,7 @@ async function updateEvent(formData: FormData) {
     venue: venue || null, venueAddress: venueAddress || null,
     isOnline, published,
     featuredImageUrl: featuredImageUrl || null,
+    categoryId, 
     updatedAt: new Date(),
   }).where(eq(events.id, id));
 
@@ -65,6 +69,12 @@ export default async function EventDetailPage({ params: { locale, id } }: { para
   if (!event) return <div className="p-6"><h1 className="text-xl font-bold text-red-600">{sv ? 'Evenemang hittades inte' : 'Event not found'}</h1></div>;
 
   const cats = await db.select().from(eventCategories).orderBy(eventCategories.nameSv);
+
+  // Venues and organizers from raw SQL (tables not in Drizzle schema yet)
+  const { Pool } = require('pg');
+  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+  const { rows: venueRows } = await pool.query('SELECT id, name FROM venues ORDER BY name');
+  const { rows: orgRows } = await pool.query('SELECT id, name FROM organizers ORDER BY name');
   
   const tickets = await db.select().from(ticketTypes).where(eq(ticketTypes.eventId, id));
   
@@ -128,6 +138,30 @@ export default async function EventDetailPage({ params: { locale, id } }: { para
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{sv ? 'Adress' : 'Address'}</label>
             <input name="venueAddress" defaultValue={event.venueAddress || ''} className="w-full border rounded-lg px-3 py-2" />
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{sv ? 'Kategori' : 'Category'}</label>
+            <select name="categoryId" defaultValue={event.categoryId || ''} className="w-full border rounded-lg px-3 py-2">
+              <option value="">{sv ? '— Ingen —' : '— None —'}</option>
+              {cats.map((c: any) => <option key={c.id} value={c.id}>{sv ? c.nameSv : c.nameEn}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{sv ? 'Plats (sparad)' : 'Venue (saved)'}</label>
+            <select name="venueId" defaultValue={(event as any).venueId || ''} className="w-full border rounded-lg px-3 py-2">
+              <option value="">{sv ? '— Ingen —' : '— None —'}</option>
+              {venueRows.map((v: any) => <option key={v.id} value={v.id}>{v.name}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{sv ? 'Arrangör' : 'Organizer'}</label>
+            <select name="organizerId" defaultValue={(event as any).organizerId || ''} className="w-full border rounded-lg px-3 py-2">
+              <option value="">{sv ? '— Ingen —' : '— None —'}</option>
+              {orgRows.map((o: any) => <option key={o.id} value={o.id}>{o.name}</option>)}
+            </select>
           </div>
         </div>
 
