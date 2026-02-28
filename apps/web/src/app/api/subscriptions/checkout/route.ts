@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { getStripeConfig } from '@/lib/stripe-config';
 import { Pool } from 'pg';
 import { getSession } from '@/lib/auth';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-04-10' });
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 export async function GET(req: NextRequest) {
@@ -27,6 +27,9 @@ export async function GET(req: NextRequest) {
   );
   const plan = planRows[0];
   if (!plan) return NextResponse.json({ error: 'Plan not found' }, { status: 404 });
+
+  const stripeCfg = await getStripeConfig();
+  const stripe = new Stripe(stripeCfg.secretKey, { apiVersion: '2024-04-10' });
 
   let customerId = user.stripe_customer_id as string | null;
   if (!customerId) {

@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { getStripeConfig } from '@/lib/stripe-config';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-04-10' });
 
 export async function POST(req: NextRequest) {
   try {
+    const stripeCfg = await getStripeConfig();
+    const stripe = new Stripe(stripeCfg.secretKey, { apiVersion: '2024-04-10' });
     const body = await req.json();
     const { items, locale = 'sv', email, metadata = {} } = body;
 

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { getStripeConfig } from '@/lib/stripe-config';
 import { Pool } from 'pg';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-04-10' });
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 async function upsertMembershipFromSubscription(sub: Stripe.Subscription) {
@@ -30,9 +30,12 @@ export async function POST(req: NextRequest) {
   const body = await req.text();
   const sig = req.headers.get('stripe-signature')!;
 
+  const stripeCfg = await getStripeConfig();
+  const stripe = new Stripe(stripeCfg.secretKey, { apiVersion: '2024-04-10' });
+
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+    event = stripe.webhooks.constructEvent(body, sig, stripeCfg.webhookSecret);
   } catch (err: any) {
     return NextResponse.json({ error: `Webhook error: ${err.message}` }, { status: 400 });
   }
