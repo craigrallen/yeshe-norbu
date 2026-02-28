@@ -29,6 +29,7 @@ const UPCOMING_EVENTS = [
     spotsLeft: 12,
     totalSpots: 20,
     slug: 'meditationsretreatt-mars-2025',
+    image: '/events/wisdom-retreat.png',
   },
   {
     id: 2,
@@ -43,6 +44,7 @@ const UPCOMING_EVENTS = [
     spotsLeft: 28,
     totalSpots: 30,
     slug: 'intro-meditation-mars-2025',
+    image: '/events/geshe-sherab.jpg',
   },
   {
     id: 3,
@@ -57,6 +59,7 @@ const UPCOMING_EVENTS = [
     spotsLeft: 35,
     totalSpots: 40,
     slug: 'veckomeditation-mars-2025',
+    image: '/events/wisdom-retreat.png',
   },
   {
     id: 4,
@@ -71,6 +74,7 @@ const UPCOMING_EVENTS = [
     spotsLeft: 20,
     totalSpots: 25,
     slug: 'fpmt-dag-april-2025',
+    image: '/events/geshe-sherab.jpg',
   },
   {
     id: 5,
@@ -85,6 +89,7 @@ const UPCOMING_EVENTS = [
     spotsLeft: 8,
     totalSpots: 15,
     slug: 'tyst-retreatt-april-2025',
+    image: '/events/wisdom-retreat.png',
   },
   {
     id: 6,
@@ -99,6 +104,7 @@ const UPCOMING_EVENTS = [
     spotsLeft: 22,
     totalSpots: 30,
     slug: 'dodsmeditation-april-2025',
+    image: '/events/geshe-sherab.jpg',
   },
 ];
 
@@ -150,6 +156,13 @@ export default async function EventsPage({
                 event.category === 'Nybörjare' ? 'bg-green-500' :
                 event.category === 'Studier' ? 'bg-blue-500' : 'bg-purple-500'
               }`} />
+
+              <img
+                src={event.image}
+                alt={isSv ? event.title : event.titleEn}
+                className="w-full h-44 object-cover"
+                loading="lazy"
+              />
 
               <div className="p-5 flex flex-col flex-1">
                 {/* Category + date */}
