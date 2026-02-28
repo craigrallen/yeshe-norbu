@@ -1,50 +1,97 @@
-import { getTranslations } from 'next-intl/server';
+'use client';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
-export default async function LoginPage({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
-  const t = await getTranslations({ locale, namespace: 'auth' });
+export default function LoggaInPage({ params: { locale } }: { params: { locale: string } }) {
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const sv = locale === 'sv';
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true); setError('');
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setError(data.error); return; }
+      router.push(`/${locale}/konto`);
+    } catch { setError(sv ? 'Serverfel, försök igen' : 'Server error, try again'); }
+    finally { setLoading(false); }
+  }
 
   return (
-    <div className="max-w-sm mx-auto py-12">
-      <h1 className="text-2xl font-bold text-primary mb-6 text-center">{t('loginTitle')}</h1>
-      <form action="/api/auth/login" method="POST" className="space-y-4">
-        <div className="space-y-1.5">
-          <label htmlFor="email" className="text-sm font-medium text-primary">{t('email')}</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            autoComplete="email"
-            className="flex h-10 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-brand"
-          />
+    <div className="min-h-screen bg-[#F9F7F4] flex items-center justify-center px-4 py-16">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <div className="text-4xl mb-3">🙏</div>
+          <h1 className="text-3xl font-bold text-[#2C2C2C]">{sv ? 'Logga in' : 'Sign in'}</h1>
+          <p className="text-gray-500 mt-2">{sv ? 'Välkommen tillbaka' : 'Welcome back'}</p>
         </div>
-        <div className="space-y-1.5">
-          <label htmlFor="password" className="text-sm font-medium text-primary">{t('password')}</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            required
-            autoComplete="current-password"
-            className="flex h-10 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-brand"
-          />
+
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {sv ? 'E-postadress' : 'Email'}
+              </label>
+              <input
+                type="email" value={email} onChange={e => setEmail(e.target.value)}
+                required autoComplete="email"
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F5A623] focus:border-transparent"
+                placeholder="din@email.se"
+              />
+            </div>
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <label className="text-sm font-medium text-gray-700">{sv ? 'Lösenord' : 'Password'}</label>
+                <Link href={`/${locale}/glomt-losenord`} className="text-xs text-[#F5A623] hover:underline">
+                  {sv ? 'Glömt lösenord?' : 'Forgot password?'}
+                </Link>
+              </div>
+              <input
+                type="password" value={password} onChange={e => setPassword(e.target.value)}
+                required autoComplete="current-password"
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F5A623] focus:border-transparent"
+                placeholder="••••••••"
+              />
+            </div>
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit" disabled={loading}
+              className="w-full bg-[#2C2C2C] text-white font-semibold py-3.5 rounded-xl hover:bg-[#3a3a3a] disabled:opacity-50 transition-colors"
+            >
+              {loading ? (sv ? 'Loggar in...' : 'Signing in...') : (sv ? 'Logga in' : 'Sign in')}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center text-sm text-gray-500">
+            {sv ? 'Har du inget konto?' : "Don't have an account?"}{' '}
+            <Link href={`/${locale}/registrera`} className="text-[#F5A623] font-medium hover:underline">
+              {sv ? 'Skapa konto' : 'Create account'}
+            </Link>
+          </div>
         </div>
-        <button
-          type="submit"
-          className="w-full h-10 rounded-lg bg-brand text-white font-medium hover:bg-brand-dark transition-colors"
-        >
-          {t('loginButton')}
-        </button>
-        <div className="text-center text-sm text-muted">
-          <a href={`/${locale}/registrera`} className="text-brand hover:text-brand-dark">
-            {t('noAccount')}
-          </a>
-        </div>
-      </form>
+
+        <p className="text-center text-xs text-gray-400 mt-6">
+          {sv
+            ? 'Om du hade ett konto på gamla webbplatsen, använd "Glömt lösenord" för att komma åt ditt konto.'
+            : 'If you had an account on the old site, use "Forgot password" to access your account.'}
+        </p>
+      </div>
     </div>
   );
 }

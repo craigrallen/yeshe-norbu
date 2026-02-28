@@ -1,73 +1,47 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-import { hash } from '@yeshe/auth/password';
-import { createTokenPair } from '@yeshe/auth/jwt';
-import { createDb, users, userRoles } from '@yeshe/db';
+import { Pool } from 'pg';
+import { hashPassword, signToken, COOKIE_OPTIONS } from '@/lib/auth';
+import { sendWelcomeEmail } from '@/lib/email';
 
-const registerSchema = z.object({
-  email: z.string().email().max(320),
-  password: z.string().min(8).max(128),
-  firstName: z.string().min(1).max(100),
-  lastName: z.string().min(1).max(100),
-  locale: z.enum(['sv', 'en']).optional().default('sv'),
-});
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    const body = await request.json();
-    const data = registerSchema.parse(body);
+    const { email, password, firstName, lastName, locale = 'sv' } = await req.json();
 
-    const db = createDb(process.env.DATABASE_URL!);
-    const passwordHash = await hash(data.password);
-
-    const [user] = await db
-      .insert(users)
-      .values({
-        email: data.email.toLowerCase(),
-        passwordHash,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        locale: data.locale,
-      })
-      .returning({ id: users.id, email: users.email });
-
-    if (!user) {
-      return NextResponse.json({ error: 'Registration failed' }, { status: 500 });
+    if (!email || !password || !firstName) {
+      return NextResponse.json({ error: 'Förnamn, e-post och lösenord krävs' }, { status: 400 });
+    }
+    if (password.length < 8) {
+      return NextResponse.json({ error: 'Lösenordet måste vara minst 8 tecken' }, { status: 400 });
     }
 
-    // Assign customer role
-    await db.insert(userRoles).values({
-      userId: user.id,
-      role: 'customer',
-    });
+    const existing = await pool.query('SELECT id FROM users WHERE email = $1', [email.toLowerCase().trim()]);
+    if (existing.rows.length > 0) {
+      return NextResponse.json({ error: 'Det finns redan ett konto med den e-postadressen' }, { status: 409 });
+    }
 
-    const { accessToken, refreshToken } = await createTokenPair(
-      { id: user.id, email: user.email, roles: ['customer'] },
-      process.env.JWT_SECRET!,
+    const passwordHash = await hashPassword(password);
+    const { rows } = await pool.query(
+      `INSERT INTO users (email, email_verified, password_hash, first_name, last_name, locale, consent_marketing, consent_analytics, created_at, updated_at)
+       VALUES ($1, false, $2, $3, $4, $5, false, false, NOW(), NOW())
+       RETURNING id, email, first_name, last_name`,
+      [email.toLowerCase().trim(), passwordHash, firstName.trim(), (lastName || '').trim(), locale]
     );
 
-    const response = NextResponse.json({ user: { id: user.id, email: user.email } }, { status: 201 });
-    response.cookies.set('access_token', accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'lax',
-      maxAge: 900, // 15 minutes
-      path: '/',
-    });
-    response.cookies.set('refresh_token', refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'lax',
-      maxAge: 30 * 24 * 3600, // 30 days
-      path: '/',
-    });
+    const user = rows[0];
+    const token = signToken({ userId: user.id, email: user.email });
 
-    return response;
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: 'Validation failed', details: error.errors }, { status: 400 });
-    }
-    console.error('Registration error:', error);
-    return NextResponse.json({ error: 'Registration failed' }, { status: 500 });
+    // Send welcome email (non-blocking)
+    sendWelcomeEmail(user.email, user.first_name).catch(e => console.error('Welcome email failed:', e));
+
+    const res = NextResponse.json({
+      user: { id: user.id, email: user.email, firstName: user.first_name, lastName: user.last_name }
+    }, { status: 201 });
+    res.cookies.set(COOKIE_OPTIONS.name, token, COOKIE_OPTIONS);
+    return res;
+  } catch (err: any) {
+    console.error('Register error:', err);
+    return NextResponse.json({ error: 'Serverfel' }, { status: 500 });
   }
 }

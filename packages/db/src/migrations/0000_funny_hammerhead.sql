@@ -705,3 +705,12 @@ CREATE INDEX IF NOT EXISTS "posts_published_idx" ON "posts" ("published_at");-->
 CREATE INDEX IF NOT EXISTS "sessions_user_idx" ON "user_sessions" ("user_id");--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "users_email_idx" ON "users" ("email");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "users_stripe_idx" ON "users" ("stripe_customer_id");
+-- Password reset tokens
+CREATE TABLE IF NOT EXISTS "password_reset_tokens" (
+  "user_id" uuid NOT NULL REFERENCES "users"("id") ON DELETE CASCADE,
+  "token" varchar(64) NOT NULL UNIQUE,
+  "expires_at" timestamp with time zone NOT NULL,
+  "used_at" timestamp with time zone,
+  "created_at" timestamp with time zone DEFAULT now() NOT NULL,
+  PRIMARY KEY ("user_id")
+);
