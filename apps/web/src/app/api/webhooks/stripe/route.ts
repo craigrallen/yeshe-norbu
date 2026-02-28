@@ -1,109 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { constructWebhookEvent } from '@yeshe/payments/stripe';
-import { createDb, payments, orders, auditLog } from '@yeshe/db';
-import { eq } from 'drizzle-orm';
+import Stripe from 'stripe';
 
-export async function POST(request: NextRequest) {
-  const rawBody = await request.text();
-  const signature = request.headers.get('stripe-signature');
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-04-10' });
 
-  if (!signature) {
-    return NextResponse.json({ error: 'Missing signature' }, { status: 400 });
-  }
+export async function POST(req: NextRequest) {
+  const body = await req.text();
+  const sig = req.headers.get('stripe-signature')!;
 
+  let event: Stripe.Event;
   try {
-    const event = constructWebhookEvent(
-      rawBody,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET!,
-    );
-
-    const db = createDb(process.env.DATABASE_URL!);
-
-    switch (event.type) {
-      case 'payment_intent.succeeded': {
-        const intent = event.data.object;
-        const orderId = intent.metadata?.orderId;
-
-        if (orderId) {
-          await db.update(payments)
-            .set({ status: 'succeeded', updatedAt: new Date() })
-            .where(eq(payments.gatewayReference, intent.id));
-
-          await db.update(orders)
-            .set({ status: 'confirmed', updatedAt: new Date() })
-            .where(eq(orders.id, orderId));
-
-          await db.insert(auditLog).values({
-            action: 'payment.succeeded',
-            channel: 'online',
-            orderId,
-            method: 'stripe_card',
-            amountSek: (intent.amount / 100).toFixed(2),
-            metadata: { stripeIntentId: intent.id },
-            description: `Payment succeeded for order ${orderId}`,
-          });
-        }
-        break;
-      }
-
-      case 'payment_intent.payment_failed': {
-        const intent = event.data.object;
-        const orderId = intent.metadata?.orderId;
-
-        if (orderId) {
-          await db.update(payments)
-            .set({ status: 'failed', updatedAt: new Date() })
-            .where(eq(payments.gatewayReference, intent.id));
-
-          await db.update(orders)
-            .set({ status: 'failed', updatedAt: new Date() })
-            .where(eq(orders.id, orderId));
-
-          await db.insert(auditLog).values({
-            action: 'payment.failed',
-            channel: 'online',
-            orderId,
-            method: 'stripe_card',
-            amountSek: (intent.amount / 100).toFixed(2),
-            metadata: { stripeIntentId: intent.id, error: intent.last_payment_error?.message },
-          });
-        }
-        break;
-      }
-
-      case 'customer.subscription.updated':
-      case 'customer.subscription.deleted': {
-        const subscription = event.data.object;
-        await db.insert(auditLog).values({
-          action: `subscription.${event.type.split('.').pop()}`,
-          metadata: {
-            subscriptionId: subscription.id,
-            customerId: typeof subscription.customer === 'string' ? subscription.customer : subscription.customer.toString(),
-            status: subscription.status,
-          },
-        });
-        break;
-      }
-
-      case 'invoice.paid':
-      case 'invoice.payment_failed': {
-        const invoice = event.data.object;
-        await db.insert(auditLog).values({
-          action: `invoice.${event.type === 'invoice.paid' ? 'paid' : 'failed'}`,
-          amountSek: ((invoice.amount_paid ?? 0) / 100).toFixed(2),
-          metadata: {
-            invoiceId: invoice.id,
-            subscriptionId: typeof invoice.subscription === 'string' ? invoice.subscription : null,
-          },
-        });
-        break;
-      }
-    }
-
-    return NextResponse.json({ received: true });
-  } catch (error) {
-    console.error('Stripe webhook error:', error);
-    return NextResponse.json({ error: 'Webhook processing failed' }, { status: 400 });
+    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+  } catch (err: any) {
+    return NextResponse.json({ error: `Webhook error: ${err.message}` }, { status: 400 });
   }
+
+  switch (event.type) {
+    case 'checkout.session.completed': {
+      const session = event.data.object as Stripe.Checkout.Session;
+      console.log('Payment completed:', session.id, session.metadata);
+      // TODO: Update order status in DB, send confirmation email
+      break;
+    }
+    case 'customer.subscription.created':
+    case 'customer.subscription.updated': {
+      const sub = event.data.object as Stripe.Subscription;
+      console.log('Subscription event:', event.type, sub.id);
+      // TODO: Update membership status in DB
+      break;
+    }
+    case 'customer.subscription.deleted': {
+      const sub = event.data.object as Stripe.Subscription;
+      console.log('Subscription cancelled:', sub.id);
+      // TODO: Deactivate membership in DB
+      break;
+    }
+    case 'invoice.payment_failed': {
+      const invoice = event.data.object as Stripe.Invoice;
+      console.log('Payment failed:', invoice.id);
+      // TODO: Send payment failure email
+      break;
+    }
+  }
+
+  return NextResponse.json({ received: true });
 }
+
+export const config = { api: { bodyParser: false } };

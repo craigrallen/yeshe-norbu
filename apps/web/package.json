@@ -10,6 +10,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.3.4",
+    "@types/uuid": "^11.0.0",
     "@yeshe/auth": "workspace:*",
     "@yeshe/db": "workspace:*",
     "@yeshe/email": "workspace:*",
@@ -20,8 +22,9 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.0",
-    "zod": "^3.23.0",
-    "@hookform/resolvers": "^3.3.4"
+    "stripe": "^15.0.0",
+    "uuid": "^13.0.0",
+    "zod": "^3.23.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",

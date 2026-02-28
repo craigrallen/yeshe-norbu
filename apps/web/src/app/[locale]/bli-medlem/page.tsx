@@ -1,86 +1,204 @@
-import { getTranslations } from 'next-intl/server';
-
-export default async function MembershipPage({
+export default async function BliMedlemPage({
   params: { locale },
 }: {
   params: { locale: string };
 }) {
-  const t = await getTranslations({ locale, namespace: 'membership' });
+  const isSv = locale === 'sv';
 
-  // TODO: Fetch plans from database
-  const plans = [
+  // Real membership tiers from WP PMPro (levels 11-15)
+  const tiers = [
     {
-      name: locale === 'sv' ? 'Vän — Årsmedlemskap' : 'Friend — Annual',
-      price: '300',
-      interval: locale === 'sv' ? 'år' : 'year',
-      description: locale === 'sv' ? 'Stöd Yeshe Norbu som vän.' : 'Support Yeshe Norbu as a friend.',
-      features: locale === 'sv'
-        ? ['Medlemsevenemang', 'Nyhetsbrev', '10% rabatt på kurser']
-        : ['Member events', 'Newsletter', '10% course discount'],
+      id: 11,
+      name: isSv ? 'Icke-vinstdrivande' : 'Non-Profit',
+      description: isSv
+        ? 'För ideella organisationer och studenter. Ger tillgång till alla vanliga evenemang och undervisningar.'
+        : 'For non-profits and students. Access to all regular events and teachings.',
+      priceSek: 250,
+      period: isSv ? 'per år' : 'per year',
+      type: 'subscription',
+      interval: 'year',
+      features: [
+        isSv ? 'Rabatterade evenemangsavgifter' : 'Discounted event fees',
+        isSv ? 'Tillgång till studiecirklar' : 'Access to study groups',
+        isSv ? 'Digitalt nyhetsbrev' : 'Digital newsletter',
+      ],
+      highlight: false,
     },
     {
-      name: locale === 'sv' ? 'Ideell — Årsmedlemskap' : 'Non-Profit — Yearly',
-      price: '500',
-      interval: locale === 'sv' ? 'år' : 'year',
-      description: locale === 'sv' ? 'Fullständigt medlemskap med rösträtt.' : 'Full membership with voting rights.',
-      features: locale === 'sv'
-        ? ['Rösträtt', 'Alla medlemsevenemang', '20% rabatt på kurser', 'Digitalt medlemskort']
-        : ['Voting rights', 'All member events', '20% course discount', 'Digital membership card'],
-      highlighted: true,
+      id: 12,
+      name: isSv ? 'Mentalgym Månadsvis' : 'Mental Gym Monthly',
+      description: isSv
+        ? 'Flexibelt månadsmedlemskap med full tillgång till alla program och retreatter.'
+        : 'Flexible monthly membership with full access to all programs and retreats.',
+      priceSek: 950,
+      period: isSv ? 'per månad' : 'per month',
+      type: 'subscription',
+      interval: 'month',
+      features: [
+        isSv ? 'Obegränsat antal evenemang' : 'Unlimited events',
+        isSv ? 'Retreattrabatt 20%' : '20% retreat discount',
+        isSv ? 'Online-undervisning' : 'Online teachings',
+        isSv ? 'Prioritet vid bokning' : 'Priority booking',
+      ],
+      highlight: true,
     },
     {
-      name: locale === 'sv' ? 'Mental Gym — Månad' : 'Mental Gym — Monthly',
-      price: '395',
-      interval: locale === 'sv' ? 'mån' : 'month',
-      description: locale === 'sv' ? 'Obegränsad tillgång till sessioner.' : 'Unlimited access to sessions.',
-      features: locale === 'sv'
-        ? ['Obegränsade sessioner', 'Onlinekurser', 'Personlig uppföljning', 'Mental Gym-community']
-        : ['Unlimited sessions', 'Online courses', 'Personal follow-up', 'Mental Gym community'],
+      id: 13,
+      name: isSv ? 'Mentalgym Årsvis' : 'Mental Gym Annual',
+      description: isSv
+        ? 'Spara 2 månader med årsmedlemskap. Bästa värdet för regelbundna praktiserande.'
+        : 'Save 2 months with annual membership. Best value for regular practitioners.',
+      priceSek: 9500,
+      period: isSv ? 'per år' : 'per year',
+      type: 'subscription',
+      interval: 'year',
+      features: [
+        isSv ? 'Allt i månadsplan' : 'Everything in monthly',
+        isSv ? 'Spara 11 400 kr/år vs månadsvis' : 'Save vs monthly plan',
+        isSv ? 'Retreattrabatt 30%' : '30% retreat discount',
+        isSv ? 'Personlig välkomstsamtal' : 'Personal welcome call',
+      ],
+      highlight: false,
+    },
+    {
+      id: 15,
+      name: isSv ? 'Väktare' : 'Guardian',
+      description: isSv
+        ? 'Hedersmedlemskap för Dharma-lärare och regelbundna stödjare av centret.'
+        : 'Honorary membership for Dharma teachers and regular center supporters.',
+      priceSek: 0,
+      period: isSv ? 'gratis' : 'free',
+      type: 'payment',
+      interval: null,
+      features: [
+        isSv ? 'Full tillgång till alla program' : 'Full access to all programs',
+        isSv ? 'Inbjudan till exklusiva evenemang' : 'Invitation to exclusive events',
+        isSv ? 'Erkänns i centrets publikationer' : 'Recognized in center publications',
+      ],
+      highlight: false,
     },
   ];
 
   return (
-    <div>
-      <div className="text-center mb-12">
-        <h1 className="text-3xl font-bold text-primary mb-4">{t('title')}</h1>
-        <p className="text-base text-muted max-w-xl mx-auto">{t('description')}</p>
+    <div className="min-h-screen bg-[#F9F7F4]">
+      {/* Hero */}
+      <div className="bg-[#2C2C2C] text-white py-16 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            {isSv ? 'Bli Medlem' : 'Membership'}
+          </h1>
+          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+            {isSv
+              ? 'Stöd Yeshe Norbu och fördjupa din praksis med ett av våra medlemskap.'
+              : 'Support Yeshe Norbu and deepen your practice with one of our memberships.'}
+          </p>
+        </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3 max-w-5xl mx-auto">
-        {plans.map((plan) => (
-          <div
-            key={plan.name}
-            className={`rounded-lg border bg-surface p-6 flex flex-col ${
-              plan.highlighted ? 'border-brand ring-2 ring-brand/20' : 'border-border'
-            }`}
-          >
-            <h3 className="text-lg font-semibold text-primary mb-1">{plan.name}</h3>
-            <p className="text-sm text-muted mb-4">{plan.description}</p>
-            <div className="mb-4">
-              <span className="text-3xl font-bold text-primary">{plan.price}</span>
-              <span className="text-sm text-muted ml-1">kr / {plan.interval}</span>
-            </div>
-            <ul className="space-y-2 mb-6 flex-1">
-              {plan.features.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm text-primary">
-                  <svg className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  {f}
-                </li>
-              ))}
-            </ul>
-            <button
-              className={`w-full h-10 rounded-lg font-medium text-sm transition-colors ${
-                plan.highlighted
-                  ? 'bg-brand text-white hover:bg-brand-dark'
-                  : 'border border-border text-primary hover:bg-gray-50'
+      <div className="max-w-6xl mx-auto px-4 py-16">
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-4 mb-16 max-w-lg mx-auto text-center">
+          <div>
+            <p className="text-3xl font-bold text-[#F5A623]">56</p>
+            <p className="text-sm text-gray-500">{isSv ? 'Aktiva medlemmar' : 'Active members'}</p>
+          </div>
+          <div>
+            <p className="text-3xl font-bold text-[#F5A623]">215</p>
+            <p className="text-sm text-gray-500">{isSv ? 'Evenemang totalt' : 'Events total'}</p>
+          </div>
+          <div>
+            <p className="text-3xl font-bold text-[#F5A623]">2004</p>
+            <p className="text-sm text-gray-500">{isSv ? 'Grundat' : 'Founded'}</p>
+          </div>
+        </div>
+
+        {/* Membership cards */}
+        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+          {tiers.map(tier => (
+            <div
+              key={tier.id}
+              className={`rounded-2xl border-2 p-6 flex flex-col transition-shadow hover:shadow-md ${
+                tier.highlight
+                  ? 'border-[#F5A623] bg-[#FFF9EE] shadow-lg relative'
+                  : 'border-gray-200 bg-white'
               }`}
             >
-              {t('signUp')}
-            </button>
+              {tier.highlight && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#F5A623] text-white text-xs font-bold px-3 py-1 rounded-full">
+                  {isSv ? 'Populärast' : 'Most popular'}
+                </div>
+              )}
+
+              <h2 className="font-bold text-[#2C2C2C] text-lg mb-2">{tier.name}</h2>
+              <p className="text-sm text-gray-500 mb-4">{tier.description}</p>
+
+              <div className="mb-6">
+                {tier.priceSek === 0 ? (
+                  <p className="text-3xl font-bold text-[#2C2C2C]">{isSv ? 'Gratis' : 'Free'}</p>
+                ) : (
+                  <>
+                    <span className="text-3xl font-bold text-[#2C2C2C]">{tier.priceSek.toLocaleString('sv-SE')}</span>
+                    <span className="text-gray-400 ml-1 text-sm">kr/{tier.period}</span>
+                  </>
+                )}
+              </div>
+
+              <ul className="space-y-2 mb-6 flex-1">
+                {tier.features.map((f, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                    <span className="text-[#F5A623] mt-0.5">✓</span>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+
+              <a
+                href={
+                  tier.priceSek === 0
+                    ? `mailto:info@yeshinnorbu.se?subject=${encodeURIComponent('Väktarmedlemskap')}`
+                    : `/${locale}/checkout?name=${encodeURIComponent(tier.name)}&amount=${tier.priceSek}&type=${tier.type}${tier.interval ? `&interval=${tier.interval}` : ''}&memberLevel=${tier.id}`
+                }
+                className={`block text-center font-semibold py-3 rounded-xl transition-colors ${
+                  tier.highlight
+                    ? 'bg-[#F5A623] text-white hover:bg-[#e09520]'
+                    : 'bg-[#2C2C2C] text-white hover:bg-[#3a3a3a]'
+                }`}
+              >
+                {tier.priceSek === 0
+                  ? (isSv ? 'Kontakta oss' : 'Contact us')
+                  : (isSv ? 'Välj detta' : 'Choose this')}
+              </a>
+            </div>
+          ))}
+        </div>
+
+        {/* FAQ */}
+        <div className="mt-20 max-w-2xl mx-auto">
+          <h2 className="text-2xl font-bold text-[#2C2C2C] mb-8 text-center">
+            {isSv ? 'Vanliga frågor' : 'FAQ'}
+          </h2>
+          <div className="space-y-4">
+            {[
+              {
+                q: isSv ? 'Kan jag avsluta mitt medlemskap när som helst?' : 'Can I cancel anytime?',
+                a: isSv ? 'Ja, månadsmedlemskap kan avslutas närsomhelst. Årsmedlemskap gäller hela perioden.' : 'Yes, monthly memberships can be cancelled anytime. Annual memberships run for the full year.',
+              },
+              {
+                q: isSv ? 'Vilka betalningsmetoder accepteras?' : 'What payment methods are accepted?',
+                a: isSv ? 'Vi accepterar Swish, Visa och Mastercard (inklusive Apple Pay och Google Pay).' : 'We accept Swish, Visa and Mastercard (including Apple Pay and Google Pay).',
+              },
+              {
+                q: isSv ? 'Är centret FPMT-anslutet?' : 'Is the center FPMT-affiliated?',
+                a: isSv ? 'Ja, Yeshe Norbu är ett FPMT-center (Foundation for the Preservation of the Mahayana Tradition).' : 'Yes, Yeshe Norbu is an FPMT center (Foundation for the Preservation of the Mahayana Tradition).',
+              },
+            ].map((item, i) => (
+              <div key={i} className="bg-white rounded-xl p-5 border border-gray-100">
+                <h3 className="font-semibold text-[#2C2C2C] mb-2">{item.q}</h3>
+                <p className="text-gray-500 text-sm">{item.a}</p>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
