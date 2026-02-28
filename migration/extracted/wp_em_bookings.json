@@ -1,0 +1,35 @@
+[
+  {
+    "booking_id": "1",
+    "event_id": "1",
+    "location_id": "1",
+    "person_id": "1",
+    "booking_status": "Test",
+    "booking_spaces": "2017-05-05 09:50:30",
+    "booking_price": "1",
+    "booking_date": "4900.0000",
+    "booking_uuid": "0.0000"
+  },
+  {
+    "booking_id": "2",
+    "event_id": "1",
+    "location_id": "2",
+    "person_id": "1",
+    "booking_status": "test",
+    "booking_spaces": "2017-05-05 15:14:25",
+    "booking_price": "1",
+    "booking_date": "3900.0000",
+    "booking_uuid": "0.0000"
+  },
+  {
+    "booking_id": "3",
+    "event_id": "2",
+    "location_id": "2",
+    "person_id": "1",
+    "booking_status": "test",
+    "booking_spaces": "2017-05-06 21:27:21",
+    "booking_price": "1",
+    "booking_date": "0.0000",
+    "booking_uuid": "0.0000"
+  }
+]
