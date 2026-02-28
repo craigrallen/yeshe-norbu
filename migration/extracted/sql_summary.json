@@ -1,0 +1,15 @@
+{
+  "tables": {
+    "wp_em_bookings": 3,
+    "wp_em_events": 4,
+    "wp_em_locations": 5,
+    "wp_learndash_user_activity": 97,
+    "wp_pmpro_membership_levels": 5,
+    "wp_pmpro_membership_orders": 20,
+    "wp_pmpro_memberships_users": 852,
+    "wp_pmpro_subscriptions": 0,
+    "wp_tec_events": 215,
+    "wp_users": 1191
+  },
+  "ld_post_samples": 15
+}
