@@ -17,7 +17,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
     `SELECT id, slug,
             COALESCE(NULLIF(title_sv,''), title_en) as title_sv_fallback,
             COALESCE(NULLIF(title_en,''), title_sv) as title_en_fallback,
-            starts_at, venue
+            starts_at, venue, featured_image_url
      FROM events
      WHERE published = true AND starts_at >= now()
      ORDER BY starts_at ASC
@@ -69,16 +69,19 @@ export default async function HomePage({ params: { locale } }: { params: { local
         </div>
         <div className="grid gap-6 md:grid-cols-3">
           {upcomingEvents.map((e: any) => (
-            <div key={e.id} className="rounded-xl border border-border bg-surface p-6 hover:shadow-md transition-shadow">
-              <h3 className="font-semibold text-primary text-lg mb-2">{sv ? e.title_sv_fallback : e.title_en_fallback}</h3>
-              <div className="space-y-1 text-sm text-muted mb-4">
-                <div>{new Date(e.starts_at).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short', timeZone: 'Europe/Stockholm' })} · {new Date(e.starts_at).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Stockholm' })}</div>
-                <div>{e.venue || 'Yeshin Norbu, Stockholm'}</div>
+            <a key={e.id} href={e.slug ? `/${locale}/events/${e.slug}` : `/${locale}/events`} className="rounded-xl border border-border bg-surface overflow-hidden hover:shadow-md transition-shadow block">
+              <img src={e.featured_image_url || '/events/wisdom-retreat.jpg'} alt={sv ? e.title_sv_fallback : e.title_en_fallback} className="w-full h-40 object-cover" loading="lazy" />
+              <div className="p-6">
+                <h3 className="font-semibold text-primary text-lg mb-2">{sv ? e.title_sv_fallback : e.title_en_fallback}</h3>
+                <div className="space-y-1 text-sm text-muted mb-4">
+                  <div>{new Date(e.starts_at).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short', timeZone: 'Europe/Stockholm' })} · {new Date(e.starts_at).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Stockholm' })}</div>
+                  <div>{e.venue || 'Yeshin Norbu, Stockholm'}</div>
+                </div>
+                <div className="flex justify-end items-center pt-3 border-t border-border">
+                  <span className="text-sm text-brand hover:text-brand-dark font-medium">{sv ? 'Läs mer' : 'Read more'} →</span>
+                </div>
               </div>
-              <div className="flex justify-end items-center pt-3 border-t border-border">
-                <a href={e.slug ? `/${locale}/events/${e.slug}` : `/${locale}/events`} className="text-sm text-brand hover:text-brand-dark font-medium">{sv ? 'Läs mer' : 'Read more'} →</a>
-              </div>
-            </div>
+            </a>
           ))}
         </div>
       </section>
