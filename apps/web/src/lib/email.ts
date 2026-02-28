@@ -39,7 +39,7 @@ function baseTemplate(content: string) {
 <body>
 <div class="wrap">
   <div class="header">
-    <div class="header-text">🙏 Yeshin Norbu Mind Training Centre</div>
+    <div class="header-text">Yeshin Norbu Mind Training Centre</div>
   </div>
   <div class="body">${content}</div>
   <div class="footer">
@@ -76,7 +76,7 @@ export async function sendPasswordResetEmail(to: string, firstName: string, toke
 
 export async function sendWelcomeEmail(to: string, firstName: string) {
   const html = baseTemplate(`
-    <h1>Välkommen till Yeshin Norbu! 🙏</h1>
+    <h1>Välkommen till Yeshin Norbu!</h1>
     <p>Hej ${firstName},</p>
     <p>Ditt konto har skapats. Du kan nu logga in och boka evenemang, hantera ditt medlemskap och ta del av våra kurser.</p>
     <p><a href="${BASE_URL}/sv/logga-in" class="btn">Logga in</a></p>

@@ -98,7 +98,7 @@ async function Header({ locale }: { locale: Locale }) {
           items={navItems}
           locale={locale}
           loginLabel={tc('login')}
-          langLabel={locale === 'sv' ? '🌐 English' : '🌐 Svenska'}
+          langLabel={locale === 'sv' ? 'English' : 'Svenska'}
           langHref={locale === 'sv' ? '/en' : '/sv'}
         />
       </div>

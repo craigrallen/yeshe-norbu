@@ -24,13 +24,13 @@ export default function GlomdLosenordPage({ params: { locale } }: { params: { lo
     <div className="min-h-screen bg-[#F9F7F4] flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="text-4xl mb-3">🔑</div>
+          <div className="text-4xl mb-3"></div>
           <h1 className="text-3xl font-bold text-[#58595b]">{sv ? 'Glömt lösenord?' : 'Forgot password?'}</h1>
         </div>
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
           {sent ? (
             <div className="text-center">
-              <div className="text-4xl mb-4">📧</div>
+              <div className="text-4xl mb-4"></div>
               <h2 className="text-xl font-semibold text-[#58595b] mb-3">{sv ? 'E-post skickad!' : 'Email sent!'}</h2>
               <p className="text-gray-500 mb-6">
                 {sv

@@ -32,7 +32,7 @@ export default function RegistreraPage({ params: { locale } }: { params: { local
     <div className="min-h-screen bg-[#F9F7F4] flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="text-4xl mb-3">🙏</div>
+          <div className="text-4xl mb-3"></div>
           <h1 className="text-3xl font-bold text-[#58595b]">{sv ? 'Skapa konto' : 'Create account'}</h1>
           <p className="text-gray-500 mt-2">{sv ? 'Gå med i vår gemenskap' : 'Join our community'}</p>
         </div>

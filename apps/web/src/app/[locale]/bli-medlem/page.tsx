@@ -150,7 +150,7 @@ export default async function BliMedlemPage({
               <ul className="space-y-2 mb-6 flex-1">
                 {tier.features.map((f, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                    <span className="text-[#f5ca00] mt-0.5">✓</span>
+                    <span className="text-[#f5ca00] mt-0.5">•</span>
                     {f}
                   </li>
                 ))}

@@ -1,9 +1,9 @@
 import { getTranslations } from 'next-intl/server';
 
 const upcomingEvents = [
-  { id: 1, title: 'Introduktion till Mindfulness', titleEn: 'Introduction to Mindfulness', date: '4 mars', dateEn: '4 March', time: '18:30', location: 'Yeshin Norbu Center', price: 'Gratis', priceEn: 'Free', emoji: '🧘' },
-  { id: 2, title: 'Lam Rim – vecka 3', titleEn: 'Lam Rim – week 3', date: '6 mars', dateEn: '6 March', time: '19:00', location: 'Online', price: '150 kr', priceEn: '150 SEK', emoji: '📿' },
-  { id: 3, title: 'Retreat: Tystnadens kraft', titleEn: 'Retreat: The Power of Silence', date: '14–16 mars', dateEn: '14–16 March', time: 'Helg', location: 'Utanför Stockholm', price: '2 500 kr', priceEn: '2,500 SEK', emoji: '🌿' },
+  { id: 1, title: 'Introduktion till Mindfulness', titleEn: 'Introduction to Mindfulness', date: '4 mars', dateEn: '4 March', time: '18:30', location: 'Yeshin Norbu Center', price: 'Gratis', priceEn: 'Free', emoji: '' },
+  { id: 2, title: 'Lam Rim – vecka 3', titleEn: 'Lam Rim – week 3', date: '6 mars', dateEn: '6 March', time: '19:00', location: 'Online', price: '150 kr', priceEn: '150 SEK', emoji: '' },
+  { id: 3, title: 'Retreat: Tystnadens kraft', titleEn: 'Retreat: The Power of Silence', date: '14–16 mars', dateEn: '14–16 March', time: 'Helg', location: 'Utanför Stockholm', price: '2 500 kr', priceEn: '2,500 SEK', emoji: '' },
 ];
 
 const blogPosts = [
@@ -27,7 +27,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
     <div className="space-y-20">
       {/* Hero */}
       <section className="text-center py-16 md:py-24">
-        <div className="inline-block text-6xl mb-6">☸️</div>
+        <div className="inline-block text-6xl mb-6"></div>
         <h1 className="text-4xl md:text-6xl font-bold text-primary mb-4">{t('heroTitle')}</h1>
         <p className="text-xl md:text-2xl text-muted mb-4">{t('heroSubtitle')}</p>
         <p className="max-w-2xl mx-auto text-base text-muted leading-relaxed mb-8">{t('heroDescription')}</p>
@@ -55,8 +55,8 @@ export default async function HomePage({ params: { locale } }: { params: { local
               <div className="text-4xl mb-4">{e.emoji}</div>
               <h3 className="font-semibold text-primary text-lg mb-2">{sv ? e.title : e.titleEn}</h3>
               <div className="space-y-1 text-sm text-muted mb-4">
-                <div>📅 {sv ? e.date : e.dateEn} · {e.time}</div>
-                <div>📍 {e.location}</div>
+                <div>{sv ? e.date : e.dateEn} · {e.time}</div>
+                <div>{e.location}</div>
               </div>
               <div className="flex justify-between items-center pt-3 border-t border-border">
                 <span className="font-medium text-primary">{sv ? e.price : e.priceEn}</span>
@@ -71,7 +71,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
 
       {/* Mission */}
       <section className="max-w-3xl mx-auto text-center bg-amber-50 rounded-2xl p-10">
-        <div className="text-5xl mb-4">🙏</div>
+        <div className="text-5xl mb-4"></div>
         <h2 className="text-2xl md:text-3xl font-semibold text-primary mb-4">{t('ourMission')}</h2>
         <p className="text-base text-muted leading-relaxed">{t('missionText')}</p>
       </section>
@@ -88,7 +88,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
           {blogPosts.map((p) => (
             <a key={p.slug} href={`/${locale}/blog/${p.slug}`} className="group">
               <div className="rounded-xl border border-border bg-surface overflow-hidden hover:shadow-md transition-shadow">
-                <div className="aspect-video bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center text-5xl">☸️</div>
+                <div className="aspect-video bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center text-5xl"></div>
                 <div className="p-5">
                   <span className="text-xs font-medium px-2 py-1 bg-blue-100 text-blue-800 rounded-full">{sv ? p.category : p.categoryEn}</span>
                   <h3 className="font-semibold text-primary mt-3 mb-2 group-hover:text-brand transition-colors">{sv ? p.title : p.titleEn}</h3>
@@ -116,7 +116,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
               <ul className="space-y-2 mb-6">
                 {(sv ? tier.benefits : tier.benefitsEn).map((b) => (
                   <li key={b} className="flex items-start gap-2 text-sm text-muted">
-                    <span className="text-green-500 mt-0.5">✓</span>
+                    <span className="text-green-500 mt-0.5">•</span>
                     <span>{b}</span>
                   </li>
                 ))}

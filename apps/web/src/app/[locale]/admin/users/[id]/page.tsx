@@ -87,8 +87,8 @@ export default async function UserDetailPage({ params: { locale, id } }: { param
           <div><span className="text-gray-400">{sv ? 'Språk' : 'Locale'}:</span> {user.locale}</div>
           <div><span className="text-gray-400">{sv ? 'Registrerad' : 'Joined'}:</span> {new Date(user.createdAt).toLocaleDateString('sv-SE')}</div>
           <div><span className="text-gray-400">Stripe ID:</span> {user.stripeCustomerId || '—'}</div>
-          <div><span className="text-gray-400">{sv ? 'E-post verifierad' : 'Email verified'}:</span> {user.emailVerified ? '✅' : '❌'}</div>
-          <div><span className="text-gray-400">{sv ? 'Marknadsföring' : 'Marketing'}:</span> {user.consentMarketing ? '✅' : '❌'}</div>
+          <div><span className="text-gray-400">{sv ? 'E-post verifierad' : 'Email verified'}:</span> {user.emailVerified ? 'Yes' : 'No'}</div>
+          <div><span className="text-gray-400">{sv ? 'Marknadsföring' : 'Marketing'}:</span> {user.consentMarketing ? 'Yes' : 'No'}</div>
         </div>
 
         <div className="grid md:grid-cols-3 gap-3 mt-5">

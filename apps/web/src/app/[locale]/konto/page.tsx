@@ -44,7 +44,7 @@ export default function KontoPage({ params: { locale } }: { params: { locale: st
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-[#58595b]">
-              {sv ? `Hej, ${user.first_name}! 🙏` : `Hello, ${user.first_name}! 🙏`}
+              {sv ? `Hej, ${user.first_name}!` : `Hello, ${user.first_name}!`}
             </h1>
             <p className="text-gray-500 mt-1">{user.email}</p>
           </div>
@@ -82,10 +82,10 @@ export default function KontoPage({ params: { locale } }: { params: { locale: st
             <h2 className="font-semibold text-[#58595b] mb-4">{sv ? 'Snabblänkar' : 'Quick links'}</h2>
             <div className="space-y-2">
               {[
-                { href: `/${locale}/events`, label: sv ? '📅 Kommande evenemang' : '📅 Upcoming events' },
-                { href: `/${locale}/bli-medlem`, label: sv ? '🌟 Uppgradera medlemskap' : '🌟 Upgrade membership' },
-                { href: `/${locale}/blog`, label: sv ? '📝 Blogg & teachings' : '📝 Blog & teachings' },
-                { href: `/${locale}/admin`, label: sv ? '⚙️ Adminpanel' : '⚙️ Admin panel' },
+                { href: `/${locale}/events`, label: sv ? 'Kommande evenemang' : 'Upcoming events' },
+                { href: `/${locale}/bli-medlem`, label: sv ? 'Uppgradera medlemskap' : 'Upgrade membership' },
+                { href: `/${locale}/blog`, label: sv ? 'Blogg & teachings' : 'Blog & teachings' },
+                { href: `/${locale}/admin`, label: sv ? 'Adminpanel' : 'Admin panel' },
               ].map(link => (
                 <Link key={link.href} href={link.href}
                   className="flex items-center gap-3 p-3 rounded-xl hover:bg-[#F9F7F4] transition-colors text-[#58595b]">

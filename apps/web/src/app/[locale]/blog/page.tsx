@@ -23,7 +23,7 @@ export default function BlogPage({ params: { locale } }: { params: { locale: str
           <a key={p.slug} href={`/${locale}/blog/${p.slug}`} className="group">
             <div className="rounded-xl border border-gray-200 bg-white overflow-hidden hover:shadow-lg transition-shadow">
               <div className="aspect-video bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center text-6xl">
-                ☸️
+                
               </div>
               <div className="p-5 space-y-3">
                 <div className="flex justify-between items-center text-xs">

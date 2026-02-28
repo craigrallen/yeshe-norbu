@@ -123,7 +123,7 @@ function CheckoutContent() {
                 method === 'stripe' ? 'border-[#f5ca00] bg-[#FFF9EE]' : 'border-gray-200 hover:border-gray-300'
               }`}
             >
-              <div className="text-2xl mb-1">💳</div>
+              <div className="text-2xl mb-1"></div>
               <div className="font-medium text-sm">Kort</div>
               <div className="text-xs text-gray-400">Visa, Mastercard</div>
             </button>
@@ -133,7 +133,7 @@ function CheckoutContent() {
                 method === 'swish' ? 'border-[#f5ca00] bg-[#FFF9EE]' : 'border-gray-200 hover:border-gray-300'
               }`}
             >
-              <div className="text-2xl mb-1">📱</div>
+              <div className="text-2xl mb-1"></div>
               <div className="font-medium text-sm">Swish</div>
               <div className="text-xs text-gray-400">Mobil betalning</div>
             </button>
@@ -166,7 +166,7 @@ function CheckoutContent() {
               >
                 {loading ? 'Behandlar...' : `Betala ${total.toLocaleString('sv-SE')} kr`}
               </button>
-              <p className="text-xs text-gray-400 text-center mt-3">🔒 Säker betalning via Stripe</p>
+              <p className="text-xs text-gray-400 text-center mt-3">Säker betalning via Stripe</p>
             </div>
           ) : swishData ? (
             <div className="text-center">
@@ -180,7 +180,7 @@ function CheckoutContent() {
                 href={swishData.swishUrl}
                 className="block w-full bg-[#00B14F] text-white font-semibold py-3.5 rounded-xl hover:bg-[#009940] transition-colors mb-3"
               >
-                📱 Öppna Swish-appen
+                 Öppna Swish-appen
               </a>
               <p className="text-sm text-gray-500">
                 Har du inte appen? Swisha manuellt till <strong>{swishData.swishNumber}</strong>

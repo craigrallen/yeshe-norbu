@@ -51,7 +51,7 @@ export default async function ShopPage({ params: { locale }, searchParams }: { p
               {p.featured_image_url ? (
                 <img src={p.featured_image_url} alt={sv ? p.name_sv : p.name_en} className="w-full h-48 object-cover" loading="lazy" />
               ) : (
-                <div className="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-300 text-4xl">🛍️</div>
+                <div className="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-300 text-4xl"></div>
               )}
               <div className="p-4">
                 <h3 className="font-medium text-gray-900 text-sm mb-2 line-clamp-2">{sv ? p.name_sv : p.name_en}</h3>

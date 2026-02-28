@@ -5,7 +5,7 @@ export default function CheckoutSuccessPage() {
   return (
     <div className="min-h-screen bg-[#F9F7F4] flex items-center justify-center px-4">
       <div className="max-w-md w-full text-center">
-        <div className="text-6xl mb-6">🙏</div>
+        <div className="text-6xl mb-6"></div>
         <h1 className="text-3xl font-bold text-[#58595b] mb-3">Tack för din betalning!</h1>
         <p className="text-gray-600 mb-2">Din betalning har genomförts.</p>
         <p className="text-gray-500 text-sm mb-8">En bekräftelse skickas till din e-postadress.</p>
