@@ -1,3 +1,4 @@
+import { requireAdmin } from '@/lib/authz';
 const adminNav = [
   { href: '/admin', label: 'Översikt', labelEn: 'Dashboard', icon: '📊' },
   { href: '/admin/users', label: 'Användare', labelEn: 'Users', icon: '👥' },
@@ -7,7 +8,7 @@ const adminNav = [
   { href: '/admin/blog', label: 'Blogg', labelEn: 'Blog', icon: '✍️' },
 ];
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
   params: { locale },
 }: {
@@ -15,6 +16,8 @@ export default function AdminLayout({
   params: { locale: string };
 }) {
   const sv = locale === 'sv';
+  await requireAdmin(locale);
+
 
   return (
     <div className="min-h-screen bg-gray-50 -mt-8 -mx-4 sm:-mx-6 lg:-mx-8">
