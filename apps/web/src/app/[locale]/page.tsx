@@ -21,8 +21,13 @@ export default async function HomePage({ params: { locale } }: { params: { local
      FROM events
      WHERE published = true
        AND starts_at >= now()
-       AND featured_image_url IS NOT NULL
-       AND featured_image_url <> ''
+       AND coalesce(
+         nullif(to_jsonb(events)->>'featured','')::boolean,
+         nullif(to_jsonb(events)->>'is_featured','')::boolean,
+         nullif(to_jsonb(events)->>'wp_featured','')::boolean,
+         nullif(to_jsonb(events)->>'tribe_featured','')::boolean,
+         false
+       ) = true
      ORDER BY starts_at ASC
      LIMIT 3`
   );

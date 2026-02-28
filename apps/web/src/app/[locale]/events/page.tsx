@@ -14,7 +14,13 @@ export default async function EventsPage({ params: { locale }, searchParams }: {
   let query = `
     SELECT e.id, e.slug, e.title_sv, e.title_en, e.starts_at, e.ends_at, e.venue, e.featured_image_url, e.is_online,
            ec.name_sv as cat_sv, ec.name_en as cat_en, ec.slug as cat_slug,
-           CASE WHEN e.featured_image_url IS NOT NULL AND e.featured_image_url <> '' THEN true ELSE false END as featured
+           coalesce(
+             nullif(to_jsonb(e)->>'featured','')::boolean,
+             nullif(to_jsonb(e)->>'is_featured','')::boolean,
+             nullif(to_jsonb(e)->>'wp_featured','')::boolean,
+             nullif(to_jsonb(e)->>'tribe_featured','')::boolean,
+             false
+           ) as featured
     FROM events e
     LEFT JOIN event_categories ec ON e.category_id = ec.id
     WHERE e.published = true
