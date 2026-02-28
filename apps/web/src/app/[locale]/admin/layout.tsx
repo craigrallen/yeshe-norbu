@@ -6,6 +6,7 @@ const adminNav = [
   { href: '/admin/members', label: 'Medlemmar', labelEn: 'Members', icon: '🪪' },
   { href: '/admin/events', label: 'Evenemang', labelEn: 'Events', icon: '📅' },
   { href: '/admin/orders', label: 'Beställningar', labelEn: 'Orders', icon: '🛍️' },
+  { href: '/admin/products', label: 'Produkter', labelEn: 'Products', icon: '📦' },
   { href: '/admin/blog', label: 'Blogg', labelEn: 'Blog', icon: '✍️' },
   { href: '/admin/venues', label: 'Platser', labelEn: 'Venues', icon: '📍' },
   { href: '/admin/organizers', label: 'Arrangörer', labelEn: 'Organizers', icon: '🎤' },
