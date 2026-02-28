@@ -1,23 +1,7 @@
-import { getTranslations } from 'next-intl/server';
 import { createDb, events, eventCategories } from '@yeshe/db';
 import { eq, asc, desc } from 'drizzle-orm';
 
-type EventRow = {
-  id: string;
-  slug: string;
-  titleSv: string;
-  titleEn: string | null;
-  startsAt: Date;
-  endsAt: Date | null;
-  venue: string | null;
-  capacity: number | null;
-  priceSek: string;
-  featuredImageUrl: string | null;
-  categoryNameSv: string | null;
-  categoryNameEn: string | null;
-};
-
-async function loadEvents(): Promise<EventRow[]> {
+async function loadEvents() {
   const db = createDb(process.env.DATABASE_URL!);
 
   const published = await db
@@ -29,8 +13,6 @@ async function loadEvents(): Promise<EventRow[]> {
       startsAt: events.startsAt,
       endsAt: events.endsAt,
       venue: events.venue,
-      capacity: events.capacity,
-      priceSek: events.priceSek,
       featuredImageUrl: events.featuredImageUrl,
       categoryNameSv: eventCategories.nameSv,
       categoryNameEn: eventCategories.nameEn,
@@ -41,9 +23,9 @@ async function loadEvents(): Promise<EventRow[]> {
     .orderBy(asc(events.startsAt))
     .limit(200);
 
-  if (published.length > 0) return published as EventRow[];
+  if (published.length > 0) return published;
 
-  const latest = await db
+  return db
     .select({
       id: events.id,
       slug: events.slug,
@@ -52,8 +34,6 @@ async function loadEvents(): Promise<EventRow[]> {
       startsAt: events.startsAt,
       endsAt: events.endsAt,
       venue: events.venue,
-      capacity: events.capacity,
-      priceSek: events.priceSek,
       featuredImageUrl: events.featuredImageUrl,
       categoryNameSv: eventCategories.nameSv,
       categoryNameEn: eventCategories.nameEn,
@@ -62,17 +42,10 @@ async function loadEvents(): Promise<EventRow[]> {
     .leftJoin(eventCategories, eq(events.categoryId, eventCategories.id))
     .orderBy(desc(events.startsAt))
     .limit(200);
-
-  return latest as EventRow[];
 }
 
 function formatDate(d: Date | string) {
   return new Date(d).toLocaleDateString('sv-SE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-}
-
-function priceLabel(priceSek: string, isSv: boolean) {
-  const v = Number(priceSek || '0');
-  return v <= 0 ? (isSv ? 'Gratis' : 'Free') : `${Math.round(v)} kr`;
 }
 
 function fallbackImage(i: number) {
@@ -95,8 +68,6 @@ export default async function EventsPage({ params: { locale } }: { params: { loc
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-12">
-        <div className="mb-4 text-sm text-gray-500">{eventRows.length} {isSv ? 'evenemang från databasen' : 'events from database'}</div>
-
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {eventRows.map((event, i) => (
             <div key={event.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow flex flex-col">
@@ -112,16 +83,18 @@ export default async function EventsPage({ params: { locale } }: { params: { loc
                 <h2 className="font-bold text-[#58595b] text-lg mb-2 leading-snug">{isSv ? event.titleSv : event.titleEn || event.titleSv}</h2>
 
                 <div className="text-sm text-gray-500 space-y-1 mb-4">
-                  <p>📍 {event.venue || 'Yeshin Norbu, Stockholm'}</p>
+                  <p>{event.venue || 'Yeshin Norbu, Stockholm'}</p>
                 </div>
 
-                <div className="mt-auto flex items-center justify-between">
-                  <p className="text-xl font-bold text-[#58595b]">{priceLabel(event.priceSek, isSv)}</p>
-                  <a href={`/${locale}/checkout?name=${encodeURIComponent(isSv ? event.titleSv : event.titleEn || event.titleSv)}&amount=${Math.round(Number(event.priceSek || '0'))}&type=event&ref=${event.slug}`} className="px-4 py-2 rounded-xl font-semibold text-sm transition-colors bg-[#f5ca00] text-white hover:bg-[#d4af00]">{isSv ? 'Boka plats' : 'Book now'}</a>
+                <div className="mt-auto">
+                  <a href={`/${locale}/events/${event.slug}`} className="px-4 py-2 rounded-xl font-semibold text-sm transition-colors bg-[#f5ca00] text-white hover:bg-[#d4af00] inline-block">{isSv ? 'Läs mer' : 'Read more'}</a>
                 </div>
               </div>
             </div>
           ))}
+          {eventRows.length === 0 && (
+            <p className="col-span-3 text-center text-gray-400 py-12">{isSv ? 'Inga evenemang just nu' : 'No events right now'}</p>
+          )}
         </div>
       </div>
     </div>
