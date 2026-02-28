@@ -1,16 +1,52 @@
 import { requireAdmin } from '@/lib/authz';
 
-const adminNav = [
+type NavItem = { href: string; label: string; labelEn: string; icon: string; children?: NavItem[] };
+
+const adminNav: NavItem[] = [
   { href: '/admin', label: 'Översikt', labelEn: 'Dashboard', icon: '📊' },
   { href: '/admin/users', label: 'Användare', labelEn: 'Users', icon: '👥' },
   { href: '/admin/members', label: 'Medlemmar', labelEn: 'Members', icon: '🪪' },
-  { href: '/admin/events', label: 'Evenemang', labelEn: 'Events', icon: '📅' },
+  { href: '/admin/events', label: 'Evenemang', labelEn: 'Events', icon: '📅', children: [
+    { href: '/admin/events', label: 'Alla evenemang', labelEn: 'All Events', icon: '📅' },
+    { href: '/admin/venues', label: 'Platser', labelEn: 'Venues', icon: '📍' },
+    { href: '/admin/organizers', label: 'Arrangörer', labelEn: 'Organizers', icon: '🎤' },
+  ]},
   { href: '/admin/orders', label: 'Beställningar', labelEn: 'Orders', icon: '🛍️' },
   { href: '/admin/products', label: 'Produkter', labelEn: 'Products', icon: '📦' },
   { href: '/admin/blog', label: 'Blogg', labelEn: 'Blog', icon: '✍️' },
-  { href: '/admin/venues', label: 'Platser', labelEn: 'Venues', icon: '📍' },
-  { href: '/admin/organizers', label: 'Arrangörer', labelEn: 'Organizers', icon: '🎤' },
 ];
+
+function SidebarItem({ item, locale, sv }: { item: NavItem; locale: string; sv: boolean }) {
+  if (item.children) {
+    return (
+      <div>
+        <div className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-500 uppercase tracking-wider text-xs mt-3">
+          <span className="text-lg">{item.icon}</span>
+          <span>{sv ? item.label : item.labelEn}</span>
+        </div>
+        <div className="ml-4 space-y-0.5">
+          {item.children.map((child) => (
+            <a key={child.href} href={`/${locale}${child.href}`}
+               className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+              <span className="text-base">{child.icon}</span>
+              <span>{sv ? child.label : child.labelEn}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    );
+  }
+  return (
+    <a href={`/${locale}${item.href}`}
+       className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+      <span className="text-lg">{item.icon}</span>
+      <span>{sv ? item.label : item.labelEn}</span>
+    </a>
+  );
+}
+
+// Flatten for mobile nav
+const mobileNav = adminNav.flatMap(item => item.children ? item.children : [item]);
 
 export default async function AdminLayout({
   children,
@@ -37,10 +73,10 @@ export default async function AdminLayout({
         </div>
       </div>
 
-      {/* Mobile nav — sits OUTSIDE the flex row */}
+      {/* Mobile nav */}
       <div className="md:hidden bg-white border-b border-gray-200 px-3 py-2 overflow-x-auto">
         <div className="flex gap-1 min-w-max">
-          {adminNav.map((item) => (
+          {mobileNav.map((item) => (
             <a key={item.href} href={`/${locale}${item.href}`} className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-700 hover:bg-gray-100 whitespace-nowrap">
               <span>{item.icon}</span>
               <span>{sv ? item.label : item.labelEn}</span>
@@ -52,16 +88,9 @@ export default async function AdminLayout({
       <div className="flex">
         {/* Desktop sidebar */}
         <aside className="w-56 min-h-screen bg-white border-r border-gray-200 pt-6 hidden md:block shrink-0">
-          <nav className="px-3 space-y-1">
+          <nav className="px-3 space-y-0.5">
             {adminNav.map((item) => (
-              <a
-                key={item.href}
-                href={`/${locale}${item.href}`}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors"
-              >
-                <span className="text-lg">{item.icon}</span>
-                <span>{sv ? item.label : item.labelEn}</span>
-              </a>
+              <SidebarItem key={item.href + (item.children ? '-group' : '')} item={item} locale={locale} sv={sv} />
             ))}
           </nav>
         </aside>
