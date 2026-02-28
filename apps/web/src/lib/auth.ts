@@ -41,7 +41,7 @@ export function generateResetToken(): string {
 export const COOKIE_OPTIONS = {
   name: COOKIE_NAME,
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
+  secure: true,
   sameSite: 'lax' as const,
   maxAge: 60 * 60 * 24 * 30, // 30 days
   path: '/',

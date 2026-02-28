@@ -1,5 +1,5 @@
 import { createDb, events, eventCategories } from '@yeshe/db';
-import { asc, desc, eq } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 function slugify(s: string) {
@@ -22,7 +22,6 @@ async function createEvent(formData: FormData) {
   const titleEn = String(formData.get('titleEn') || titleSv).trim();
   const startsAt = String(formData.get('startsAt') || '').trim();
   const venue = String(formData.get('venue') || '').trim();
-  const priceSek = String(formData.get('priceSek') || '0').trim();
 
   if (!titleSv || !startsAt) return;
 
@@ -38,7 +37,6 @@ async function createEvent(formData: FormData) {
     titleEn,
     startsAt: new Date(startsAt),
     venue: venue || null,
-    priceSek: priceSek || '0',
     published: false,
   });
 
@@ -82,8 +80,8 @@ export default async function AdminEvents({ params: { locale } }: { params: { lo
       titleSv: events.titleSv,
       titleEn: events.titleEn,
       startsAt: events.startsAt,
+      endsAt: events.endsAt,
       venue: events.venue,
-      priceSek: events.priceSek,
       published: events.published,
       categoryNameSv: eventCategories.nameSv,
       categoryNameEn: eventCategories.nameEn,
@@ -99,34 +97,32 @@ export default async function AdminEvents({ params: { locale } }: { params: { lo
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{sv ? 'Evenemang' : 'Events'}</h1>
           <p className="text-gray-500 text-sm mt-1">
-            {sv ? 'Databasdriven eventhantering (skapa/publicera/ta bort)' : 'Database-driven event management (create/publish/delete)'}
+            {rows.length} {sv ? 'evenemang i databasen' : 'events in database'}
           </p>
         </div>
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 p-4">
         <h2 className="font-semibold mb-3">{sv ? 'Nytt evenemang' : 'New event'}</h2>
-        <form action={createEvent} className="grid md:grid-cols-5 gap-3">
+        <form action={createEvent} className="grid md:grid-cols-4 gap-3">
           <input name="titleSv" required placeholder={sv ? 'Titel (SV)' : 'Title (SV)'} className="border rounded-lg px-3 py-2" />
           <input name="titleEn" placeholder={sv ? 'Titel (EN)' : 'Title (EN)'} className="border rounded-lg px-3 py-2" />
           <input name="startsAt" type="datetime-local" required className="border rounded-lg px-3 py-2" />
-          <input name="venue" placeholder={sv ? 'Plats' : 'Venue'} className="border rounded-lg px-3 py-2" />
           <div className="flex gap-2">
-            <input name="priceSek" type="number" min="0" step="1" defaultValue="0" className="border rounded-lg px-3 py-2 w-28" />
-            <button className="px-4 py-2 bg-[#58595b] text-white rounded-lg hover:bg-[#6b6c6e] font-medium">+ {sv ? 'Skapa' : 'Create'}</button>
+            <input name="venue" placeholder={sv ? 'Plats' : 'Venue'} className="border rounded-lg px-3 py-2 flex-1" />
+            <button className="px-4 py-2 bg-[#58595b] text-white rounded-lg hover:bg-[#6b6c6e] font-medium whitespace-nowrap">+ {sv ? 'Skapa' : 'Create'}</button>
           </div>
         </form>
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div className="px-4 py-3 text-sm text-gray-500">{rows.length} {sv ? 'evenemang i databasen' : 'events in database'}</div>
         <table className="w-full">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Titel' : 'Title'}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Datum' : 'Date'}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Plats' : 'Venue'}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Pris' : 'Price'}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Kategori' : 'Category'}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
               <th className="px-6 py-3"></th>
             </tr>
@@ -139,10 +135,10 @@ export default async function AdminEvents({ params: { locale } }: { params: { lo
                   <div className="text-xs text-gray-400">/{e.slug}</div>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">{new Date(e.startsAt).toLocaleString('sv-SE')}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{e.venue || '—'}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{Math.round(Number(e.priceSek || '0'))} kr</td>
+                <td className="px-6 py-4 text-sm text-gray-600">{e.venue || '\u2014'}</td>
+                <td className="px-6 py-4 text-sm text-gray-600">{(sv ? e.categoryNameSv : e.categoryNameEn) || '\u2014'}</td>
                 <td className="px-6 py-4">
-                  <span className={`px-2 py-1 text-xs rounded-full font-medium ${e.published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                  <span className={"px-2 py-1 text-xs rounded-full font-medium " + (e.published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800')}>
                     {e.published ? (sv ? 'Publicerad' : 'Published') : (sv ? 'Utkast' : 'Draft')}
                   </span>
                 </td>
@@ -163,6 +159,9 @@ export default async function AdminEvents({ params: { locale } }: { params: { lo
                 </td>
               </tr>
             ))}
+            {rows.length === 0 && (
+              <tr><td colSpan={6} className="px-6 py-12 text-center text-gray-400">{sv ? 'Inga evenemang \u00e4nnu' : 'No events yet'}</td></tr>
+            )}
           </tbody>
         </table>
       </div>

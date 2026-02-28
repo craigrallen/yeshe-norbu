@@ -50,13 +50,7 @@ export default async function AdminLayout({
             ))}
           </nav>
 
-          <div className="mt-8 mx-3 px-3 py-4 bg-blue-50 rounded-lg">
-            <p className="text-xs font-medium text-blue-700 mb-1">{sv ? 'Databas' : 'Database'}</p>
-            <p className="text-xs text-blue-600">1,191 {sv ? 'användare' : 'users'}</p>
-            <p className="text-xs text-blue-600">852 {sv ? 'medlemmar' : 'members'}</p>
-            <p className="text-xs text-blue-600">215 {sv ? 'evenemang' : 'events'}</p>
-          </div>
-        </aside>
+          </aside>
 
         {/* Mobile admin nav */}
         <div className="md:hidden w-full bg-white border-b border-gray-200 px-4 py-2 overflow-x-auto">
