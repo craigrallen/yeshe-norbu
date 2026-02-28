@@ -29,7 +29,7 @@ const UPCOMING_EVENTS = [
     spotsLeft: 12,
     totalSpots: 20,
     slug: 'meditationsretreatt-mars-2025',
-    image: '/events/wisdom-retreat.png',
+    image: '/events/wisdom-retreat.jpg',
   },
   {
     id: 2,
@@ -59,7 +59,7 @@ const UPCOMING_EVENTS = [
     spotsLeft: 35,
     totalSpots: 40,
     slug: 'veckomeditation-mars-2025',
-    image: '/events/wisdom-retreat.png',
+    image: '/events/wisdom-retreat.jpg',
   },
   {
     id: 4,
@@ -89,7 +89,7 @@ const UPCOMING_EVENTS = [
     spotsLeft: 8,
     totalSpots: 15,
     slug: 'tyst-retreatt-april-2025',
-    image: '/events/wisdom-retreat.png',
+    image: '/events/wisdom-retreat.jpg',
   },
   {
     id: 6,
