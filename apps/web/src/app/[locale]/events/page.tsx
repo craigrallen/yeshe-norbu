@@ -13,7 +13,8 @@ export default async function EventsPage({ params: { locale }, searchParams }: {
   // Events
   let query = `
     SELECT e.id, e.slug, e.title_sv, e.title_en, e.starts_at, e.ends_at, e.venue, e.featured_image_url, e.is_online,
-           ec.name_sv as cat_sv, ec.name_en as cat_en, ec.slug as cat_slug
+           ec.name_sv as cat_sv, ec.name_en as cat_en, ec.slug as cat_slug,
+           CASE WHEN e.featured_image_url IS NOT NULL AND e.featured_image_url <> '' THEN true ELSE false END as featured
     FROM events e
     LEFT JOIN event_categories ec ON e.category_id = ec.id
     WHERE e.published = true
@@ -33,6 +34,8 @@ export default async function EventsPage({ params: { locale }, searchParams }: {
   query += ' ORDER BY e.starts_at ' + (showPast ? 'DESC' : 'ASC') + ' LIMIT 200';
 
   const { rows: events } = await pool.query(query, params);
+
+  const featuredEvents = events.filter((e: any) => e.featured).slice(0, 3);
 
   function formatDate(d: string) {
     return new Date(d).toLocaleDateString('sv-SE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
@@ -74,6 +77,26 @@ export default async function EventsPage({ params: { locale }, searchParams }: {
             {sv ? 'Exportera iCal' : 'Export iCal'}
           </a>
         </div>
+
+        {featuredEvents.length > 0 && !showPast && !catFilter && (
+          <section className="mb-8">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-xl font-semibold text-[#58595b]">{sv ? 'Utvalda evenemang' : 'Featured events'}</h2>
+              <a href={`/${locale}/events`} className="text-sm text-blue-600 hover:underline">{sv ? 'Visa alla' : 'Show all'} →</a>
+            </div>
+            <div className="grid md:grid-cols-3 gap-4">
+              {featuredEvents.map((event: any, i: number) => (
+                <a key={event.id} href={`/${locale}/events/${event.slug}`} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+                  <img src={event.featured_image_url || fallbackImage(i)} alt={sv ? event.title_sv : event.title_en} className="w-full h-36 object-cover" loading="lazy" />
+                  <div className="p-4">
+                    <h3 className="font-semibold text-[#58595b]">{sv ? event.title_sv : event.title_en}</h3>
+                    <p className="text-xs text-gray-500 mt-1">{formatDate(event.starts_at)}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
 
         <div className="text-sm text-gray-400 mb-4">{events.length} {sv ? 'evenemang' : 'events'}</div>
 

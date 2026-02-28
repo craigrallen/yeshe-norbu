@@ -13,16 +13,32 @@ export default async function HomePage({ params: { locale } }: { params: { local
   const t = await getTranslations({ locale, namespace: 'home' });
   const sv = locale === 'sv';
 
-  const { rows: upcomingEvents } = await pool.query(
+  const { rows: featuredEvents } = await pool.query(
     `SELECT id, slug,
             COALESCE(NULLIF(title_sv,''), title_en) as title_sv_fallback,
             COALESCE(NULLIF(title_en,''), title_sv) as title_en_fallback,
             starts_at, venue, featured_image_url
      FROM events
-     WHERE published = true AND starts_at >= now()
+     WHERE published = true
+       AND starts_at >= now()
+       AND featured_image_url IS NOT NULL
+       AND featured_image_url <> ''
      ORDER BY starts_at ASC
      LIMIT 3`
   );
+
+  const upcomingEvents = featuredEvents.length
+    ? featuredEvents
+    : (await pool.query(
+      `SELECT id, slug,
+              COALESCE(NULLIF(title_sv,''), title_en) as title_sv_fallback,
+              COALESCE(NULLIF(title_en,''), title_sv) as title_en_fallback,
+              starts_at, venue, featured_image_url
+       FROM events
+       WHERE published = true AND starts_at >= now()
+       ORDER BY starts_at ASC
+       LIMIT 3`
+    )).rows;
 
   const { rows: plans } = await pool.query(
     `SELECT id, slug, name_sv, name_en, price_sek, interval_months
@@ -64,7 +80,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
 
       <section>
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl md:text-3xl font-semibold text-primary">{sv ? 'Kommande evenemang' : 'Upcoming Events'}</h2>
+          <h2 className="text-2xl md:text-3xl font-semibold text-primary">{sv ? 'Utvalda evenemang' : 'Featured Events'}</h2>
           <a href={`/${locale}/events`} className="text-sm text-brand hover:text-brand-dark font-medium">{sv ? 'Visa alla' : 'View all'} →</a>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
