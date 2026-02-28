@@ -57,7 +57,7 @@ async function Header({ locale }: { locale: Locale }) {
     { href: `/${locale}`, label: t('home') },
     { href: `/${locale}/program`, label: t('program') },
     { href: `/${locale}/events`, label: locale === 'sv' ? 'Evenemang' : 'Events' },
-    { href: `/${locale}/blog`, label: 'Blogg' },
+    { href: `/${locale}/blog`, label: locale === 'sv' ? 'Blogg' : 'Blog' },
     { href: `/${locale}/donera`, label: t('donate') },
     { href: `/${locale}/bli-medlem`, label: t('membership') },
   ];
@@ -124,7 +124,7 @@ async function Footer({ locale }: { locale: Locale }) {
             <h3 className="font-semibold text-primary mb-3">{locale === 'sv' ? 'Snabblänkar' : 'Quick Links'}</h3>
             <div className="flex flex-col gap-2 text-sm text-muted">
               <a href={`/${locale}/events`} className="hover:text-primary">{locale === 'sv' ? 'Evenemang' : 'Events'}</a>
-              <a href={`/${locale}/blog`} className="hover:text-primary">Blogg</a>
+              <a href={`/${locale}/blog`} className="hover:text-primary">{locale === 'sv' ? 'Blogg' : 'Blog'}</a>
               <a href={`/${locale}/bli-medlem`} className="hover:text-primary">{locale === 'sv' ? 'Bli medlem' : 'Membership'}</a>
               <a href={`/${locale}/donera`} className="hover:text-primary">{locale === 'sv' ? 'Donera' : 'Donate'}</a>
             </div>
