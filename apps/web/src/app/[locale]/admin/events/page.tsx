@@ -31,14 +31,7 @@ async function createEvent(formData: FormData) {
   const existing = await db.select({ slug: events.slug }).from(events).where(eq(events.slug, slug)).limit(1);
   if (existing.length) slug = `${slug}-${Date.now().toString().slice(-6)}`;
 
-  await db.insert(events).values({
-    slug,
-    titleSv,
-    titleEn,
-    startsAt: new Date(startsAt),
-    venue: venue || null,
-    published: false,
-  });
+  await db.insert(events).values({ slug, titleSv, titleEn, startsAt: new Date(startsAt), venue: venue || null, published: false });
 
   revalidatePath('/sv/admin/events');
   revalidatePath('/en/admin/events');
@@ -63,7 +56,6 @@ async function deleteEvent(formData: FormData) {
   const db = createDb(process.env.DATABASE_URL!);
   const id = String(formData.get('id') || '');
   if (!id) return;
-
   await db.delete(events).where(eq(events.id, id));
   revalidatePath('/sv/admin/events');
   revalidatePath('/en/admin/events');
@@ -80,7 +72,6 @@ export default async function AdminEvents({ params: { locale } }: { params: { lo
       titleSv: events.titleSv,
       titleEn: events.titleEn,
       startsAt: events.startsAt,
-      endsAt: events.endsAt,
       venue: events.venue,
       published: events.published,
       categoryNameSv: eventCategories.nameSv,
@@ -93,77 +84,69 @@ export default async function AdminEvents({ params: { locale } }: { params: { lo
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">{sv ? 'Evenemang' : 'Events'}</h1>
-          <p className="text-gray-500 text-sm mt-1">
-            {rows.length} {sv ? 'evenemang i databasen' : 'events in database'}
-          </p>
-        </div>
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">{sv ? 'Evenemang' : 'Events'}</h1>
+        <p className="text-gray-500 text-sm mt-1">{rows.length} {sv ? 'evenemang i databasen' : 'events in database'}</p>
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 p-4">
         <h2 className="font-semibold mb-3">{sv ? 'Nytt evenemang' : 'New event'}</h2>
-        <form action={createEvent} className="grid md:grid-cols-4 gap-3">
-          <input name="titleSv" required placeholder={sv ? 'Titel (SV)' : 'Title (SV)'} className="border rounded-lg px-3 py-2" />
-          <input name="titleEn" placeholder={sv ? 'Titel (EN)' : 'Title (EN)'} className="border rounded-lg px-3 py-2" />
-          <input name="startsAt" type="datetime-local" required className="border rounded-lg px-3 py-2" />
-          <div className="flex gap-2">
-            <input name="venue" placeholder={sv ? 'Plats' : 'Venue'} className="border rounded-lg px-3 py-2 flex-1" />
-            <button className="px-4 py-2 bg-[#58595b] text-white rounded-lg hover:bg-[#6b6c6e] font-medium whitespace-nowrap">+ {sv ? 'Skapa' : 'Create'}</button>
-          </div>
+        <form action={createEvent} className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-end">
+          <input name="titleSv" required placeholder={sv ? 'Titel (SV)' : 'Title (SV)'} className="border rounded-lg px-3 py-2 lg:col-span-3 min-w-0" />
+          <input name="titleEn" placeholder={sv ? 'Titel (EN)' : 'Title (EN)'} className="border rounded-lg px-3 py-2 lg:col-span-3 min-w-0" />
+          <input name="startsAt" type="datetime-local" required className="border rounded-lg px-3 py-2 lg:col-span-3 min-w-0" />
+          <input name="venue" placeholder={sv ? 'Plats' : 'Venue'} className="border rounded-lg px-3 py-2 lg:col-span-2 min-w-0" />
+          <button className="px-4 py-2 bg-[#58595b] text-white rounded-lg hover:bg-[#6b6c6e] font-medium whitespace-nowrap lg:col-span-1 w-full lg:w-auto">+ {sv ? 'Skapa' : 'Create'}</button>
         </form>
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Titel' : 'Title'}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Datum' : 'Date'}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Plats' : 'Venue'}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Kategori' : 'Category'}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-              <th className="px-6 py-3"></th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {rows.map((e) => (
-              <tr key={e.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm">
-                  <a href={`/${locale}/admin/events/${e.id}`} className="font-medium text-blue-600 hover:underline">{sv ? e.titleSv : e.titleEn}</a>
-                  <div className="text-xs text-gray-400">/{e.slug}</div>
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-600">{new Date(e.startsAt).toLocaleString('sv-SE')}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{e.venue || '\u2014'}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{(sv ? e.categoryNameSv : e.categoryNameEn) || '\u2014'}</td>
-                <td className="px-6 py-4">
-                  <span className={"px-2 py-1 text-xs rounded-full font-medium " + (e.published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800')}>
-                    {e.published ? (sv ? 'Publicerad' : 'Published') : (sv ? 'Utkast' : 'Draft')}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex gap-2 justify-end">
-                    <form action={togglePublish}>
-                      <input type="hidden" name="id" value={e.id} />
-                      <input type="hidden" name="next" value={(!e.published).toString()} />
-                      <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                        {e.published ? (sv ? 'Avpublicera' : 'Unpublish') : (sv ? 'Publicera' : 'Publish')}
-                      </button>
-                    </form>
-                    <form action={deleteEvent}>
-                      <input type="hidden" name="id" value={e.id} />
-                      <button className="text-red-600 hover:text-red-800 text-sm">{sv ? 'Ta bort' : 'Delete'}</button>
-                    </form>
-                  </div>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[980px]">
+            <thead className="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Titel' : 'Title'}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Datum' : 'Date'}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Plats' : 'Venue'}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Kategori' : 'Category'}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                <th className="px-6 py-3"></th>
               </tr>
-            ))}
-            {rows.length === 0 && (
-              <tr><td colSpan={6} className="px-6 py-12 text-center text-gray-400">{sv ? 'Inga evenemang \u00e4nnu' : 'No events yet'}</td></tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {rows.map((e) => (
+                <tr key={e.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 text-sm">
+                    <a href={`/${locale}/admin/events/${e.id}`} className="font-medium text-blue-600 hover:underline">{sv ? e.titleSv : e.titleEn}</a>
+                    <div className="text-xs text-gray-400">/{e.slug}</div>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{new Date(e.startsAt).toLocaleString('sv-SE')}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{e.venue || '—'}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{(sv ? e.categoryNameSv : e.categoryNameEn) || '—'}</td>
+                  <td className="px-6 py-4">
+                    <span className={'px-2 py-1 text-xs rounded-full font-medium ' + (e.published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800')}>
+                      {e.published ? (sv ? 'Publicerad' : 'Published') : (sv ? 'Utkast' : 'Draft')}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <div className="flex gap-2 justify-end">
+                      <form action={togglePublish}>
+                        <input type="hidden" name="id" value={e.id} />
+                        <input type="hidden" name="next" value={(!e.published).toString()} />
+                        <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">{e.published ? (sv ? 'Avpublicera' : 'Unpublish') : (sv ? 'Publicera' : 'Publish')}</button>
+                      </form>
+                      <form action={deleteEvent}>
+                        <input type="hidden" name="id" value={e.id} />
+                        <button className="text-red-600 hover:text-red-800 text-sm">{sv ? 'Ta bort' : 'Delete'}</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {rows.length === 0 && <tr><td colSpan={6} className="px-6 py-12 text-center text-gray-400">{sv ? 'Inga evenemang ännu' : 'No events yet'}</td></tr>}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

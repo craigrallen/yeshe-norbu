@@ -1,4 +1,4 @@
-import { createDb, users, userRoles, memberships, membershipPlans, orders, payments } from '@yeshe/db';
+import { createDb, users, userRoles, memberships, membershipPlans, orders, payments, courseEnrollments, courses } from '@yeshe/db';
 import { eq, desc, sql } from 'drizzle-orm';
 import { requireAdmin } from '@/lib/authz';
 import { revalidatePath } from 'next/cache';
@@ -71,6 +71,22 @@ export default async function UserDetailPage({ params: { locale, id } }: { param
 
   const [stats] = await db.select({ totalOrders: sql<number>`count(*)::int`, totalSpend: sql<string>`coalesce(sum(${orders.totalSek}), 0)::text`, avgOrder: sql<string>`coalesce(avg(${orders.totalSek}), 0)::text` }).from(orders).where(eq(orders.userId, id));
 
+  const enrolledCourses = await db
+    .select({
+      id: courseEnrollments.id,
+      courseId: courseEnrollments.courseId,
+      orderId: courseEnrollments.orderId,
+      completedAt: courseEnrollments.completedAt,
+      createdAt: courseEnrollments.createdAt,
+      titleSv: courses.titleSv,
+      titleEn: courses.titleEn,
+      slug: courses.slug,
+    })
+    .from(courseEnrollments)
+    .leftJoin(courses, eq(courseEnrollments.courseId, courses.id))
+    .where(eq(courseEnrollments.userId, id))
+    .orderBy(desc(courseEnrollments.createdAt));
+
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">
       <a href={`/${locale}/admin/users`} className="text-sm text-blue-600 hover:underline">&larr; {sv ? 'Alla användare' : 'All users'}</a>
@@ -114,9 +130,46 @@ export default async function UserDetailPage({ params: { locale, id } }: { param
         <button className="px-5 py-2 rounded-lg bg-[#58595b] text-white">{sv ? 'Spara användare' : 'Save user'}</button>
       </form>
 
+
+      <div className="bg-white rounded-xl border p-6">
+        <h2 className="font-semibold text-lg mb-3">CRM</h2>
+        <div className="grid md:grid-cols-2 gap-3 text-sm">
+          <div className="rounded border p-3">
+            <div className="text-gray-500">{sv ? 'Marknadsföring' : 'Marketing'}</div>
+            <div className="font-medium">{user.consentMarketing ? (sv ? 'Samtycke: Ja' : 'Consent: Yes') : (sv ? 'Samtycke: Nej' : 'Consent: No')}</div>
+            <div className="text-gray-500 text-xs">{user.consentMarketingAt ? new Date(user.consentMarketingAt).toLocaleString('sv-SE') : '—'}</div>
+          </div>
+          <div className="rounded border p-3">
+            <div className="text-gray-500">Mailchimp</div>
+            <a className="text-blue-600 hover:underline" target="_blank" rel="noreferrer" href={`https://admin.mailchimp.com/?q=${encodeURIComponent(user.email)}`}>
+              {sv ? 'Öppna i Mailchimp (sök e-post)' : 'Open in Mailchimp (search email)'}
+            </a>
+          </div>
+        </div>
+      </div>
+
       <div className="bg-white rounded-xl border p-6">
         <h2 className="font-semibold text-lg mb-3">{sv ? 'Ordrar' : 'Orders'} ({userOrders.length})</h2>
         <div className="space-y-1 text-sm">{userOrders.map(o => <a key={o.id} href={`/${locale}/admin/orders/${o.id}`} className="block text-blue-600 hover:underline">#{o.orderNumber} · {Math.round(Number(o.totalSek))} kr · {o.status}</a>)}</div>
+      </div>
+
+
+      <div className="bg-white rounded-xl border p-6">
+        <h2 className="font-semibold text-lg mb-3">{sv ? 'Kurser' : 'Courses attended'} ({enrolledCourses.length})</h2>
+        {enrolledCourses.length === 0 ? (
+          <p className="text-sm text-gray-500">{sv ? 'Inga kursregistreringar' : 'No course enrollments'}</p>
+        ) : (
+          <div className="space-y-1 text-sm">
+            {enrolledCourses.map(c => (
+              <div key={c.id} className="flex flex-wrap items-center gap-2">
+                <span className="font-medium">{sv ? c.titleSv : c.titleEn}</span>
+                {c.completedAt ? <span className="px-1.5 py-0.5 rounded text-[10px] bg-green-100 text-green-800">{sv ? 'Klar' : 'Completed'}</span> : <span className="px-1.5 py-0.5 rounded text-[10px] bg-yellow-100 text-yellow-800">{sv ? 'Pågår' : 'In progress'}</span>}
+                <span className="text-gray-500">{new Date(c.createdAt).toLocaleDateString('sv-SE')}</span>
+                {c.orderId && <a href={`/${locale}/admin/orders/${c.orderId}`} className="text-blue-600 hover:underline">#{sv ? 'Order' : 'Order'}</a>}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="bg-white rounded-xl border p-6">
