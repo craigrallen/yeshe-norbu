@@ -24,8 +24,8 @@ export default async function EventDetailPage({ params: { locale, slug } }: { pa
     'SELECT * FROM ticket_types WHERE event_id = $1 ORDER BY price_sek', [event.id]
   );
 
-  const title = sv ? event.title_sv : event.title_en;
-  const desc = sv ? event.description_sv : event.description_en;
+  const title = sv ? (event.title_sv || event.title_en) : (event.title_en || event.title_sv);
+  const desc = sv ? (event.description_sv || event.description_en) : (event.description_en || event.description_sv);
   const catName = sv ? event.cat_sv : event.cat_en;
 
   function stripHtml(s: string) {
