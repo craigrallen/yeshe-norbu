@@ -10,6 +10,7 @@ const adminNav: NavItem[] = [
     { href: '/admin/events', label: 'Alla evenemang', labelEn: 'All Events', icon: '📅' },
     { href: '/admin/venues', label: 'Platser', labelEn: 'Venues', icon: '📍' },
     { href: '/admin/organizers', label: 'Arrangörer', labelEn: 'Organizers', icon: '🎤' },
+    { href: '/admin/events/settings', label: 'Eventinställningar', labelEn: 'Event Settings', icon: '⚙️' },
   ]},
   { href: '/admin/orders', label: 'Beställningar', labelEn: 'Orders', icon: '🛍️' },
   { href: '/admin/products', label: 'Produkter', labelEn: 'Products', icon: '📦' },

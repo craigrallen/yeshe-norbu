@@ -9,6 +9,7 @@ export default async function BliMedlemPage({
   const tiers = [
     {
       id: 11,
+      slug: 'non-profit',
       name: isSv ? 'Icke-vinstdrivande' : 'Non-Profit',
       description: isSv
         ? 'För ideella organisationer och studenter. Ger tillgång till alla vanliga evenemang och undervisningar.'
@@ -26,6 +27,7 @@ export default async function BliMedlemPage({
     },
     {
       id: 12,
+      slug: 'gym-card',
       name: isSv ? 'Mentalgym Månadsvis' : 'Mental Gym Monthly',
       description: isSv
         ? 'Flexibelt månadsmedlemskap med full tillgång till alla program och retreatter.'
@@ -44,6 +46,7 @@ export default async function BliMedlemPage({
     },
     {
       id: 13,
+      slug: 'friend',
       name: isSv ? 'Mentalgym Årsvis' : 'Mental Gym Annual',
       description: isSv
         ? 'Spara 2 månader med årsmedlemskap. Bästa värdet för regelbundna praktiserande.'
@@ -62,6 +65,7 @@ export default async function BliMedlemPage({
     },
     {
       id: 15,
+      slug: 'teacher',
       name: isSv ? 'Väktare' : 'Guardian',
       description: isSv
         ? 'Hedersmedlemskap för Dharma-lärare och regelbundna stödjare av centret.'
@@ -156,7 +160,7 @@ export default async function BliMedlemPage({
                 href={
                   tier.priceSek === 0
                     ? `mailto:info@yeshinnorbu.se?subject=${encodeURIComponent('Väktarmedlemskap')}`
-                    : `/${locale}/checkout?name=${encodeURIComponent(tier.name)}&amount=${tier.priceSek}&type=${tier.type}${tier.interval ? `&interval=${tier.interval}` : ''}&memberLevel=${tier.id}`
+                    : `/api/subscriptions/checkout?plan=${tier.slug}&locale=${locale}`
                 }
                 className={`block text-center font-semibold py-3 rounded-xl transition-colors ${
                   tier.highlight
