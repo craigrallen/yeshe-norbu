@@ -2,6 +2,8 @@ FROM node:20-alpine AS base
 RUN corepack enable && corepack prepare pnpm@10.0.0 --activate
 
 FROM base AS deps
+# sharp native deps
+RUN apk add --no-cache python3 make g++ vips-dev
 WORKDIR /app
 COPY pnpm-workspace.yaml package.json ./
 COPY apps/web/package.json ./apps/web/
@@ -26,6 +28,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
+RUN apk add --no-cache vips
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
