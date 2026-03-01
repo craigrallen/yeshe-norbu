@@ -55,7 +55,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
       {/* HERO */}
       <section className="relative min-h-[85vh] flex items-center overflow-hidden mt-[72px]">
         <div className="absolute inset-0">
-          <img id="hero-img" src="/brand/hero-nature.jpg" alt="" className="w-full h-full object-cover" />
+          <img id="hero-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-seasonal="true" alt="" className="w-full h-full object-cover" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-charcoal/80 via-charcoal/40 to-transparent" />
         {/* Circles motif */}
