@@ -27,7 +27,14 @@ export default async function EventsPage({ params: { locale }, searchParams }: {
   // Events
   let query = `
     SELECT e.id, e.slug, e.title_sv, e.title_en, e.starts_at, e.ends_at, e.venue, e.featured_image_url, e.is_online,
-           ec.name_sv as cat_sv, ec.name_en as cat_en, ec.slug as cat_slug
+           ec.name_sv as cat_sv, ec.name_en as cat_en, ec.slug as cat_slug,
+           COALESCE(
+             (SELECT json_agg(json_build_object('slug', ac.slug, 'name_sv', ac.name_sv, 'name_en', ac.name_en))
+              FROM event_category_assignments eca
+              JOIN event_categories ac ON eca.category_id = ac.id
+              WHERE eca.event_id = e.id),
+             '[]'::json
+           ) as extra_cats
     FROM events e
     LEFT JOIN event_categories ec ON e.category_id = ec.id
     WHERE e.published = true
@@ -121,7 +128,12 @@ export default async function EventsPage({ params: { locale }, searchParams }: {
               <div className="p-5 flex flex-col flex-1">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xs font-semibold uppercase tracking-wide text-[#f5ca00] bg-[#FFF9EE] px-2 py-1 rounded-full">
-                    {(sv ? event.cat_sv : event.cat_en) || (sv ? 'Evenemang' : 'Event')}
+                    {(() => {
+                      const primary = sv ? event.cat_sv : event.cat_en;
+                      const extras: Array<{slug: string; name_sv: string; name_en: string}> = event.extra_cats || [];
+                      const allCats = [primary, ...extras.map((c: any) => sv ? c.name_sv : c.name_en)].filter(Boolean);
+                      return allCats.length > 0 ? allCats.join(' · ') : (sv ? 'Evenemang' : 'Event');
+                    })()}
                   </span>
                   {event.is_online && <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Online</span>}
                 </div>

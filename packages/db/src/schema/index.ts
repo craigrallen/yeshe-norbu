@@ -600,3 +600,28 @@ export const coursesRelations = relations(courses, ({ one, many }) => ({
 export const courseModulesRelations = relations(courseModules, ({ many }) => ({
   lessons: many(courseLessons),
 }));
+
+// ─── Event Category Assignments (junction) ───────────────────────────────────
+
+export const eventCategoryAssignments = pgTable(
+  'event_category_assignments',
+  {
+    eventId: uuid('event_id')
+      .notNull()
+      .references(() => events.id, { onDelete: 'cascade' }),
+    categoryId: uuid('category_id')
+      .notNull()
+      .references(() => eventCategories.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    pk: { name: 'eca_pk', columns: [t.eventId, t.categoryId] },
+    eventIdx: index('eca_event_idx').on(t.eventId),
+    categoryIdx: index('eca_category_idx').on(t.categoryId),
+  }),
+);
+
+export const eventCategoryAssignmentsRelations = relations(eventCategoryAssignments, ({ one }) => ({
+  event: one(events, { fields: [eventCategoryAssignments.eventId], references: [events.id] }),
+  category: one(eventCategories, { fields: [eventCategoryAssignments.categoryId], references: [eventCategories.id] }),
+}));

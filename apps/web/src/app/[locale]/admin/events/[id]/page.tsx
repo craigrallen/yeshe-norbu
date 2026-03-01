@@ -66,15 +66,15 @@ async function updateEvent(formData: FormData) {
     [JSON.stringify(Array.from(nextFeatured))]
   );
 
-  // additional categories map in app_settings
-  const er = await pool.query("SELECT value FROM app_settings WHERE key='events.extra_categories' LIMIT 1");
-  const extraMap: Record<string, string[]> = er.rows?.[0]?.value || {};
-  extraMap[id] = extraCategoryIds;
-  await pool.query(
-    `INSERT INTO app_settings (key, value, updated_at) VALUES ('events.extra_categories', $1::jsonb, now())
-     ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = now()`,
-    [JSON.stringify(extraMap)]
-  );
+  // Sync extra categories to event_category_assignments junction table
+  await pool.query('DELETE FROM event_category_assignments WHERE event_id = $1', [id]);
+  if (extraCategoryIds.length > 0) {
+    const placeholders = extraCategoryIds.map((_: string, i: number) => `($1, $${i + 2})`).join(', ');
+    await pool.query(
+      `INSERT INTO event_category_assignments (event_id, category_id) VALUES ${placeholders} ON CONFLICT DO NOTHING`,
+      [id, ...extraCategoryIds]
+    );
+  }
 
   revalidatePath('/sv/admin/events');
   revalidatePath('/en/admin/events');
@@ -117,9 +117,10 @@ export default async function EventDetailPage({ params: { locale, id } }: { para
   const defaultCategorySlugs: string[] = defaultsRows?.[0]?.value || [];
   const { rows: featuredRows } = await pool.query("SELECT value FROM app_settings WHERE key='events.featured_ids' LIMIT 1");
   const featuredIds: string[] = featuredRows?.[0]?.value || [];
-  const { rows: extraRows } = await pool.query("SELECT value FROM app_settings WHERE key='events.extra_categories' LIMIT 1");
-  const extraMap: Record<string, string[]> = extraRows?.[0]?.value || {};
-  const selectedExtra = extraMap[id] || [];
+  const { rows: extraRows } = await pool.query(
+    'SELECT category_id FROM event_category_assignments WHERE event_id = $1', [id]
+  );
+  const selectedExtra: string[] = extraRows.map((r: any) => r.category_id);
   const currentCategory = cats.find((c: any) => c.id === event.categoryId);
   const categoryDefaultOn = currentCategory?.slug ? defaultCategorySlugs.includes(currentCategory.slug) : false;
 
