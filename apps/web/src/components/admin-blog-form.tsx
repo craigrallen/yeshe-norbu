@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { MediaPicker } from '@/components/admin/MediaPicker';
 
 interface BlogFormProps {
   locale: string;
@@ -23,6 +24,7 @@ interface BlogFormProps {
 export function BlogPostForm({ locale, post, action, deleteAction }: BlogFormProps) {
   const sv = locale === 'sv';
   const [activeTab, setActiveTab] = useState<'sv' | 'en'>('sv');
+  const [featuredImageUrl, setFeaturedImageUrl] = useState(post?.featured_image_url || '');
 
   return (
     <form action={action} className="space-y-6">
@@ -101,19 +103,24 @@ export function BlogPostForm({ locale, post, action, deleteAction }: BlogFormPro
           <div className="flex gap-2">
             <input
               name="featured_image_url"
-              defaultValue={post?.featured_image_url}
+              value={featuredImageUrl}
+              onChange={e => setFeaturedImageUrl(e.target.value)}
               placeholder="https://..."
               className="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8B817]"
             />
-            <a
-              href={`/${locale}/admin/media`}
-              target="_blank"
-              className="px-3 py-2 border rounded-lg text-sm text-gray-600 hover:bg-gray-50 whitespace-nowrap"
-            >
-              {sv ? 'Bläddra' : 'Browse'}
-            </a>
+            <MediaPicker
+              value={featuredImageUrl}
+              onChange={setFeaturedImageUrl}
+              locale={locale}
+            />
           </div>
         </div>
+
+        {featuredImageUrl && (
+          <div className="mt-2">
+            <img src={featuredImageUrl} alt="preview" className="h-32 rounded-lg object-cover border" />
+          </div>
+        )}
 
         <div className="flex items-center gap-3">
           <input
