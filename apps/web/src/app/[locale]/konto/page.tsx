@@ -38,7 +38,7 @@ export default function KontoPage({ params: { locale } }: { params: { locale: st
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-[#F9F7F4]">
+    <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A]">
       <div className="max-w-4xl mx-auto px-4 py-12">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">

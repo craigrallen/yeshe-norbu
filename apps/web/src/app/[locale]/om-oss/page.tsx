@@ -14,7 +14,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default function Page({ params: { locale } }: { params: { locale: string } }) {
   const sv = locale === 'sv';
   return (
-    <div className="min-h-screen bg-[#F9F7F4]">
+    <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A]">
       <PageHero
         title={sv ? 'Om oss' : 'About Us'}
         subtitle={sv ? 'Ett ideellt meditationscenter i Stockholm, affilierat med FPMT.' : 'A non-profit meditation centre in Stockholm, affiliated with FPMT.'}

@@ -9,6 +9,8 @@ import { createDb, userRoles } from '@yeshe/db';
 import { eq } from 'drizzle-orm';
 import '../globals.css';
 import { OrganizationJsonLd } from '@/components/seo/JsonLd';
+import { ThemeProvider } from '@/components/ThemeProvider';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const sv = locale === 'sv';
@@ -44,13 +46,15 @@ export default async function LocaleLayout({ children, params: { locale } }: { c
   if (!locales.includes(locale as Locale)) notFound();
   const messages = await getMessages();
   return (
-    <html lang={locale}>
-      <body className="min-h-screen bg-cream font-sans antialiased text-charcoal">
+    <html lang={locale} suppressHydrationWarning>
+      <body className="min-h-screen bg-cream dark:bg-[#1A1A1A] font-sans antialiased text-charcoal dark:text-[#E8E4DE]">
         <OrganizationJsonLd />
         <NextIntlClientProvider messages={messages}>
-          <Header locale={locale as Locale} />
-          <main className="pt-[72px] overflow-x-hidden">{children}</main>
-          <Footer locale={locale as Locale} />
+          <ThemeProvider>
+            <Header locale={locale as Locale} />
+            <main className="pt-[72px] overflow-x-hidden">{children}</main>
+            <Footer locale={locale as Locale} />
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>
@@ -80,18 +84,19 @@ async function Header({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#E8E4DE] transition-all">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-[#1A1A1A] border-b border-[#E8E4DE] dark:border-[#3D3D3D] transition-all">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-[72px]">
         <a href={`/${locale}`} className="flex items-center">
-          <img src="/brand/logo-no-tag.png" alt="Yeshin Norbu" className="h-10 w-auto" />
+          <img src="/brand/logo-no-tag.png" alt="Yeshin Norbu" className="h-10 w-auto dark:brightness-[10]" />
         </a>
         <nav className="hidden lg:flex items-center gap-7" aria-label="Main">
           {navItems.map((item) => (
-            <a key={item.href} href={item.href} className="text-[14px] font-medium text-charcoal hover:text-brand-dark transition-colors tracking-wide">
+            <a key={item.href} href={item.href} className="text-[14px] font-medium text-charcoal dark:text-[#E8E4DE] hover:text-brand-dark transition-colors tracking-wide">
               {item.label}
             </a>
           ))}
-          <a href={locale === 'sv' ? '/en' : '/sv'} className="text-xs text-charcoal-light hover:text-charcoal border border-[#E8E4DE] rounded px-2.5 py-1 tracking-wide">
+          <ThemeToggle />
+          <a href={locale === 'sv' ? '/en' : '/sv'} className="text-xs text-charcoal-light dark:text-[#A0A0A0] hover:text-charcoal dark:hover:text-[#E8E4DE] border border-[#E8E4DE] dark:border-[#3D3D3D] rounded px-2.5 py-1 tracking-wide">
             {locale === 'sv' ? 'EN' : 'SV'}
           </a>
           {session ? (

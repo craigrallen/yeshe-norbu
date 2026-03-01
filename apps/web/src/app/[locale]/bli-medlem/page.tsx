@@ -96,7 +96,7 @@ export default async function BliMedlemPage({
   ];
 
   return (
-    <div className="min-h-screen bg-[#F9F7F4]">
+    <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A]">
       {/* Hero */}
       <div className="bg-[#58595b] text-white py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">

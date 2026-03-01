@@ -13,7 +13,7 @@ export default function Page({ params: { locale } }: { params: { locale: string 
   return (
     <div className="pt-[72px]">
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <h1 className="font-serif text-4xl lg:text-5xl font-bold text-charcoal mb-6">{sv ? 'Lokalhyra' : 'Venue Hire'}</h1>
+        <h1 className="font-serif text-4xl lg:text-5xl font-bold text-charcoal dark:text-[#E8E4DE] mb-6">{sv ? 'Lokalhyra' : 'Venue Hire'}</h1>
         <div className="gold-bar mb-8" />
         <div className="prose prose-lg text-charcoal-light leading-relaxed whitespace-pre-line">
           {sv ? `Hyr våra rymliga, ljusa, moderna lokaler med unik karaktär — belägen i en historisk byggnad från 1907. Vi befinner oss vid Roslagstull i närheten av KTH, Stockholms universitet och Karolinska institutet.

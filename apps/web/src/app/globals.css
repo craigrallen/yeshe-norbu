@@ -88,3 +88,27 @@ html, body {
   .btn-brand { @apply btn-gold; }
   .btn-dark { @apply btn-charcoal; }
 }
+
+/* ─── Dark mode ──────────────────────────────────────────────── */
+html.dark {
+  color-scheme: dark;
+}
+
+html.dark body {
+  background-color: #1A1A1A;
+  color: #E8E4DE;
+}
+
+html.dark :root {
+  --cream: #1A1A1A;
+  --surface: #2A2A2A;
+  --background: #1A1A1A;
+  --text: #E8E4DE;
+  --text-light: #A0A0A0;
+  --border: #3D3D3D;
+  --charcoal-light: #A0A0A0;
+  --color-surface: #2A2A2A;
+  --color-background: #1A1A1A;
+  --color-muted: #A0A0A0;
+  --color-border: #3D3D3D;
+}

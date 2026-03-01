@@ -132,7 +132,7 @@ export default async function ProductDetailPage({ params: { locale, id } }: { pa
         <input type="hidden" name="locale" value={locale} />
 
         <div className="space-y-4">
-          <div className="bg-white border rounded">
+          <div className="bg-white dark:bg-[#2A2A2A] dark:border-[#3D3D3D] border rounded">
             <div className="px-4 py-3 border-b bg-gray-50 text-sm font-medium">{sv ? 'Produktdata' : 'Product data'}</div>
             <div className="p-4 grid md:grid-cols-2 gap-3 text-sm">
               <div>
@@ -171,7 +171,7 @@ export default async function ProductDetailPage({ params: { locale, id } }: { pa
             </div>
           </div>
 
-          <div className="bg-white border rounded">
+          <div className="bg-white dark:bg-[#2A2A2A] dark:border-[#3D3D3D] border rounded">
             <div className="px-4 py-3 border-b bg-gray-50 text-sm font-medium">{sv ? 'Priser' : 'Pricing'}</div>
             <div className="p-4 grid md:grid-cols-3 gap-3 text-sm">
               <div>
@@ -189,7 +189,7 @@ export default async function ProductDetailPage({ params: { locale, id } }: { pa
             </div>
           </div>
 
-          <div className="bg-white border rounded">
+          <div className="bg-white dark:bg-[#2A2A2A] dark:border-[#3D3D3D] border rounded">
             <div className="px-4 py-3 border-b bg-gray-50 text-sm font-medium">{sv ? 'Beskrivning' : 'Description'}</div>
             <div className="p-4 space-y-3">
               <textarea name="shortDescriptionSv" defaultValue={p.short_description_sv || ''} rows={3} placeholder={sv ? 'Kort beskrivning (SV)' : 'Short description (SV)'} className="w-full border rounded px-3 py-2 text-sm" />
@@ -199,7 +199,7 @@ export default async function ProductDetailPage({ params: { locale, id } }: { pa
             </div>
           </div>
 
-          <div className="bg-white border rounded">
+          <div className="bg-white dark:bg-[#2A2A2A] dark:border-[#3D3D3D] border rounded">
             <div className="px-4 py-3 border-b bg-gray-50 text-sm font-medium">{sv ? 'Taxonomi' : 'Taxonomy'}</div>
             <div className="p-4 grid md:grid-cols-2 gap-3 text-sm">
               <div>
@@ -215,7 +215,7 @@ export default async function ProductDetailPage({ params: { locale, id } }: { pa
         </div>
 
         <aside className="space-y-4">
-          <div className="bg-white border rounded">
+          <div className="bg-white dark:bg-[#2A2A2A] dark:border-[#3D3D3D] border rounded">
             <div className="px-4 py-3 border-b bg-gray-50 text-sm font-medium">{sv ? 'Publicera' : 'Publish'}</div>
             <div className="p-4 space-y-3 text-sm">
               <label className="flex items-center gap-2"><input type="checkbox" name="published" defaultChecked={Boolean(p.published)} /> {sv ? 'Publicerad' : 'Published'}</label>
@@ -226,7 +226,7 @@ export default async function ProductDetailPage({ params: { locale, id } }: { pa
             </div>
           </div>
 
-          <div className="bg-white border rounded">
+          <div className="bg-white dark:bg-[#2A2A2A] dark:border-[#3D3D3D] border rounded">
             <div className="px-4 py-3 border-b bg-gray-50 text-sm font-medium">{sv ? 'Produktbild' : 'Product image'}</div>
             <div className="p-4 space-y-3">
               {p.featured_image_url ? <img src={p.featured_image_url} alt="" className="w-full h-40 object-cover rounded border" /> : <div className="w-full h-40 rounded border bg-gray-50" />}
@@ -234,7 +234,7 @@ export default async function ProductDetailPage({ params: { locale, id } }: { pa
             </div>
           </div>
 
-          <div className="bg-white border rounded">
+          <div className="bg-white dark:bg-[#2A2A2A] dark:border-[#3D3D3D] border rounded">
             <div className="px-4 py-3 border-b bg-gray-50 text-sm font-medium">{sv ? 'Lager' : 'Inventory'}</div>
             <div className="p-4 text-sm">
               <label className="block text-gray-600 mb-1">{sv ? 'Antal i lager' : 'Stock quantity'}</label>
@@ -242,7 +242,7 @@ export default async function ProductDetailPage({ params: { locale, id } }: { pa
             </div>
           </div>
 
-          <div className="bg-white border rounded p-4">
+          <div className="bg-white dark:bg-[#2A2A2A] dark:border-[#3D3D3D] border rounded p-4">
             <button formAction={deleteProduct} className="w-full px-4 py-2 rounded border border-red-200 text-red-600 hover:bg-red-50 text-sm">
               <input type="hidden" name="id" value={p.id} />
               <input type="hidden" name="locale" value={locale} />

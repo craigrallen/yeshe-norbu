@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { ThemeToggle } from './ThemeToggle';
 
 interface NavItem { href: string; label: string; }
 
@@ -36,19 +37,20 @@ export function MobileMenu({ items, locale, loginLabel, logoutLabel, langLabel, 
       </button>
 
       {open && (
-        <div className="absolute top-16 left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-lg">
+        <div className="absolute top-16 left-0 right-0 z-50 bg-white dark:bg-[#1A1A1A] border-b border-gray-200 dark:border-[#3D3D3D] shadow-lg">
           <nav className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
             {items.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="px-4 py-3 text-base font-medium text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+                className="px-4 py-3 text-base font-medium text-gray-900 dark:text-[#E8E4DE] hover:bg-gray-50 dark:hover:bg-[#2A2A2A] rounded-lg transition-colors"
               >
                 {item.label}
               </a>
             ))}
-            <div className="border-t border-gray-100 my-2" />
+            <div className="border-t border-gray-100 dark:border-[#3D3D3D] my-2" />
+            <div className="px-2 py-1"><ThemeToggle /></div>
             <a
               href={langHref}
               onClick={() => setOpen(false)}

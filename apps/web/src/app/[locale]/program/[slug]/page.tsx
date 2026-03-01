@@ -67,7 +67,7 @@ export default async function ProgramTrackPage({ params: { locale, slug } }: { p
   }
 
   return (
-    <div className="min-h-screen bg-[#F9F7F4]">
+    <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A]">
       <PageHero title={sv ? c.titleSv : c.titleEn} subtitle={sv ? c.subtitleSv : c.subtitleEn} />
 
       <div className="max-w-6xl mx-auto px-4 py-10">

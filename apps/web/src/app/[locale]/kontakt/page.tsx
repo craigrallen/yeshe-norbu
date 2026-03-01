@@ -14,7 +14,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default function Page({ params: { locale } }: { params: { locale: string } }) {
   const sv = locale === 'sv';
   return (
-    <div className="min-h-screen bg-[#F9F7F4]">
+    <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A]">
       <PageHero
         title={sv ? 'Kontakt' : 'Contact'}
         subtitle={sv ? 'Vi svarar gärna på frågor om kurser, event och centret.' : 'We are happy to answer questions about courses, events and the centre.'}
@@ -34,13 +34,13 @@ Postal address: Birger Jarlsgatan 131B, 113 56 Stockholm`}
         </div>
 
         <div className="bg-white rounded-2xl border border-[#E8E4DE] p-8 mt-8">
-          <h2 className="font-serif text-2xl font-bold text-charcoal mb-6">{sv ? 'Skicka meddelande' : 'Send a message'}</h2>
+          <h2 className="font-serif text-2xl font-bold text-charcoal dark:text-[#E8E4DE] mb-6">{sv ? 'Skicka meddelande' : 'Send a message'}</h2>
           <form className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
               <input placeholder={sv ? 'Namn' : 'Name'} className="w-full border border-[#E8E4DE] rounded-xl px-4 py-3 text-sm" />
               <input placeholder="Email" type="email" className="w-full border border-[#E8E4DE] rounded-xl px-4 py-3 text-sm" />
             </div>
-            <select className="w-full border border-[#E8E4DE] rounded-xl px-4 py-3 text-sm text-charcoal-light">
+            <select className="w-full border border-[#E8E4DE] rounded-xl px-4 py-3 text-sm text-charcoal-light dark:text-[#A0A0A0]">
               <option>{sv ? 'Ämne' : 'Subject'}</option>
               <option>{sv ? 'Kurser' : 'Courses'}</option>
               <option>{sv ? 'Evenemang' : 'Events'}</option>

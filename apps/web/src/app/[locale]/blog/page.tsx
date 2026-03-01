@@ -36,7 +36,7 @@ export default async function BlogPage({ params: { locale } }: { params: { local
   }
 
   return (
-    <div className="min-h-screen bg-[#F9F7F4]">
+    <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A]">
       <PageHero
         title={sv ? 'Blogg' : 'Blog'}
         subtitle={sv ? 'Artiklar om meditation, mindfulness, buddhistisk filosofi och praktik.' : 'Articles on meditation, mindfulness, Buddhist philosophy and practice.'}

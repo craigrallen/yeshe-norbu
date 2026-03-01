@@ -13,7 +13,7 @@ export default function Page({ params: { locale } }: { params: { locale: string 
   return (
     <div className="pt-[72px]">
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <h1 className="font-serif text-4xl lg:text-5xl font-bold text-charcoal mb-6">{sv ? 'Bli volontär' : 'Volunteer'}</h1>
+        <h1 className="font-serif text-4xl lg:text-5xl font-bold text-charcoal dark:text-[#E8E4DE] mb-6">{sv ? 'Bli volontär' : 'Volunteer'}</h1>
         <div className="gold-bar mb-8" />
         <div className="prose prose-lg text-charcoal-light leading-relaxed whitespace-pre-line">
           {sv ? `Yeshin Norbu välkomnar alltid volontärer! Vi är en ideell organisation som drivs av engagerad personal och volontärer. Utan människor som vänligt erbjuder sin tid, kompetens och tjänst skulle vi inte kunna existera.

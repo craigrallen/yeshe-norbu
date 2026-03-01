@@ -125,7 +125,7 @@ fetch('/seasons/manifest.json').then(r=>r.json()).then(d=>{
       {/* FEATURED EVENTS */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl lg:text-4xl font-bold text-charcoal mb-3">{sv ? 'Kommande höjdpunkter' : 'Upcoming Highlights'}</h2>
+          <h2 className="text-3xl lg:text-4xl font-bold text-charcoal dark:text-[#E8E4DE] mb-3">{sv ? 'Kommande höjdpunkter' : 'Upcoming Highlights'}</h2>
           <p className="text-charcoal-light text-lg max-w-lg mx-auto">{sv ? 'Upptäck våra utvalda evenemang och kurser' : 'Discover our featured events and courses'}</p>
           <div className="gold-bar mx-auto mt-4" />
         </div>
@@ -141,8 +141,8 @@ fetch('/seasons/manifest.json').then(r=>r.json()).then(d=>{
                 <div className="text-brand-dark text-[13px] font-semibold mb-1">
                   {new Date(e.starts_at).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short', year: 'numeric' })} · {new Date(e.starts_at).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Stockholm' })}
                 </div>
-                <h3 className="font-serif text-xl font-semibold text-charcoal mb-2">{sv ? e.title : e.title_en}</h3>
-                <p className="text-sm text-charcoal-light">{e.venue || 'Yeshin Norbu, Stockholm'}</p>
+                <h3 className="font-serif text-xl font-semibold text-charcoal dark:text-[#E8E4DE] mb-2">{sv ? e.title : e.title_en}</h3>
+                <p className="text-sm text-charcoal-light dark:text-[#A0A0A0]">{e.venue || 'Yeshin Norbu, Stockholm'}</p>
               </div>
             </a>
           ))}
@@ -182,7 +182,7 @@ fetch('/seasons/manifest.json').then(r=>r.json()).then(d=>{
       {/* CATEGORIES */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl lg:text-4xl font-bold text-charcoal mb-3">{sv ? 'Utforska vårt utbud' : 'Explore Our Offerings'}</h2>
+          <h2 className="text-3xl lg:text-4xl font-bold text-charcoal dark:text-[#E8E4DE] mb-3">{sv ? 'Utforska vårt utbud' : 'Explore Our Offerings'}</h2>
           <p className="text-charcoal-light text-lg max-w-lg mx-auto">{sv ? 'Kurser och event för alla nivåer och intressen' : 'Courses and events for all levels and interests'}</p>
           <div className="gold-bar mx-auto mt-4" />
         </div>
@@ -202,7 +202,7 @@ fetch('/seasons/manifest.json').then(r=>r.json()).then(d=>{
       {/* SUPPORT CTA */}
       <section className="bg-gradient-to-br from-brand to-brand-dark py-16 px-4 sm:px-6 lg:px-8 text-center">
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold text-charcoal mb-3">{sv ? 'Stöd centret' : 'Support the Centre'}</h2>
+          <h2 className="text-3xl font-bold text-charcoal dark:text-[#E8E4DE] mb-3">{sv ? 'Stöd centret' : 'Support the Centre'}</h2>
           <p className="text-charcoal-light mb-8">
             {sv ? 'Bli medlem och få tillgång till rabatter, nyhetsbrev och möjlighet att påverka centrets framtid. Från 250 kr/år.' : 'Become a member for discounts, newsletters and a voice in the centre\'s future. From 250 SEK/year.'}
           </p>
@@ -214,14 +214,14 @@ fetch('/seasons/manifest.json').then(r=>r.json()).then(d=>{
       {plans.length > 0 && (
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-charcoal mb-3">{sv ? 'Medlemskap' : 'Membership Plans'}</h2>
+            <h2 className="text-3xl font-bold text-charcoal dark:text-[#E8E4DE] mb-3">{sv ? 'Medlemskap' : 'Membership Plans'}</h2>
             <div className="gold-bar mx-auto mt-4" />
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {plans.slice(0, 3).map((p: any) => (
-              <div key={p.id} className={`rounded-2xl bg-white p-7 border-2 ${p.slug === 'gym-card' ? 'border-brand shadow-lg' : 'border-[#E8E4DE]'}`}>
+              <div key={p.id} className={`rounded-2xl bg-white dark:bg-[#2A2A2A] p-7 border-2 ${p.slug === 'gym-card' ? 'border-brand shadow-lg' : 'border-[#E8E4DE]'}`}>
                 {p.slug === 'gym-card' && <div className="text-xs font-bold text-brand uppercase tracking-wide mb-2">{sv ? 'Populärast' : 'Most popular'}</div>}
-                <h3 className="font-serif text-xl font-bold text-charcoal mb-1">{sv ? p.name_sv : p.name_en}</h3>
+                <h3 className="font-serif text-xl font-bold text-charcoal dark:text-[#E8E4DE] mb-1">{sv ? p.name_sv : p.name_en}</h3>
                 <p className="text-2xl font-bold text-brand mb-5">{Math.round(Number(p.price_sek))} kr/{p.interval_months === 12 ? (sv ? 'år' : 'year') : (sv ? 'mån' : 'mo')}</p>
                 <a href={`/${locale}/bli-medlem`} className={`block text-center py-3 rounded-xl font-bold text-sm transition-all ${p.slug === 'gym-card' ? 'btn-gold w-full' : 'btn-outline w-full'}`}>{sv ? 'Välj plan' : 'Choose plan'}</a>
               </div>
@@ -232,7 +232,7 @@ fetch('/seasons/manifest.json').then(r=>r.json()).then(d=>{
 
       {/* FPMT */}
       <section className="text-center py-8 px-4">
-        <p className="text-sm text-charcoal-light">
+        <p className="text-sm text-charcoal-light dark:text-[#A0A0A0]">
           {sv ? 'Affilierat med ' : 'Affiliated with '}
           <a href="https://fpmt.org" className="text-brand hover:underline font-medium">FPMT – Foundation for the Preservation of the Mahayana Tradition</a>
         </p>

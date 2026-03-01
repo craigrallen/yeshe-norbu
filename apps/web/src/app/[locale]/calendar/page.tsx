@@ -55,7 +55,7 @@ export default async function CalendarPage({ params: { locale }, searchParams }:
   const monthName = sv ? MONTHS_SV[month] : MONTHS_EN[month];
 
   return (
-    <div className="min-h-screen bg-[#F9F7F4]">
+    <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A]">
       <div className="bg-[#58595b] text-white py-12 px-4"><div className="max-w-5xl mx-auto text-center"><h1 className="text-4xl font-bold">{sv ? 'Kalender' : 'Calendar'}</h1></div></div>
 
       <div className="max-w-5xl mx-auto px-4 py-8">

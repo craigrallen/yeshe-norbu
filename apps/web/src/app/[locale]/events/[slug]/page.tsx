@@ -86,7 +86,7 @@ export default async function EventDetailPage({ params: { locale, slug } }: { pa
   }
 
   return (
-    <div className="min-h-screen bg-[#F9F7F4]">
+    <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A]">
       <EventJsonLd event={event} locale={locale} />
       {event.featured_image_url && (
         <div className="w-full h-64 md:h-80 relative">

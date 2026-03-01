@@ -70,7 +70,7 @@ export default async function ProgramPage({ params: { locale }, searchParams }: 
   }
 
   return (
-    <div className="min-h-screen bg-[#F9F7F4]">
+    <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A]">
       <PageHero
         title={sv ? 'Program' : 'Programme'}
         subtitle={sv ? 'Kurser, retreater och drop-in i meditation, mindfulness och buddhism.' : 'Courses, retreats and drop-in sessions in meditation, mindfulness and Buddhism.'}
@@ -79,9 +79,9 @@ export default async function ProgramPage({ params: { locale }, searchParams }: 
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="grid md:grid-cols-3 gap-4 mb-8">
           {tracks.map((t) => (
-            <a key={t.slug} href={`/${locale}/program/${t.slug}`} className="block rounded-2xl border border-[#E8E4DE] bg-white p-6 hover:-translate-y-1 hover:shadow-lg transition-all">
-              <h3 className="font-serif text-2xl font-semibold text-charcoal mb-2">{sv ? t.titleSv : t.titleEn}</h3>
-              <p className="text-sm text-charcoal-light">{sv ? t.descSv : t.descEn}</p>
+            <a key={t.slug} href={`/${locale}/program/${t.slug}`} className="block rounded-2xl border border-[#E8E4DE] dark:border-[#3D3D3D] bg-white dark:bg-[#2A2A2A] p-6 hover:-translate-y-1 hover:shadow-lg transition-all">
+              <h3 className="font-serif text-2xl font-semibold text-charcoal dark:text-[#E8E4DE] mb-2">{sv ? t.titleSv : t.titleEn}</h3>
+              <p className="text-sm text-charcoal-light dark:text-[#A0A0A0]">{sv ? t.descSv : t.descEn}</p>
               <span className="inline-block mt-4 text-brand-dark text-sm font-medium">{sv ? 'Läs mer →' : 'Read more →'}</span>
             </a>
           ))}
