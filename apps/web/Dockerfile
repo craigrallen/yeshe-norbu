@@ -1,9 +1,9 @@
 FROM node:20-alpine AS base
 RUN corepack enable && corepack prepare pnpm@10.0.0 --activate
+# sharp/vips native deps needed in all build stages
+RUN apk add --no-cache python3 make g++ vips-dev
 
 FROM base AS deps
-# sharp native deps
-RUN apk add --no-cache python3 make g++ vips-dev
 WORKDIR /app
 COPY pnpm-workspace.yaml package.json ./
 COPY apps/web/package.json ./apps/web/
@@ -23,25 +23,20 @@ RUN pnpm install --frozen-lockfile
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm --filter @yeshe/web build
 
-FROM base AS runner
+FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Only vips runtime lib needed (not -dev)
 RUN apk add --no-cache vips
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Standalone output
 COPY --from=builder /app/apps/web/.next/standalone ./
-# Static assets
 COPY --from=builder /app/apps/web/.next/static ./apps/web/.next/static
-# Public folder (logo, favicon, images)
 COPY --from=builder /app/apps/web/public ./apps/web/public
-# Full server dir (metadata files etc)
 COPY --from=builder /app/apps/web/.next/server ./apps/web/.next/server
-
-# DB migrations — use the db package's own node_modules for drizzle
 COPY --from=builder /app/packages/db/src/migrations ./packages/db/src/migrations
 COPY --from=builder /app/packages/db/drizzle.config.ts ./packages/db/
 COPY --from=builder /app/packages/db/node_modules ./packages/db/node_modules
