@@ -28,7 +28,7 @@ export default async function LocaleLayout({ children, params: { locale } }: { c
       <body className="min-h-screen bg-cream font-sans antialiased text-charcoal">
         <NextIntlClientProvider messages={messages}>
           <Header locale={locale as Locale} />
-          <main>{children}</main>
+          <main className="pt-[72px] overflow-x-hidden">{children}</main>
           <Footer locale={locale as Locale} />
         </NextIntlClientProvider>
       </body>
