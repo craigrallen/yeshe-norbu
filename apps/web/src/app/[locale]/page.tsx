@@ -64,7 +64,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
         </div>
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight max-w-xl mb-5">
-            {sv ? <>Förändra ditt sinne, <span className="text-brand-light">förändra din värld</span></> : <>Transform your mind, <span className="text-brand-light">transform your world</span></>}
+            <span id="hero-phrase" />
           </h1>
           <p className="text-white/85 text-lg max-w-md leading-relaxed mb-8">
             {sv ? 'Meditation, mindfulness och buddhistisk filosofi i hjärtat av Stockholm.' : 'Meditation, mindfulness and Buddhist philosophy in the heart of Stockholm.'}
@@ -76,7 +76,30 @@ export default async function HomePage({ params: { locale } }: { params: { local
         </div>
         {/* Seasonal hero script */}
         <script dangerouslySetInnerHTML={{__html:`
-          fetch('/seasons/manifest.json').then(r=>r.json()).then(d=>{
+          var phrases=[
+{sv:'Förändra ditt sinne, <span class="text-brand-light">förändra din värld</span>',en:'Transform your mind, <span class="text-brand-light">transform your world</span>'},
+{sv:'Anlända i ögonblicket. <span class="text-brand-light">Hitta dig själv.</span>',en:'Arrive in the moment. <span class="text-brand-light">Align with yourself.</span>'},
+{sv:'Resan inåt <span class="text-brand-light">börjar med ett andetag</span>',en:'The journey inward <span class="text-brand-light">begins with a single breath</span>'},
+{sv:'Hitta din mitt <span class="text-brand-light">i en värld som aldrig stannar</span>',en:'Find your center <span class="text-brand-light">in a world that never stops</span>'},
+{sv:'Tysta bruset. <span class="text-brand-light">Upptäck lugnet.</span>',en:'Quiet the noise. <span class="text-brand-light">Discover the calm.</span>'},
+{sv:'Rena ditt sinne. <span class="text-brand-light">Skapa din frid.</span>',en:'Clear your mind. <span class="text-brand-light">Create your peace.</span>'},
+{sv:'Stillhet <span class="text-brand-light">är den ultimata superkraften</span>',en:'Stillness <span class="text-brand-light">is the ultimate superpower</span>'},
+{sv:'Mindre övertänkande. <span class="text-brand-light">Mer varande.</span>',en:'Less overthinking. <span class="text-brand-light">More being.</span>'},
+{sv:'Ändra ditt perspektiv, <span class="text-brand-light">ändra ditt liv</span>',en:'Change your perspective, <span class="text-brand-light">change your life</span>'},
+{sv:'Inre harmoni. <span class="text-brand-light">Yttre genomslag.</span>',en:'Inner harmony. <span class="text-brand-light">Outer impact.</span>'},
+{sv:'Bemästra ditt sinne. <span class="text-brand-light">Forma dina dagar.</span>',en:'Master your mind. <span class="text-brand-light">Design your days.</span>'},
+{sv:'Hela inifrån. <span class="text-brand-light">Blomstra utåt.</span>',en:'Heal within. <span class="text-brand-light">Thrive without.</span>'},
+{sv:'Var här. <span class="text-brand-light">Var hel.</span>',en:'Be here. <span class="text-brand-light">Be whole.</span>'},
+{sv:'Mindfulness <span class="text-brand-light">för modern tid</span>',en:'Mindfulness <span class="text-brand-light">made modern</span>'},
+{sv:'Andas. Hitta balans. <span class="text-brand-light">Utvecklas.</span>',en:'Breathe. Align. <span class="text-brand-light">Evolve.</span>'},
+{sv:'Dit din uppmärksamhet går, <span class="text-brand-light">växer ditt liv</span>',en:'Where your attention goes, <span class="text-brand-light">your life grows</span>'},
+{sv:'Helt enkelt <span class="text-brand-light">närvarande</span>',en:'Simply <span class="text-brand-light">present</span>'}
+];
+var lang=document.documentElement.lang||'sv';
+var ph=phrases[Math.floor(Math.random()*phrases.length)];
+var el=document.getElementById('hero-phrase');
+if(el)el.innerHTML=lang==='sv'?ph.sv:ph.en;
+fetch('/seasons/manifest.json').then(r=>r.json()).then(d=>{
             var m=new Date().getMonth()+1,p=m<10?'0'+m:String(m),imgs=d[p]||d['03'];
             if(imgs&&imgs.length){document.getElementById('hero-img').src=imgs[Math.floor(Math.random()*imgs.length)];}
           }).catch(()=>{});
