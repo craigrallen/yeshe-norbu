@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { PageHero } from '@/components/PageHero';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const sv = locale === 'sv';
@@ -13,10 +14,13 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default function Page({ params: { locale } }: { params: { locale: string } }) {
   const sv = locale === 'sv';
   return (
-    <div className="pt-[72px]">
-      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <h1 className="font-serif text-4xl lg:text-5xl font-bold text-charcoal mb-6">{sv ? 'Kontakta oss' : 'Contact Us'}</h1>
-        <div className="gold-bar mb-8" />
+    <div className="min-h-screen bg-[#F9F7F4]">
+      <PageHero
+        title={sv ? 'Kontakt' : 'Contact'}
+        subtitle={sv ? 'Vi svarar gärna på frågor om kurser, event och centret.' : 'We are happy to answer questions about courses, events and the centre.'}
+      />
+
+      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
         <div className="prose prose-lg text-charcoal-light leading-relaxed whitespace-pre-line">
           {sv ? `Telefon: +46 (0)8 55 008 575
 E-post: info@yeshinnorbu.se
@@ -28,6 +32,7 @@ Email: info@yeshinnorbu.se
 Visiting address: Roslagsgatan 62, Stockholm
 Postal address: Birger Jarlsgatan 131B, 113 56 Stockholm`}
         </div>
+
         <div className="bg-white rounded-2xl border border-[#E8E4DE] p-8 mt-8">
           <h2 className="font-serif text-2xl font-bold text-charcoal mb-6">{sv ? 'Skicka meddelande' : 'Send a message'}</h2>
           <form className="space-y-4">

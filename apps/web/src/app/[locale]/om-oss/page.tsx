@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { PageHero } from '@/components/PageHero';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const sv = locale === 'sv';
@@ -13,10 +14,13 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default function Page({ params: { locale } }: { params: { locale: string } }) {
   const sv = locale === 'sv';
   return (
-    <div className="pt-[72px]">
-      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <h1 className="font-serif text-4xl lg:text-5xl font-bold text-charcoal mb-6">{sv ? 'Om oss' : 'About Us'}</h1>
-        <div className="gold-bar mb-8" />
+    <div className="min-h-screen bg-[#F9F7F4]">
+      <PageHero
+        title={sv ? 'Om oss' : 'About Us'}
+        subtitle={sv ? 'Ett ideellt meditationscenter i Stockholm, affilierat med FPMT.' : 'A non-profit meditation centre in Stockholm, affiliated with FPMT.'}
+      />
+
+      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
         <div className="prose prose-lg text-charcoal-light leading-relaxed whitespace-pre-line">
           {sv ? `Yeshin Norbu Meditationscenter är en ideell medlemsorganisation som är starkt inspirerad av Dalai Lamas vision om sekulär och universell etik. Centret startades 2017 av en handfull entusiastiska volontärer som tillsammans hjälpte till att bygga upp centret till vad det är idag.
 
