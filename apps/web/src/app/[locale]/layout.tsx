@@ -4,6 +4,9 @@ import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales, type Locale } from '@/i18n';
 import { MobileMenu } from '@/components/MobileMenu';
+import { getSession } from '@/lib/auth';
+import { createDb, userRoles } from '@yeshe/db';
+import { eq } from 'drizzle-orm';
 import '../globals.css';
 
 export async function generateMetadata({
@@ -53,6 +56,14 @@ async function Header({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'nav' });
   const tc = await getTranslations({ locale, namespace: 'common' });
 
+  const session = await getSession();
+  let isAdmin = false;
+  if (session?.userId) {
+    const db = createDb(process.env.DATABASE_URL!);
+    const roles = await db.select().from(userRoles).where(eq(userRoles.userId, session.userId));
+    isAdmin = roles.some((r) => r.role === 'admin');
+  }
+
   const navItems = [
     { href: `/${locale}`, label: t('home') },
     { href: `/${locale}/program`, label: t('program') },
@@ -83,14 +94,16 @@ async function Header({ locale }: { locale: Locale }) {
             {locale === 'sv' ? 'EN' : 'SV'}
           </a>
           <a
-            href={`/${locale}/logga-in`}
+            href={session ? `/api/auth/logout?next=/${locale}` : `/${locale}/logga-in`}
             className="text-sm font-medium px-4 py-2 bg-brand text-white rounded-lg hover:bg-brand-dark transition-colors"
           >
-            {tc('login')}
+            {session ? (locale === 'sv' ? 'Logga ut' : 'Logout') : tc('login')}
           </a>
-          <a href={`/${locale}/admin`} className="hidden md:inline-block text-xs text-gray-400 hover:text-gray-600 border border-gray-200 px-2 py-1 rounded ml-2">
-            Admin
-          </a>
+          {isAdmin && (
+            <a href={`/${locale}/admin`} className="hidden md:inline-block text-xs text-gray-400 hover:text-gray-600 border border-gray-200 px-2 py-1 rounded ml-2">
+              Admin
+            </a>
+          )}
         </nav>
 
         {/* Mobile hamburger */}
@@ -98,6 +111,9 @@ async function Header({ locale }: { locale: Locale }) {
           items={navItems}
           locale={locale}
           loginLabel={tc('login')}
+          logoutLabel={locale === 'sv' ? 'Logga ut' : 'Logout'}
+          isLoggedIn={Boolean(session)}
+          showAdmin={isAdmin}
           langLabel={locale === 'sv' ? 'English' : 'Svenska'}
           langHref={locale === 'sv' ? '/en' : '/sv'}
         />

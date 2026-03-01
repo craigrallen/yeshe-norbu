@@ -4,12 +4,15 @@ import { useState } from 'react';
 
 interface NavItem { href: string; label: string; }
 
-export function MobileMenu({ items, locale, loginLabel, langLabel, langHref }: {
+export function MobileMenu({ items, locale, loginLabel, logoutLabel, langLabel, langHref, isLoggedIn, showAdmin }: {
   items: NavItem[];
   locale: string;
   loginLabel: string;
+  logoutLabel: string;
   langLabel: string;
   langHref: string;
+  isLoggedIn: boolean;
+  showAdmin: boolean;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -54,12 +57,21 @@ export function MobileMenu({ items, locale, loginLabel, langLabel, langHref }: {
               {langLabel}
             </a>
             <a
-              href={`/${locale}/logga-in`}
+              href={isLoggedIn ? `/api/auth/logout?next=/${locale}` : `/${locale}/logga-in`}
               onClick={() => setOpen(false)}
               className="px-4 py-3 text-base font-medium text-yellow-700 hover:bg-gray-50 rounded-lg transition-colors"
             >
-              {loginLabel}
+              {isLoggedIn ? logoutLabel : loginLabel}
             </a>
+            {showAdmin && (
+              <a
+                href={`/${locale}/admin`}
+                onClick={() => setOpen(false)}
+                className="px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 rounded-lg transition-colors"
+              >
+                Admin
+              </a>
+            )}
           </nav>
         </div>
       )}
