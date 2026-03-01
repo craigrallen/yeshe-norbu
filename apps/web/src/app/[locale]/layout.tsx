@@ -9,17 +9,10 @@ import { createDb, userRoles } from '@yeshe/db';
 import { eq } from 'drizzle-orm';
 import '../globals.css';
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'common' });
   return {
-    title: {
-      default: `${t('siteName')} — ${t('tagline')}`,
-      template: `%s | ${t('siteName')}`,
-    },
+    title: { default: `${t('siteName')} — ${t('tagline')}`, template: `%s | ${t('siteName')}` },
     description: t('tagline'),
     metadataBase: new URL('https://yeshinnorbu.se'),
     alternates: { canonical: '/', languages: { sv: '/sv', en: '/en' } },
@@ -27,24 +20,15 @@ export async function generateMetadata({
   };
 }
 
-export default async function LocaleLayout({
-  children,
-  params: { locale },
-}: {
-  children: React.ReactNode;
-  params: { locale: string };
-}) {
+export default async function LocaleLayout({ children, params: { locale } }: { children: React.ReactNode; params: { locale: string } }) {
   if (!locales.includes(locale as Locale)) notFound();
   const messages = await getMessages();
-
   return (
     <html lang={locale}>
-      <body className="min-h-screen bg-background font-sans antialiased">
+      <body className="min-h-screen bg-cream font-sans antialiased text-charcoal">
         <NextIntlClientProvider messages={messages}>
           <Header locale={locale as Locale} />
-          <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-            {children}
-          </main>
+          <main>{children}</main>
           <Footer locale={locale as Locale} />
         </NextIntlClientProvider>
       </body>
@@ -55,7 +39,7 @@ export default async function LocaleLayout({
 async function Header({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'nav' });
   const tc = await getTranslations({ locale, namespace: 'common' });
-
+  const sv = locale === 'sv';
   const session = await getSession();
   let isAdmin = false;
   if (session?.userId) {
@@ -65,53 +49,47 @@ async function Header({ locale }: { locale: Locale }) {
   }
 
   const navItems = [
-    { href: `/${locale}`, label: t('home') },
-    { href: `/${locale}/program`, label: t('program') },
-    { href: `/${locale}/events`, label: locale === 'sv' ? 'Evenemang' : 'Events' },
-    { href: `/${locale}/blog`, label: locale === 'sv' ? 'Blogg' : 'Blog' },
-    { href: `/${locale}/donera`, label: t('donate') },
-    { href: `/${locale}/bli-medlem`, label: t('membership') },
+    { href: `/${locale}/program`, label: sv ? 'Program' : 'Programme' },
+    { href: `/${locale}/events`, label: sv ? 'Evenemang' : 'Events' },
+    { href: `/${locale}/om-oss`, label: sv ? 'Om oss' : 'About' },
+    { href: `/${locale}/stod-oss`, label: sv ? 'Stöd oss' : 'Support' },
+    { href: `/${locale}/besok-oss`, label: sv ? 'Besök oss' : 'Visit' },
+    { href: `/${locale}/blog`, label: sv ? 'Blogg' : 'Blog' },
+    { href: `/${locale}/kontakt`, label: sv ? 'Kontakt' : 'Contact' },
   ];
 
   return (
-    <header className="border-b border-border bg-surface sticky top-0 z-40">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/97 backdrop-blur-sm border-b border-[#E8E4DE] transition-all">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-[72px]">
         <a href={`/${locale}`} className="flex items-center">
-          <img src="/logo.png" alt="Yeshin Norbu" className="h-10 w-auto" />
+          <img src="/brand/logo-no-tag.png" alt="Yeshin Norbu" className="h-10 w-auto" />
         </a>
-
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-6" aria-label="Main">
+        <nav className="hidden lg:flex items-center gap-7" aria-label="Main">
           {navItems.map((item) => (
-            <a key={item.href} href={item.href} className="text-sm font-medium text-primary hover:text-brand transition-colors">
+            <a key={item.href} href={item.href} className="text-[14px] font-medium text-charcoal hover:text-brand-dark transition-colors tracking-wide">
               {item.label}
             </a>
           ))}
-          <a
-            href={locale === 'sv' ? '/en' : '/sv'}
-            className="text-sm text-muted hover:text-primary border border-border rounded px-2 py-1"
-          >
+          <a href={locale === 'sv' ? '/en' : '/sv'} className="text-xs text-charcoal-light hover:text-charcoal border border-[#E8E4DE] rounded px-2.5 py-1 tracking-wide">
             {locale === 'sv' ? 'EN' : 'SV'}
           </a>
-          <a
-            href={session ? `/api/auth/logout?next=/${locale}` : `/${locale}/logga-in`}
-            className="text-sm font-medium px-4 py-2 bg-brand text-white rounded-lg hover:bg-brand-dark transition-colors"
-          >
-            {session ? (locale === 'sv' ? 'Logga ut' : 'Logout') : tc('login')}
+          {session ? (
+            <a href={`/api/auth/logout?next=/${locale}`} className="text-[13px] font-medium text-charcoal-light hover:text-charcoal">{sv ? 'Logga ut' : 'Logout'}</a>
+          ) : (
+            <a href={`/${locale}/logga-in`} className="text-[13px] font-medium text-charcoal-light hover:text-charcoal">{tc('login')}</a>
+          )}
+          <a href={`/${locale}/bli-medlem`} className="btn-charcoal !py-2.5 !px-6 !text-[13px] !rounded-lg">
+            {sv ? 'Bli medlem' : 'Join'}
           </a>
           {isAdmin && (
-            <a href={`/${locale}/admin`} className="hidden md:inline-block text-xs text-gray-400 hover:text-gray-600 border border-gray-200 px-2 py-1 rounded ml-2">
-              Admin
-            </a>
+            <a href={`/${locale}/admin`} className="text-[11px] text-charcoal-light hover:text-charcoal border border-[#E8E4DE] px-2 py-1 rounded">Admin</a>
           )}
         </nav>
-
-        {/* Mobile hamburger */}
         <MobileMenu
           items={navItems}
           locale={locale}
           loginLabel={tc('login')}
-          logoutLabel={locale === 'sv' ? 'Logga ut' : 'Logout'}
+          logoutLabel={sv ? 'Logga ut' : 'Logout'}
           isLoggedIn={Boolean(session)}
           showAdmin={isAdmin}
           langLabel={locale === 'sv' ? 'English' : 'Svenska'}
@@ -124,41 +102,53 @@ async function Header({ locale }: { locale: Locale }) {
 
 async function Footer({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'footer' });
+  const sv = locale === 'sv';
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border mt-16 py-12 bg-surface">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-3 gap-8 mb-8">
-          <div>
-            <h3 className="font-semibold text-primary mb-3">Yeshin Norbu</h3>
-            <p className="text-sm text-muted leading-relaxed">
-              {locale === 'sv' ? 'Buddhistiskt center i Stockholm, affilierat med FPMT.' : 'Buddhist centre in Stockholm, affiliated with FPMT.'}
+    <footer className="bg-charcoal text-white/70 mt-0">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid md:grid-cols-4 gap-10 mb-12">
+          <div className="md:col-span-1">
+            <img src="/brand/logo-no-tag.png" alt="Yeshin Norbu" className="h-9 brightness-[10] mb-4" />
+            <p className="text-sm leading-relaxed">
+              Yeshin Norbu Meditationscenter<br/>
+              Roslagsgatan 62, Stockholm<br/>
+              +46 (0)8 55 008 575<br/>
+              info@yeshinnorbu.se
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-primary mb-3">{locale === 'sv' ? 'Snabblänkar' : 'Quick Links'}</h3>
-            <div className="flex flex-col gap-2 text-sm text-muted">
-              <a href={`/${locale}/events`} className="hover:text-primary">{locale === 'sv' ? 'Evenemang' : 'Events'}</a>
-              <a href={`/${locale}/blog`} className="hover:text-primary">{locale === 'sv' ? 'Blogg' : 'Blog'}</a>
-              <a href={`/${locale}/bli-medlem`} className="hover:text-primary">{locale === 'sv' ? 'Bli medlem' : 'Membership'}</a>
-              <a href={`/${locale}/donera`} className="hover:text-primary">{locale === 'sv' ? 'Donera' : 'Donate'}</a>
+            <h4 className="text-brand-light font-sans text-xs font-bold tracking-widest uppercase mb-4">Program</h4>
+            <div className="flex flex-col gap-2 text-sm">
+              <a href={`/${locale}/program`} className="hover:text-brand transition-colors">Buddhism</a>
+              <a href={`/${locale}/program`} className="hover:text-brand transition-colors">Mindfulness</a>
+              <a href={`/${locale}/program`} className="hover:text-brand transition-colors">Yoga & Qigong</a>
+              <a href={`/${locale}/events`} className="hover:text-brand transition-colors">{sv ? 'Kalender' : 'Calendar'}</a>
             </div>
           </div>
           <div>
-            <h3 className="font-semibold text-primary mb-3">{locale === 'sv' ? 'Kontakt' : 'Contact'}</h3>
-            <p className="text-sm text-muted">{t('address')}</p>
-            <p className="text-sm text-muted mt-2">
-              <a href="https://fpmt.org" className="hover:text-primary">Affilierat med FPMT →</a>
-            </p>
+            <h4 className="text-brand-light font-sans text-xs font-bold tracking-widest uppercase mb-4">{sv ? 'Stöd oss' : 'Support'}</h4>
+            <div className="flex flex-col gap-2 text-sm">
+              <a href={`/${locale}/bli-medlem`} className="hover:text-brand transition-colors">{sv ? 'Bli medlem' : 'Membership'}</a>
+              <a href={`/${locale}/donera`} className="hover:text-brand transition-colors">{sv ? 'Donera' : 'Donate'}</a>
+              <a href={`/${locale}/bli-volontar`} className="hover:text-brand transition-colors">{sv ? 'Volontär' : 'Volunteer'}</a>
+              <a href={`/${locale}/lokalhyra`} className="hover:text-brand transition-colors">{sv ? 'Lokalhyra' : 'Venue hire'}</a>
+            </div>
+          </div>
+          <div>
+            <h4 className="text-brand-light font-sans text-xs font-bold tracking-widest uppercase mb-4">Info</h4>
+            <div className="flex flex-col gap-2 text-sm">
+              <a href={`/${locale}/om-oss`} className="hover:text-brand transition-colors">{sv ? 'Om oss' : 'About'}</a>
+              <a href={`/${locale}/kontakt`} className="hover:text-brand transition-colors">{sv ? 'Kontakt' : 'Contact'}</a>
+              <a href={`/${locale}/integritetspolicy`} className="hover:text-brand transition-colors">{sv ? 'Integritetspolicy' : 'Privacy'}</a>
+              <a href={`/${locale}/nyhetsbrev`} className="hover:text-brand transition-colors">{sv ? 'Nyhetsbrev' : 'Newsletter'}</a>
+            </div>
           </div>
         </div>
-        <div className="border-t border-border pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted">
-          <p>{t('copyright', { year: String(year) })}</p>
-          <div className="flex gap-4">
-            <a href={`/${locale}/integritetspolicy`} className="hover:text-primary">{t('privacy')}</a>
-            <a href={`/${locale}/cookies`} className="hover:text-primary">{t('cookies')}</a>
-          </div>
+        <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+          <span>© {year} Yeshin Norbu Meditationscenter. {sv ? 'Ideell förening.' : 'Non-profit association.'}</span>
+          <img src="/brand/fpmt-logo.png" alt="FPMT" className="h-7 opacity-60" />
         </div>
       </div>
     </footer>

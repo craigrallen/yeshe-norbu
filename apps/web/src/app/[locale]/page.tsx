@@ -3,12 +3,6 @@ import { Pool } from 'pg';
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
-const blogPosts = [
-  { slug: 'fpmt-och-yeshe-norbu', title: 'FPMT och Yeshin Norbu', titleEn: 'FPMT and Yeshin Norbu', excerpt: 'Lär dig om FPMT och hur Yeshin Norbu i Stockholm är en del av detta globala andliga nätverk.', excerptEn: 'Learn about FPMT and Yeshin Norbu Stockholm as part of this global spiritual network.', category: 'Undervisning', categoryEn: 'Teaching' },
-  { slug: 'mindfulness-i-vardagen', title: 'Mindfulness i vardagen', titleEn: 'Mindfulness in Daily Life', excerpt: 'Fem konkreta mindfulnessövningar för dig som vill skapa mer närvaro i vardagen.', excerptEn: 'Five practical mindfulness exercises for creating more presence in daily life.', category: 'Mindfulness', categoryEn: 'Mindfulness' },
-  { slug: 'vad-ar-meditation', title: 'Vad är meditation?', titleEn: 'What is Meditation?', excerpt: 'Meditation är inte att tömma sinnet. Det är att träna uppmärksamheten.', excerptEn: 'Meditation is not emptying the mind. It is training attention.', category: 'Undervisning', categoryEn: 'Teaching' },
-];
-
 export default async function HomePage({ params: { locale } }: { params: { locale: string } }) {
   const t = await getTranslations({ locale, namespace: 'home' });
   const sv = locale === 'sv';
@@ -18,139 +12,191 @@ export default async function HomePage({ params: { locale } }: { params: { local
 
   const featuredEvents = featuredIds.length
     ? (await pool.query(
-      `SELECT id, slug,
-              COALESCE(NULLIF(title_sv,''), title_en) as title_sv_fallback,
-              COALESCE(NULLIF(title_en,''), title_sv) as title_en_fallback,
-              starts_at, venue, featured_image_url
-       FROM events
-       WHERE published = true AND starts_at >= now() AND id = ANY($1::uuid[])
-       ORDER BY starts_at ASC
-       LIMIT 3`,
+      `SELECT e.id, e.slug,
+              COALESCE(NULLIF(e.title_sv,''), e.title_en) as title,
+              COALESCE(NULLIF(e.title_en,''), e.title_sv) as title_en,
+              e.starts_at, e.ends_at, e.venue, e.featured_image_url,
+              COALESCE(NULLIF(ec.name_sv,''), ec.name_en) as cat_sv,
+              COALESCE(NULLIF(ec.name_en,''), ec.name_sv) as cat_en
+       FROM events e
+       LEFT JOIN event_categories ec ON e.category_id = ec.id
+       WHERE e.published = true AND e.starts_at >= now() AND e.id = ANY($1::uuid[])
+       ORDER BY e.starts_at ASC LIMIT 3`,
       [featuredIds]
     )).rows
     : [];
 
-  const upcomingEvents = featuredEvents.length
-    ? featuredEvents
-    : (await pool.query(
-      `SELECT id, slug,
-              COALESCE(NULLIF(title_sv,''), title_en) as title_sv_fallback,
-              COALESCE(NULLIF(title_en,''), title_sv) as title_en_fallback,
-              starts_at, venue, featured_image_url
-       FROM events
-       WHERE published = true AND starts_at >= now()
-       ORDER BY starts_at ASC
-       LIMIT 3`
-    )).rows;
+  const upcomingEvents = featuredEvents.length ? featuredEvents : (await pool.query(
+    `SELECT e.id, e.slug,
+            COALESCE(NULLIF(e.title_sv,''), e.title_en) as title,
+            COALESCE(NULLIF(e.title_en,''), e.title_sv) as title_en,
+            e.starts_at, e.ends_at, e.venue, e.featured_image_url,
+            COALESCE(NULLIF(ec.name_sv,''), ec.name_en) as cat_sv,
+            COALESCE(NULLIF(ec.name_en,''), ec.name_sv) as cat_en
+     FROM events e
+     LEFT JOIN event_categories ec ON e.category_id = ec.id
+     WHERE e.published = true AND e.starts_at >= now()
+     ORDER BY e.starts_at ASC LIMIT 3`
+  )).rows;
 
   const { rows: plans } = await pool.query(
     `SELECT id, slug, name_sv, name_en, price_sek, interval_months
-     FROM membership_plans
-     WHERE active = true
-     ORDER BY price_sek ASC`
+     FROM membership_plans WHERE active = true ORDER BY price_sek ASC`
   );
 
-  const membershipTiers = plans.slice(0, 3).map((p: any) => ({
-    slug: p.slug,
-    name: p.name_sv,
-    nameEn: p.name_en,
-    price: `${Math.round(Number(p.price_sek)).toLocaleString('sv-SE')} kr/${p.interval_months === 12 ? 'år' : 'mån'}`,
-    priceEn: `${Math.round(Number(p.price_sek)).toLocaleString('sv-SE')} SEK/${p.interval_months === 12 ? 'year' : 'month'}`,
-    popular: p.slug === 'gym-card',
-    benefits: p.slug === 'gym-card'
-      ? ['Obegränsad drop-in', 'Alla veckliga klasser', 'Prioriterad plats på retreat']
-      : p.slug === 'friend'
-      ? ['Stöd centrets arbete', 'Nyhetsbrev', 'Exklusiva aktiviteter']
-      : ['Tillgång till centrets medlemsförmåner', 'Nyhetsbrev', 'Rabatter'],
-    benefitsEn: p.slug === 'gym-card'
-      ? ['Unlimited drop-in', 'All weekly classes', 'Priority retreat booking']
-      : p.slug === 'friend'
-      ? ['Support the centre', 'Newsletter', 'Exclusive activities']
-      : ['Access to member benefits', 'Newsletter', 'Discounts'],
-  }));
+  const categories = [
+    { title: 'Buddhism', titleEn: 'Buddhism', sub: 'Kurser · Retreats · Drop-in', subEn: 'Courses · Retreats · Drop-in', img: '/brand/buddhism.jpg', href: `/${locale}/program` },
+    { title: 'Mindfulness & Medkänsla', titleEn: 'Mindfulness & Compassion', sub: 'Kurser · Retreats · Drop-in', subEn: 'Courses · Retreats · Drop-in', img: '/brand/mindfulness.jpg', href: `/${locale}/program` },
+    { title: 'Yoga & Qigong', titleEn: 'Yoga & Qigong', sub: 'Iyengar · Yin · Qigong', subEn: 'Iyengar · Yin · Qigong', img: '/brand/yoga.jpg', href: `/${locale}/program` },
+  ];
 
   return (
-    <div className="space-y-20">
-      <section className="text-center py-16 md:py-24">
-        <h1 className="text-4xl md:text-6xl font-bold text-primary mb-4">{t('heroTitle')}</h1>
-        <p className="text-xl md:text-2xl text-muted mb-4">{t('heroSubtitle')}</p>
-        <p className="max-w-2xl mx-auto text-base text-muted leading-relaxed mb-8">{t('heroDescription')}</p>
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <a href={`/${locale}/events`} className="inline-flex items-center justify-center h-12 px-8 rounded-lg bg-brand text-white font-medium hover:bg-brand-dark transition-colors text-base">{sv ? 'Kommande evenemang' : 'Upcoming Events'}</a>
-          <a href={`/${locale}/bli-medlem`} className="inline-flex items-center justify-center h-12 px-8 rounded-lg border-2 border-brand text-brand font-medium hover:bg-brand hover:text-white transition-colors text-base">{sv ? 'Bli medlem' : 'Become a Member'}</a>
+    <div>
+      {/* HERO */}
+      <section className="relative min-h-[85vh] flex items-center overflow-hidden mt-[72px]">
+        <div className="absolute inset-0">
+          <img id="hero-img" src="/brand/hero-nature.jpg" alt="" className="w-full h-full object-cover" />
         </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-charcoal/80 via-charcoal/40 to-transparent" />
+        {/* Circles motif */}
+        <div className="absolute right-[-80px] top-1/2 -translate-y-1/2 opacity-[0.08]">
+          <svg width="600" height="600" viewBox="0 0 400 400"><circle cx="200" cy="180" r="180" stroke="#E8B817" strokeWidth="3" fill="none"/><circle cx="210" cy="210" r="130" stroke="#E8B817" strokeWidth="3" fill="none"/><circle cx="218" cy="235" r="80" stroke="#E8B817" strokeWidth="3" fill="none"/></svg>
+        </div>
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight max-w-xl mb-5">
+            {sv ? <>Förändra ditt sinne, <span className="text-brand-light">förändra din värld</span></> : <>Transform your mind, <span className="text-brand-light">transform your world</span></>}
+          </h1>
+          <p className="text-white/85 text-lg max-w-md leading-relaxed mb-8">
+            {sv ? 'Meditation, mindfulness och buddhistisk filosofi i hjärtat av Stockholm.' : 'Meditation, mindfulness and Buddhist philosophy in the heart of Stockholm.'}
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <a href={`/${locale}/events`} className="btn-gold">{sv ? 'Utforska programmet →' : 'Explore programme →'}</a>
+            <a href={`/${locale}/forsta-besoket`} className="inline-flex items-center gap-2 px-7 py-3 rounded-xl font-semibold text-sm text-white border-2 border-white/40 hover:border-brand hover:text-brand transition-all">{sv ? 'Ditt första besök' : 'Your first visit'}</a>
+          </div>
+        </div>
+        {/* Seasonal hero script */}
+        <script dangerouslySetInnerHTML={{__html:`
+          fetch('/seasons/manifest.json').then(r=>r.json()).then(d=>{
+            var m=new Date().getMonth()+1,p=m<10?'0'+m:String(m),imgs=d[p]||d['03'];
+            if(imgs&&imgs.length){document.getElementById('hero-img').src=imgs[Math.floor(Math.random()*imgs.length)];}
+          }).catch(()=>{});
+        `}} />
       </section>
 
-      <section>
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl md:text-3xl font-semibold text-primary">{sv ? 'Utvalda evenemang' : 'Featured Events'}</h2>
-          <a href={`/${locale}/events`} className="text-sm text-brand hover:text-brand-dark font-medium">{sv ? 'Visa alla' : 'View all'} →</a>
+      {/* FEATURED EVENTS */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl lg:text-4xl font-bold text-charcoal mb-3">{sv ? 'Kommande höjdpunkter' : 'Upcoming Highlights'}</h2>
+          <p className="text-charcoal-light text-lg max-w-lg mx-auto">{sv ? 'Upptäck våra utvalda evenemang och kurser' : 'Discover our featured events and courses'}</p>
+          <div className="gold-bar mx-auto mt-4" />
         </div>
         <div className="grid gap-6 md:grid-cols-3">
           {upcomingEvents.map((e: any) => (
-            <a key={e.id} href={e.slug ? `/${locale}/events/${e.slug}` : `/${locale}/events`} className="rounded-xl border border-border bg-surface overflow-hidden hover:shadow-md transition-shadow block">
-              <img src={e.featured_image_url || '/events/wisdom-retreat.jpg'} alt={sv ? e.title_sv_fallback : e.title_en_fallback} className="w-full h-40 object-cover" loading="lazy" />
-              <div className="p-6">
-                <h3 className="font-semibold text-primary text-lg mb-2">{sv ? e.title_sv_fallback : e.title_en_fallback}</h3>
-                <div className="space-y-1 text-sm text-muted mb-4">
-                  <div>{new Date(e.starts_at).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short', timeZone: 'Europe/Stockholm' })} · {new Date(e.starts_at).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Stockholm' })}</div>
-                  <div>{e.venue || 'Yeshin Norbu, Stockholm'}</div>
+            <a key={e.id} href={e.slug ? `/${locale}/events/${e.slug}` : `/${locale}/events`} className="bg-white rounded-2xl overflow-hidden border border-[#E8E4DE] hover:-translate-y-1 hover:shadow-xl transition-all block group">
+              <div className="h-[200px] overflow-hidden relative">
+                <img src={e.featured_image_url || '/brand/courses.jpg'} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                {featuredIds.includes(e.id) && <span className="absolute top-3 left-3 bg-brand text-charcoal text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-wider">{sv ? 'Utvald' : 'Featured'}</span>}
+                {(e.cat_sv || e.cat_en) && <span className="absolute top-3 right-3 bg-charcoal/70 text-white text-[11px] px-2.5 py-1 rounded-md">{sv ? e.cat_sv : e.cat_en}</span>}
+              </div>
+              <div className="p-5">
+                <div className="text-brand-dark text-[13px] font-semibold mb-1">
+                  {new Date(e.starts_at).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short', year: 'numeric' })} · {new Date(e.starts_at).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Stockholm' })}
                 </div>
-                <div className="flex justify-end items-center pt-3 border-t border-border">
-                  <span className="text-sm text-brand hover:text-brand-dark font-medium">{sv ? 'Läs mer' : 'Read more'} →</span>
-                </div>
+                <h3 className="font-serif text-xl font-semibold text-charcoal mb-2">{sv ? e.title : e.title_en}</h3>
+                <p className="text-sm text-charcoal-light">{e.venue || 'Yeshin Norbu, Stockholm'}</p>
               </div>
             </a>
           ))}
         </div>
-      </section>
-
-      <section>
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl md:text-3xl font-semibold text-primary">{sv ? 'Från bloggen' : 'From the Blog'}</h2>
-          <a href={`/${locale}/blog`} className="text-sm text-brand hover:text-brand-dark font-medium">{sv ? 'Alla artiklar' : 'All articles'} →</a>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {blogPosts.map((p) => (
-            <a key={p.slug} href={`/${locale}/blog/${p.slug}`} className="group">
-              <div className="rounded-xl border border-border bg-surface overflow-hidden hover:shadow-md transition-shadow">
-                <div className="aspect-video bg-gradient-to-br from-amber-100 to-orange-100" />
-                <div className="p-5">
-                  <span className="text-xs font-medium px-2 py-1 bg-blue-100 text-blue-800 rounded-full">{sv ? p.category : p.categoryEn}</span>
-                  <h3 className="font-semibold text-primary mt-3 mb-2 group-hover:text-brand transition-colors">{sv ? p.title : p.titleEn}</h3>
-                  <p className="text-sm text-muted leading-relaxed">{sv ? p.excerpt : p.excerptEn}</p>
-                  <div className="mt-4 text-sm text-brand font-medium">{sv ? 'Läs mer' : 'Read more'} →</div>
-                </div>
-              </div>
-            </a>
-          ))}
+        <div className="text-center mt-8">
+          <a href={`/${locale}/events`} className="btn-outline">{sv ? 'Visa alla evenemang →' : 'View all events →'}</a>
         </div>
       </section>
 
-      <section className="bg-gray-50 rounded-2xl p-8 md:p-12">
-        <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-semibold text-primary mb-3">{sv ? 'Bli medlem' : 'Become a Member'}</h2>
-          <p className="text-muted max-w-xl mx-auto">{sv ? 'Stöd centrets arbete och få tillgång till exklusiva förmåner.' : 'Support the centre and get access to exclusive benefits.'}</p>
+      {/* MISSION / ABOUT */}
+      <section className="bg-charcoal text-white relative overflow-hidden">
+        <div className="absolute left-[-120px] bottom-[-120px] opacity-[0.06]">
+          <svg width="400" height="400" viewBox="0 0 400 400"><circle cx="200" cy="180" r="180" stroke="#E8B817" strokeWidth="2" fill="none"/><circle cx="210" cy="210" r="130" stroke="#E8B817" strokeWidth="2" fill="none"/><circle cx="218" cy="235" r="80" stroke="#E8B817" strokeWidth="2" fill="none"/></svg>
         </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          {membershipTiers.map((tier) => (
-            <div key={tier.slug} className={`rounded-xl bg-white p-6 border-2 ${tier.popular ? 'border-brand shadow-lg' : 'border-border'}`}>
-              {tier.popular && <div className="text-xs font-semibold text-brand uppercase tracking-wide mb-3">{sv ? 'Populärast' : 'Most popular'}</div>}
-              <h3 className="text-xl font-bold text-primary mb-1">{sv ? tier.name : tier.nameEn}</h3>
-              <p className="text-2xl font-bold text-brand mb-4">{sv ? tier.price : tier.priceEn}</p>
-              <ul className="space-y-2 mb-6">
-                {(sv ? tier.benefits : tier.benefitsEn).map((b) => (
-                  <li key={b} className="flex items-start gap-2 text-sm text-muted"><span className="text-green-500 mt-0.5">•</span><span>{b}</span></li>
-                ))}
-              </ul>
-              <a href={`/${locale}/bli-medlem`} className={`block text-center py-2.5 rounded-lg font-medium transition-colors ${tier.popular ? 'bg-brand text-white hover:bg-brand-dark' : 'border border-brand text-brand hover:bg-brand hover:text-white'}`}>{sv ? 'Välj plan' : 'Choose plan'}</a>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl lg:text-4xl font-bold text-brand-light mb-2">{sv ? 'Vår vision' : 'Our Vision'}</h2>
+              <div className="gold-bar mt-4 mb-6" />
+              <p className="text-white/85 text-lg leading-relaxed mb-4">
+                {sv
+                  ? 'Yeshin Norbu Meditationscenter är en ideell organisation inspirerad av Dalai Lamas vision om sekulär och universell etik. Vi erbjuder kurser som främjar mentalt och fysiskt välbefinnande — meditation, mindfulness, yoga och autentisk buddhistisk filosofi.'
+                  : 'Yeshin Norbu Meditation Centre is a non-profit organisation inspired by the Dalai Lama\'s vision of secular and universal ethics. We offer courses promoting mental and physical well-being — meditation, mindfulness, yoga and authentic Buddhist philosophy.'}
+              </p>
+              <p className="text-white/70 leading-relaxed mb-8">
+                {sv ? 'Att träna sinnet är lika viktigt som att träna kroppen.' : 'Training the mind is as important as training the body.'}
+              </p>
+              <a href={`/${locale}/om-oss`} className="btn-gold">{sv ? 'Läs mer om oss →' : 'Learn more →'}</a>
             </div>
+            <div className="rounded-2xl overflow-hidden">
+              <img src="/brand/stupa.jpg" alt="Center stupa" className="w-full" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CATEGORIES */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl lg:text-4xl font-bold text-charcoal mb-3">{sv ? 'Utforska vårt utbud' : 'Explore Our Offerings'}</h2>
+          <p className="text-charcoal-light text-lg max-w-lg mx-auto">{sv ? 'Kurser och event för alla nivåer och intressen' : 'Courses and events for all levels and interests'}</p>
+          <div className="gold-bar mx-auto mt-4" />
+        </div>
+        <div className="grid md:grid-cols-3 gap-5">
+          {categories.map(c => (
+            <a key={c.title} href={c.href} className="relative rounded-2xl overflow-hidden h-[280px] group block">
+              <img src={c.img} alt="" className="w-full h-full object-cover group-hover:scale-[1.08] transition-transform duration-500" loading="lazy" />
+              <div className="absolute inset-0 bg-gradient-to-t from-charcoal/85 to-transparent flex flex-col justify-end p-6">
+                <h3 className="text-white font-serif text-2xl font-semibold mb-1">{sv ? c.title : c.titleEn}</h3>
+                <span className="text-brand-light text-sm font-medium">{sv ? c.sub : c.subEn}</span>
+              </div>
+            </a>
           ))}
         </div>
       </section>
 
-      <section className="text-center py-6">
-        <p className="text-sm text-muted">{sv ? 'Affilierat med ' : 'Affiliated with '}<a href="https://fpmt.org" className="text-brand hover:underline font-medium">FPMT – Foundation for the Preservation of the Mahayana Tradition</a></p>
+      {/* SUPPORT CTA */}
+      <section className="bg-gradient-to-br from-brand to-brand-dark py-16 px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-3xl font-bold text-charcoal mb-3">{sv ? 'Stöd centret' : 'Support the Centre'}</h2>
+          <p className="text-charcoal-light mb-8">
+            {sv ? 'Bli medlem och få tillgång till rabatter, nyhetsbrev och möjlighet att påverka centrets framtid. Från 250 kr/år.' : 'Become a member for discounts, newsletters and a voice in the centre\'s future. From 250 SEK/year.'}
+          </p>
+          <a href={`/${locale}/bli-medlem`} className="btn-charcoal">{sv ? 'Bli medlem →' : 'Join now →'}</a>
+        </div>
+      </section>
+
+      {/* MEMBERSHIP PLANS */}
+      {plans.length > 0 && (
+        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-charcoal mb-3">{sv ? 'Medlemskap' : 'Membership Plans'}</h2>
+            <div className="gold-bar mx-auto mt-4" />
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {plans.slice(0, 3).map((p: any) => (
+              <div key={p.id} className={`rounded-2xl bg-white p-7 border-2 ${p.slug === 'gym-card' ? 'border-brand shadow-lg' : 'border-[#E8E4DE]'}`}>
+                {p.slug === 'gym-card' && <div className="text-xs font-bold text-brand uppercase tracking-wide mb-2">{sv ? 'Populärast' : 'Most popular'}</div>}
+                <h3 className="font-serif text-xl font-bold text-charcoal mb-1">{sv ? p.name_sv : p.name_en}</h3>
+                <p className="text-2xl font-bold text-brand mb-5">{Math.round(Number(p.price_sek))} kr/{p.interval_months === 12 ? (sv ? 'år' : 'year') : (sv ? 'mån' : 'mo')}</p>
+                <a href={`/${locale}/bli-medlem`} className={`block text-center py-3 rounded-xl font-bold text-sm transition-all ${p.slug === 'gym-card' ? 'btn-gold w-full' : 'btn-outline w-full'}`}>{sv ? 'Välj plan' : 'Choose plan'}</a>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* FPMT */}
+      <section className="text-center py-8 px-4">
+        <p className="text-sm text-charcoal-light">
+          {sv ? 'Affilierat med ' : 'Affiliated with '}
+          <a href="https://fpmt.org" className="text-brand hover:underline font-medium">FPMT – Foundation for the Preservation of the Mahayana Tradition</a>
+        </p>
       </section>
     </div>
   );

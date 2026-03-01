@@ -1,61 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  /* Yeshin Norbu brand colors (from Divi theme) */
-  --brand: #f5ca00;
-  --brand-dark: #d4af00;
-  --charcoal: #58595b;
-  --charcoal-dark: #3d3e40;
-  --surface: #edeae6;
-  --background: #f4f4f4;
-  --white: #ffffff;
-  --text: #58595b;
-  --muted: #888888;
-  --border: #ddd8d3;
+  --gold: #E8B817;
+  --gold-dark: #C49A0E;
+  --gold-light: #F5D660;
+  --charcoal: #3D3D3D;
+  --charcoal-light: #5A5A5A;
+  --cream: #FAFAF6;
+  --warm-white: #FFFFFF;
+  --text: #2D2D2D;
+  --text-light: #6B6B6B;
+  --border: #E8E4DE;
+  --sage: #8FA98F;
 
-  /* Aliases */
+  /* Aliases for existing code */
+  --brand: var(--gold);
+  --brand-dark: var(--gold-dark);
+  --surface: var(--cream);
+  --background: var(--cream);
+  --white: #ffffff;
+  --muted: var(--text-light);
   --color-primary: var(--charcoal);
-  --color-brand: var(--brand);
-  --color-surface: var(--surface);
-  --color-background: var(--background);
-  --color-muted: var(--muted);
+  --color-brand: var(--gold);
+  --color-surface: var(--cream);
+  --color-background: var(--cream);
+  --color-muted: var(--text-light);
   --color-border: var(--border);
 }
 
 @layer base {
   body {
-    background-color: var(--background);
+    background-color: var(--cream);
     color: var(--text);
+    font-family: 'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
-  
-  a {
-    color: inherit;
+  h1, h2, h3, h4 {
+    font-family: 'Playfair Display', serif;
   }
+  a { color: inherit; }
+}
 
-  /* Brand button utility */
-  .btn-brand {
-    background-color: var(--brand);
+@layer components {
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl font-bold text-sm tracking-wide transition-all;
+    background: var(--gold);
     color: var(--charcoal);
-    font-weight: 600;
-    border-radius: 8px;
-    padding: 12px 24px;
-    transition: background-color 0.2s;
+    border: 2px solid var(--gold);
   }
-  .btn-brand:hover {
-    background-color: var(--brand-dark);
+  .btn-gold:hover {
+    background: var(--gold-dark);
+    border-color: var(--gold-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(232,184,23,0.3);
   }
-  
-  .btn-dark {
-    background-color: var(--charcoal);
-    color: white;
-    font-weight: 600;
-    border-radius: 8px;
-    padding: 12px 24px;
-    transition: background-color 0.2s;
+  .btn-charcoal {
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl font-bold text-sm tracking-wide transition-all;
+    background: var(--charcoal);
+    color: var(--gold-light);
   }
-  .btn-dark:hover {
-    background-color: var(--charcoal-dark);
+  .btn-charcoal:hover {
+    background: #2D2D2D;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
   }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl font-semibold text-sm tracking-wide transition-all;
+    border: 2px solid var(--border);
+    color: var(--charcoal);
+  }
+  .btn-outline:hover {
+    border-color: var(--gold);
+    color: var(--gold-dark);
+  }
+  .gold-bar {
+    width: 48px; height: 3px; background: var(--gold); border-radius: 2px;
+  }
+  /* Backward compat */
+  .btn-brand { @apply btn-gold; }
+  .btn-dark { @apply btn-charcoal; }
 }

@@ -132,7 +132,7 @@ export default async function MediaLibraryPage({
                   <span>{item.mimeType}</span>
                 </div>
                 <div className="flex gap-1 mt-2">
-                  <button onClick={`navigator.clipboard.writeText('${item.url}')`} className="text-[10px] px-2 py-0.5 rounded bg-gray-100 text-gray-600 hover:bg-gray-200" title="Copy URL">📋 URL</a>
+                  <a href={item.url} target="_blank" rel="noreferrer" className="text-[10px] px-2 py-0.5 rounded bg-gray-100 text-gray-600 hover:bg-gray-200">📋 URL</a>
                   <form action={deleteMedia} className="inline">
                     <input type="hidden" name="locale" value={locale} />
                     <input type="hidden" name="id" value={item.id} />

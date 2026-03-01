@@ -5,22 +5,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        brand: {
-          DEFAULT: '#f5ca00',  // Yeshin Norbu gold (from Divi theme)
-          dark: '#d4af00',
-          light: '#f9e066',
-        },
-        charcoal: {
-          DEFAULT: '#58595b',  // Yeshin Norbu charcoal
-          dark: '#3d3e40',
-          light: '#6b6c6e',
-        },
-        surface: '#edeae6',    // Off-white from Divi settings
-        background: '#f4f4f4',
+        brand: { DEFAULT: '#E8B817', dark: '#C49A0E', light: '#F5D660' },
+        charcoal: { DEFAULT: '#3D3D3D', dark: '#2D2D2D', light: '#5A5A5A' },
+        cream: '#FAFAF6',
+        sage: '#8FA98F',
+        surface: '#FAFAF6',
+        background: '#FAFAF6',
       },
       fontFamily: {
-        sans: ['Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+        sans: ['DM Sans', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+        serif: ['Playfair Display', 'Georgia', 'serif'],
       },
+      borderRadius: { xl: '16px', '2xl': '20px' },
     },
   },
   plugins: [],
