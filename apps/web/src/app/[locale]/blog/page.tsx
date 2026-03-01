@@ -1,4 +1,8 @@
 import type { Metadata } from 'next';
+import { Pool } from 'pg';
+import Link from 'next/link';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const sv = locale === 'sv';
@@ -10,16 +14,25 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   };
 }
 
-const posts = [
-  { slug: 'fpmt-och-yeshe-norbu', title: 'FPMT och Yeshin Norbu', excerpt: 'Lär dig om FPMT och hur Yeshin Norbu i Stockholm är en del av detta globala andliga nätverk.', date: '28 feb 2026', category: 'Undervisning' },
-  { slug: 'mindfulness-i-vardagen', title: 'Mindfulness i vardagen', excerpt: 'Fem konkreta mindfulnessövningar för dig som vill skapa mer närvaro i vardagen.', date: '28 feb 2026', category: 'Mindfulness' },
-  { slug: 'vad-ar-meditation', title: 'Vad är meditation?', excerpt: 'Meditation är inte att tömma sinnet. Det är att träna uppmärksamheten. En nybörjarguide.', date: '28 feb 2026', category: 'Undervisning' },
-  { slug: 'mindfulness-och-hjarnforskning', title: 'Mindfulness och hjärnforskning', excerpt: 'Vad säger vetenskapen om mindfulness? En översikt över den senaste forskningen.', date: '28 feb 2026', category: 'Mindfulness' },
-  { slug: 'valkomna-till-yeshe-norbu', title: 'Välkommen till Yeshin Norbu', excerpt: 'Ett öppet och inkluderande center i Stockholm för alla som är intresserade av meditation och buddhism.', date: '28 feb 2026', category: 'Gemenskap' },
-];
-
-export default function BlogPage({ params: { locale } }: { params: { locale: string } }) {
+export default async function BlogPage({ params: { locale } }: { params: { locale: string } }) {
   const sv = locale === 'sv';
+
+  let posts: any[] = [];
+  try {
+    const { rows } = await pool.query(
+      `SELECT p.id, p.slug, p.title_sv, p.title_en, p.excerpt_sv, p.excerpt_en,
+              p.featured_image_url, p.published_at, p.created_at,
+              u.first_name, u.last_name
+       FROM posts p
+       LEFT JOIN users u ON u.id = p.author_id
+       WHERE p.published = true
+       ORDER BY COALESCE(p.published_at, p.created_at) DESC
+       LIMIT 50`
+    );
+    posts = rows;
+  } catch (e) {
+    // DB not available locally
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-12 space-y-12">
@@ -30,28 +43,42 @@ export default function BlogPage({ params: { locale } }: { params: { locale: str
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {posts.map((p) => (
-          <a key={p.slug} href={`/${locale}/blog/${p.slug}`} className="group">
-            <div className="rounded-xl border border-gray-200 bg-white overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="aspect-video bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center text-6xl">
-                
-              </div>
-              <div className="p-5 space-y-3">
-                <div className="flex justify-between items-center text-xs">
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full font-medium">{p.category}</span>
-                  <span className="text-gray-500">{p.date}</span>
+      {posts.length === 0 ? (
+        <p className="text-center text-gray-500">{sv ? 'Inga inlägg ännu.' : 'No posts yet.'}</p>
+      ) : (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {posts.map((p) => {
+            const title = sv ? p.title_sv : (p.title_en || p.title_sv);
+            const excerpt = sv ? p.excerpt_sv : (p.excerpt_en || p.excerpt_sv);
+            const date = p.published_at || p.created_at;
+            const author = p.first_name ? `${p.first_name} ${p.last_name}` : null;
+            return (
+              <Link key={p.slug} href={`/${locale}/blog/${p.slug}`} className="group">
+                <div className="rounded-xl border border-gray-200 bg-white overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
+                  {p.featured_image_url ? (
+                    <div className="aspect-video overflow-hidden">
+                      <img src={p.featured_image_url} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    </div>
+                  ) : (
+                    <div className="aspect-video bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center text-6xl">🪷</div>
+                  )}
+                  <div className="p-5 space-y-3 flex-1 flex flex-col">
+                    <div className="flex justify-between items-center text-xs text-gray-500">
+                      {author && <span>{author}</span>}
+                      {date && <span>{new Date(date).toLocaleDateString(sv ? 'sv-SE' : 'en-GB')}</span>}
+                    </div>
+                    <h3 className="font-semibold text-gray-900 text-lg group-hover:text-[#E8B817] transition-colors">{title}</h3>
+                    {excerpt && <p className="text-sm text-gray-600 leading-relaxed flex-1">{excerpt}</p>}
+                    <div className="pt-2">
+                      <span className="text-[#E8B817] text-sm font-medium group-hover:underline">{sv ? 'Läs mer' : 'Read more'} →</span>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="font-semibold text-gray-900 text-lg group-hover:text-blue-600 transition-colors">{p.title}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{p.excerpt}</p>
-                <div className="pt-2">
-                  <span className="text-blue-600 text-sm font-medium group-hover:underline">{sv ? 'Läs mer' : 'Read more'} →</span>
-                </div>
-              </div>
-            </div>
-          </a>
-        ))}
-      </div>
+              </Link>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
