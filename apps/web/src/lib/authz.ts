@@ -19,3 +19,18 @@ export async function requireAdmin(locale: string) {
   if (!rows[0]) redirect(`/${locale}/konto`);
   return session;
 }
+
+export async function requireEventManager(locale: string) {
+  const session = await getSession();
+  if (!session?.userId) redirect(`/${locale}/logga-in`);
+
+  const { rows } = await pool.query(
+    `SELECT role FROM user_roles
+     WHERE user_id = $1 AND role IN ('admin', 'event_manager')
+     LIMIT 1`,
+    [session.userId]
+  );
+
+  if (!rows[0]) redirect(`/${locale}/konto`);
+  return { session, role: rows[0].role as 'admin' | 'event_manager' };
+}

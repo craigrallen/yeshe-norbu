@@ -20,6 +20,7 @@ import { relations } from 'drizzle-orm';
 export const userRoleEnum = pgEnum('user_role', [
   'admin',
   'editor',
+  'event_manager',
   'finance',
   'support',
   'cashier',
