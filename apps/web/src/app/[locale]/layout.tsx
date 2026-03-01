@@ -59,7 +59,7 @@ async function Header({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/97 backdrop-blur-sm border-b border-[#E8E4DE] transition-all">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#E8E4DE] transition-all">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-[72px]">
         <a href={`/${locale}`} className="flex items-center">
           <img src="/brand/logo-no-tag.png" alt="Yeshin Norbu" className="h-10 w-auto" />
