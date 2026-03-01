@@ -152,10 +152,13 @@ footer a:hover { color:var(--gold); }
   <div class="hero-bg"><img id="hero-seasonal" src="/seasons/06-june.jpg" alt=""></div>
 <script>
 (function(){
-  var m=new Date().getMonth()+1;
-  var pad=m<10?'0'+m:m;
-  var names={1:'january',2:'february',3:'march',4:'april',5:'may',6:'june',7:'july',8:'august',9:'september',10:'october',11:'november',12:'december'};
-  document.getElementById('hero-seasonal').src='/seasons/'+pad+'-'+names[m]+'.jpg';
+  fetch('/seasons/manifest.json').then(function(r){return r.json()}).then(function(data){
+    var m=new Date().getMonth()+1;
+    var pad=m<10?'0'+m:String(m);
+    var imgs=data[pad]||data['06'];
+    var pick=imgs[Math.floor(Math.random()*imgs.length)];
+    document.getElementById('hero-seasonal').src=pick;
+  });
 })();
 </script>
   <div class="hero-overlay"></div>
