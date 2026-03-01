@@ -35,7 +35,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       ? 'meditation stockholm, mindfulness, yoga, buddhism, meditationscenter, kurser meditation, retreat stockholm, FPMT'
       : 'meditation stockholm, mindfulness, yoga, buddhism, meditation center, meditation courses, retreat stockholm, FPMT',
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
-    icons: { icon: '/favicon.ico' },
+    icons: { icon: '/favicon.ico', apple: '/apple-touch-icon.png' },
     verification: {},
   };
 }

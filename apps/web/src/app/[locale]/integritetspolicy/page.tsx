@@ -1,3 +1,13 @@
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const sv = locale === 'sv';
+  return {
+    title: sv ? 'Integritetspolicy' : 'Privacy Policy',
+    description: sv ? 'Yeshin Norbus integritetspolicy och hantering av personuppgifter enligt GDPR.' : 'Yeshin Norbu privacy policy and personal data handling under GDPR.',
+  };
+}
+
 export default function Page({ params: { locale } }: { params: { locale: string } }) {
   const sv = locale === 'sv';
   return (

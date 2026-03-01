@@ -1,3 +1,13 @@
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const sv = locale === 'sv';
+  return {
+    title: sv ? 'Butik' : 'Shop',
+    description: sv ? 'Handla böcker, meditationskuddar och tillbehör från Yeshin Norbu.' : 'Shop books, meditation cushions and accessories from Yeshin Norbu.',
+  };
+}
+
 import { Pool } from 'pg';
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });

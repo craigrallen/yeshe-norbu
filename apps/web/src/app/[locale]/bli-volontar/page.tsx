@@ -1,3 +1,13 @@
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const sv = locale === 'sv';
+  return {
+    title: sv ? 'Bli volontär' : 'Volunteer',
+    description: sv ? 'Hjälp till på Yeshin Norbu som volontär. Vi söker hjälp med reception, café, evenemang och mer.' : 'Help out at Yeshin Norbu as a volunteer. We need help with reception, café, events and more.',
+  };
+}
+
 export default function Page({ params: { locale } }: { params: { locale: string } }) {
   const sv = locale === 'sv';
   return (

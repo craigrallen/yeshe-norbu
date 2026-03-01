@@ -1,3 +1,13 @@
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const sv = locale === 'sv';
+  return {
+    title: sv ? 'Program' : 'Programme',
+    description: sv ? 'Utforska Yeshin Norbus program — kurser, retreats och drop-in i meditation, mindfulness, yoga och buddhism.' : 'Explore Yeshin Norbu programme — courses, retreats and drop-in in meditation, mindfulness, yoga and Buddhism.',
+  };
+}
+
 import { getTranslations } from 'next-intl/server';
 
 export default async function ProgramPage({

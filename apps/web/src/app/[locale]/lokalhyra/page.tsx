@@ -1,3 +1,13 @@
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const sv = locale === 'sv';
+  return {
+    title: sv ? 'Lokalhyra' : 'Venue Hire',
+    description: sv ? 'Hyr lokaler på Yeshin Norbu för retreats, workshops, yoga eller andra evenemang i centrala Stockholm.' : 'Hire spaces at Yeshin Norbu for retreats, workshops, yoga or other events in central Stockholm.',
+  };
+}
+
 export default function Page({ params: { locale } }: { params: { locale: string } }) {
   const sv = locale === 'sv';
   return (

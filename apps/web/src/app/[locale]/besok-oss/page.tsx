@@ -1,3 +1,13 @@
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const sv = locale === 'sv';
+  return {
+    title: sv ? 'Besök oss' : 'Visit Us',
+    description: sv ? 'Hitta till Yeshin Norbu på Roslagsgatan 62 i Stockholm. Öppettider, vägbeskrivning och praktisk information.' : 'Find Yeshin Norbu at Roslagsgatan 62 in Stockholm. Opening hours, directions and practical information.',
+  };
+}
+
 export default function Page({ params: { locale } }: { params: { locale: string } }) {
   const sv = locale === 'sv';
   return (

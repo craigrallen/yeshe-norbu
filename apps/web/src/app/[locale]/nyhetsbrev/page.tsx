@@ -1,3 +1,13 @@
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const sv = locale === 'sv';
+  return {
+    title: sv ? 'Nyhetsbrev' : 'Newsletter',
+    description: sv ? 'Prenumerera på Yeshin Norbus nyhetsbrev och få uppdateringar om kurser, retreats och evenemang.' : 'Subscribe to Yeshin Norbu newsletter for updates on courses, retreats and events.',
+  };
+}
+
 export default function Page({ params: { locale } }: { params: { locale: string } }) {
   const sv = locale === 'sv';
   return (
