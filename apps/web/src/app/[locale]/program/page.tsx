@@ -12,6 +12,30 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   };
 }
 
+const tracks = [
+  {
+    slug: 'buddhism',
+    titleSv: 'Buddhism',
+    titleEn: 'Buddhism',
+    descSv: 'Kurser, retreater och gruppraktik i tibetansk buddhistisk filosofi för både nybörjare och erfarna utövare.',
+    descEn: 'Courses, retreats and group practice in Tibetan Buddhist philosophy for both beginners and experienced practitioners.',
+  },
+  {
+    slug: 'mindfulness',
+    titleSv: 'Mindfulness',
+    titleEn: 'Mindfulness',
+    descSv: 'Mindfulness och medkänsla som verktyg för inre välmående, fokus och emotionell balans i vardagen.',
+    descEn: 'Mindfulness and compassion as tools for inner wellbeing, focus and emotional balance in everyday life.',
+  },
+  {
+    slug: 'yoga',
+    titleSv: 'Yoga & Qigong',
+    titleEn: 'Yoga & Qigong',
+    descSv: 'Återhämtande klasser som stärker kroppen, förbättrar sömn och hjälper dig att landa i närvaro.',
+    descEn: 'Restorative classes that strengthen the body, improve sleep and help you settle into presence.',
+  },
+];
+
 export default async function ProgramPage({ params: { locale }, searchParams }: { params: { locale: string }; searchParams: { cat?: string } }) {
   const sv = locale === 'sv';
   const catFilter = searchParams.cat || '';
@@ -53,6 +77,16 @@ export default async function ProgramPage({ params: { locale }, searchParams }: 
       />
 
       <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="grid md:grid-cols-3 gap-4 mb-8">
+          {tracks.map((t) => (
+            <a key={t.slug} href={`/${locale}/program/${t.slug}`} className="block rounded-2xl border border-[#E8E4DE] bg-white p-6 hover:-translate-y-1 hover:shadow-lg transition-all">
+              <h3 className="font-serif text-2xl font-semibold text-charcoal mb-2">{sv ? t.titleSv : t.titleEn}</h3>
+              <p className="text-sm text-charcoal-light">{sv ? t.descSv : t.descEn}</p>
+              <span className="inline-block mt-4 text-brand-dark text-sm font-medium">{sv ? 'Läs mer →' : 'Read more →'}</span>
+            </a>
+          ))}
+        </div>
+
         <div className="flex gap-2 mb-8 flex-wrap">
           <a href={`/${locale}/program`} className={`px-4 py-2 rounded-full text-sm font-medium border ${!catFilter ? 'bg-[#E8B817] text-white border-[#E8B817]' : 'bg-white text-[#58595b] border-gray-200'}`}>
             {sv ? 'Alla kategorier' : 'All categories'}
@@ -69,11 +103,7 @@ export default async function ProgramPage({ params: { locale }, searchParams }: 
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {events.map((event: any, i: number) => (
-              <a
-                key={event.id}
-                href={`/${locale}/events/${event.slug}`}
-                className="block rounded-lg border border-border bg-white overflow-hidden hover:shadow-md transition-shadow"
-              >
+              <a key={event.id} href={`/${locale}/events/${event.slug}`} className="block rounded-lg border border-border bg-white overflow-hidden hover:shadow-md transition-shadow">
                 <img src={event.featured_image_url || (i % 2 === 0 ? '/events/wisdom-retreat.jpg' : '/events/geshe-sherab.jpg')} alt={sv ? event.title_sv : (event.title_en || event.title_sv)} className="w-full h-44 object-cover" />
                 <div className="p-5">
                   <p className="text-xs text-brand font-medium mb-1">{sv ? event.cat_sv : (event.cat_en || event.cat_sv)}</p>
