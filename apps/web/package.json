@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "@img/sharp-linuxmusl-x64": "0.34.5",
     "@types/nodemailer": "^7.0.11",
     "@types/pg": "^8.16.0",
     "@types/uuid": "^11.0.0",
@@ -23,8 +24,6 @@
     "jsonwebtoken": "^9.0.3",
     "next": "^15.5.10",
     "next-intl": "^3.11.0",
-    "node-addon-api": "^8.6.0",
-    "node-gyp": "^12.2.0",
     "nodemailer": "^8.0.1",
     "pg": "^8.19.0",
     "react": "^18.2.0",

@@ -1,6 +1,5 @@
 FROM node:20-alpine AS base
-# Cache bust: v2
-RUN apk add --no-cache python3 make g++ vips-dev
+# Cache bust: v3 - using prebuilt sharp binary, no vips-dev needed
 RUN corepack enable && corepack prepare pnpm@10.0.0 --activate
 
 FROM base AS deps
@@ -27,7 +26,6 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN apk add --no-cache vips
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
