@@ -53,7 +53,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
   return (
     <div>
       {/* HERO */}
-      <section className="relative min-h-[85vh] flex items-center overflow-hidden mt-[72px]">
+      <section className="relative min-h-[85vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img id="hero-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-seasonal="true" alt="" className="w-full h-full object-cover" />
         </div>

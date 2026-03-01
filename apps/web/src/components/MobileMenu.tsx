@@ -17,7 +17,7 @@ export function MobileMenu({ items, locale, loginLabel, logoutLabel, langLabel, 
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       <button
         onClick={() => setOpen(!open)}
         className="p-2 rounded-md text-primary hover:bg-gray-100 transition-colors"
