@@ -1,7 +1,7 @@
 FROM node:20-alpine AS base
-RUN corepack enable && corepack prepare pnpm@10.0.0 --activate
-# sharp/vips native deps needed in all build stages
+# Cache bust: v2
 RUN apk add --no-cache python3 make g++ vips-dev
+RUN corepack enable && corepack prepare pnpm@10.0.0 --activate
 
 FROM base AS deps
 WORKDIR /app
@@ -27,8 +27,6 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-
-# Only vips runtime lib needed (not -dev)
 RUN apk add --no-cache vips
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
@@ -45,9 +43,7 @@ COPY apps/web/docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
 USER nextjs
-
 EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
-
 CMD ["/docker-entrypoint.sh"]
