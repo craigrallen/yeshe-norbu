@@ -22,5 +22,21 @@
   "packageManager": "pnpm@9.1.0",
   "engines": {
     "node": ">=20.0.0"
+  },
+  "pnpm": {
+    "supportedArchitectures": {
+      "os": [
+        "current",
+        "linux"
+      ],
+      "cpu": [
+        "current",
+        "x64"
+      ],
+      "libc": [
+        "current",
+        "musl"
+      ]
+    }
   }
 }
