@@ -1,7 +1,23 @@
 import { getTranslations } from 'next-intl/server';
+import type { Metadata } from 'next';
 import { Pool } from 'pg';
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const sv = locale === 'sv';
+  return {
+    title: sv ? 'Yeshin Norbu Meditationscenter — Meditation i Stockholm' : 'Yeshin Norbu Meditation Centre — Meditation in Stockholm',
+    description: sv
+      ? 'Upptäck meditation, mindfulness, yoga och buddhistisk filosofi på Yeshin Norbu i centrala Stockholm. Kurser för alla nivåer.'
+      : 'Discover meditation, mindfulness, yoga and Buddhist philosophy at Yeshin Norbu in central Stockholm. Courses for all levels.',
+    openGraph: {
+      title: sv ? 'Yeshin Norbu Meditationscenter' : 'Yeshin Norbu Meditation Centre',
+      description: sv ? 'Meditation, mindfulness & buddhistisk filosofi i Stockholm' : 'Meditation, mindfulness & Buddhist philosophy in Stockholm',
+      images: [{ url: '/brand/church-01.jpg', width: 1200, height: 630 }],
+    },
+  };
+}
 
 export default async function HomePage({ params: { locale } }: { params: { locale: string } }) {
   const t = await getTranslations({ locale, namespace: 'home' });

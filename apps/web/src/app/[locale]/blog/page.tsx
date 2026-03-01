@@ -1,3 +1,15 @@
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const sv = locale === 'sv';
+  return {
+    title: sv ? 'Blogg' : 'Blog',
+    description: sv
+      ? 'Nyheter, reflektioner och inspiration från Yeshin Norbu Meditationscenter i Stockholm.'
+      : 'News, reflections and inspiration from Yeshin Norbu Meditation Centre in Stockholm.',
+  };
+}
+
 const posts = [
   { slug: 'fpmt-och-yeshe-norbu', title: 'FPMT och Yeshin Norbu', excerpt: 'Lär dig om FPMT och hur Yeshin Norbu i Stockholm är en del av detta globala andliga nätverk.', date: '28 feb 2026', category: 'Undervisning' },
   { slug: 'mindfulness-i-vardagen', title: 'Mindfulness i vardagen', excerpt: 'Fem konkreta mindfulnessövningar för dig som vill skapa mer närvaro i vardagen.', date: '28 feb 2026', category: 'Mindfulness' },

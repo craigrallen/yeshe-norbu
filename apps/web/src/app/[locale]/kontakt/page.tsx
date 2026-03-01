@@ -1,3 +1,15 @@
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const sv = locale === 'sv';
+  return {
+    title: sv ? 'Kontakt' : 'Contact',
+    description: sv
+      ? 'Kontakta Yeshin Norbu Meditationscenter. Roslagsgatan 62, Stockholm. Telefon: 08-55 008 575.'
+      : 'Contact Yeshin Norbu Meditation Centre. Roslagsgatan 62, Stockholm. Phone: 08-55 008 575.',
+  };
+}
+
 export default function Page({ params: { locale } }: { params: { locale: string } }) {
   const sv = locale === 'sv';
   return (

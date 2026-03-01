@@ -1,3 +1,15 @@
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const sv = locale === 'sv';
+  return {
+    title: sv ? 'Evenemang & Kurser' : 'Events & Courses',
+    description: sv
+      ? 'Se hela programmet med kurser, retreats och drop-in i meditation, mindfulness, yoga och buddhism på Yeshin Norbu.'
+      : 'Browse all courses, retreats and drop-in sessions in meditation, mindfulness, yoga and Buddhism at Yeshin Norbu.',
+  };
+}
+
 import { Pool } from 'pg';
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });

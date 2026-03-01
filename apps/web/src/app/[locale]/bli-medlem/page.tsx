@@ -1,3 +1,15 @@
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const sv = locale === 'sv';
+  return {
+    title: sv ? 'Bli medlem' : 'Become a Member',
+    description: sv
+      ? 'Bli medlem i Yeshin Norbu och få rabatter på kurser, nyhetsbrev och möjlighet att påverka centrets framtid.'
+      : 'Join Yeshin Norbu for course discounts, newsletters and a voice in the centre's future.',
+  };
+}
+
 export default async function BliMedlemPage({
   params: { locale },
 }: {

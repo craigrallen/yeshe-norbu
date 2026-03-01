@@ -1,3 +1,31 @@
+import type { Metadata } from 'next';
+import { EventJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd';
+
+const metaPool = new (require('pg').Pool)({ connectionString: process.env.DATABASE_URL });
+
+export async function generateMetadata({ params: { locale, slug } }: { params: { locale: string; slug: string } }): Promise<Metadata> {
+  const sv = locale === 'sv';
+  const { rows } = await metaPool.query(
+    `SELECT COALESCE(NULLIF(title_sv,''), title_en) as title, COALESCE(NULLIF(title_en,''), title_sv) as title_en,
+            COALESCE(NULLIF(description_sv,''), description_en) as desc_sv, COALESCE(NULLIF(description_en,''), description_sv) as desc_en,
+            featured_image_url, starts_at
+     FROM events WHERE slug = $1 LIMIT 1`, [slug]
+  );
+  const e = rows[0];
+  if (!e) return { title: 'Event' };
+  const title = sv ? e.title : e.title_en;
+  const desc = (sv ? e.desc_sv : e.desc_en || '').replace(/<[^>]+>/g, '').slice(0, 160);
+  return {
+    title,
+    description: desc || title,
+    openGraph: {
+      title, description: desc || title,
+      images: e.featured_image_url ? [{ url: e.featured_image_url }] : [{ url: '/brand/church-01.jpg' }],
+      type: 'article',
+    },
+  };
+}
+
 import { Pool } from 'pg';
 import { notFound } from 'next/navigation';
 import { getSession } from '@/lib/auth';

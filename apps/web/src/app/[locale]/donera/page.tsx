@@ -1,3 +1,15 @@
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const sv = locale === 'sv';
+  return {
+    title: sv ? 'Donera' : 'Donate',
+    description: sv
+      ? 'Stöd Yeshin Norbu Meditationscenter med en donation. Varje bidrag hjälper oss att fortsätta erbjuda meditation och mindfulness.'
+      : 'Support Yeshin Norbu Meditation Centre with a donation. Every contribution helps us continue offering meditation and mindfulness.',
+  };
+}
+
 import { getTranslations } from 'next-intl/server';
 
 export default async function DonatePage({

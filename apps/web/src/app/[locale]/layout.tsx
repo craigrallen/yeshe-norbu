@@ -8,15 +8,35 @@ import { getSession } from '@/lib/auth';
 import { createDb, userRoles } from '@yeshe/db';
 import { eq } from 'drizzle-orm';
 import '../globals.css';
+import { OrganizationJsonLd } from '@/components/seo/JsonLd';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
-  const t = await getTranslations({ locale, namespace: 'common' });
+  const sv = locale === 'sv';
+  const siteName = 'Yeshin Norbu Meditationscenter';
+  const tagline = sv ? 'Meditation, mindfulness & buddhistisk filosofi i Stockholm' : 'Meditation, mindfulness & Buddhist philosophy in Stockholm';
+  const description = sv
+    ? 'Yeshin Norbu erbjuder kurser i meditation, mindfulness, yoga och buddhistisk filosofi i hjärtat av Stockholm. Öppet för alla – nybörjare till avancerade.'
+    : 'Yeshin Norbu offers courses in meditation, mindfulness, yoga and Buddhist philosophy in the heart of Stockholm. Open to all – beginners to advanced.';
   return {
-    title: { default: `${t('siteName')} — ${t('tagline')}`, template: `%s | ${t('siteName')}` },
-    description: t('tagline'),
+    title: { default: `${siteName} — ${tagline}`, template: `%s | ${siteName}` },
+    description,
     metadataBase: new URL('https://yeshinnorbu.se'),
-    alternates: { canonical: '/', languages: { sv: '/sv', en: '/en' } },
-    openGraph: { siteName: t('siteName'), locale: locale === 'sv' ? 'sv_SE' : 'en_GB' },
+    alternates: { canonical: `/${locale}`, languages: { sv: '/sv', en: '/en' } },
+    openGraph: {
+      siteName,
+      locale: sv ? 'sv_SE' : 'en_GB',
+      type: 'website',
+      title: `${siteName} — ${tagline}`,
+      description,
+      images: [{ url: '/brand/church-01.jpg', width: 1200, height: 630, alt: siteName }],
+    },
+    twitter: { card: 'summary_large_image', title: `${siteName} — ${tagline}`, description, images: ['/brand/church-01.jpg'] },
+    keywords: sv
+      ? 'meditation stockholm, mindfulness, yoga, buddhism, meditationscenter, kurser meditation, retreat stockholm, FPMT'
+      : 'meditation stockholm, mindfulness, yoga, buddhism, meditation center, meditation courses, retreat stockholm, FPMT',
+    robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
+    icons: { icon: '/favicon.ico' },
+    verification: {},
   };
 }
 
@@ -26,6 +46,7 @@ export default async function LocaleLayout({ children, params: { locale } }: { c
   return (
     <html lang={locale}>
       <body className="min-h-screen bg-cream font-sans antialiased text-charcoal">
+        <OrganizationJsonLd />
         <NextIntlClientProvider messages={messages}>
           <Header locale={locale as Locale} />
           <main className="pt-[72px] overflow-x-hidden">{children}</main>

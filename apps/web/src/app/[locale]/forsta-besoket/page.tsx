@@ -1,3 +1,15 @@
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const sv = locale === 'sv';
+  return {
+    title: sv ? 'Ditt första besök' : 'Your First Visit',
+    description: sv
+      ? 'Välkommen till Yeshin Norbu! Allt du behöver veta inför ditt första besök — vad du kan förvänta dig, var vi finns och hur du hittar.'
+      : 'Welcome to Yeshin Norbu! Everything you need to know before your first visit — what to expect, where to find us and how to get here.',
+  };
+}
+
 export default function Page({ params: { locale } }: { params: { locale: string } }) {
   const sv = locale === 'sv';
   return (

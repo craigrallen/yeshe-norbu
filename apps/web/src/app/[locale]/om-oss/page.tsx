@@ -1,3 +1,15 @@
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const sv = locale === 'sv';
+  return {
+    title: sv ? 'Om oss' : 'About Us',
+    description: sv
+      ? 'Yeshin Norbu är ett ideellt meditationscenter i Stockholm, affilierat med FPMT. Vi erbjuder meditation, mindfulness och buddhistisk filosofi.'
+      : 'Yeshin Norbu is a non-profit meditation centre in Stockholm, affiliated with FPMT. We offer meditation, mindfulness and Buddhist philosophy.',
+  };
+}
+
 export default function Page({ params: { locale } }: { params: { locale: string } }) {
   const sv = locale === 'sv';
   return (
