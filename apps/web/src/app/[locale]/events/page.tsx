@@ -28,13 +28,7 @@ export default async function EventsPage({ params: { locale }, searchParams }: {
   let query = `
     SELECT e.id, e.slug, e.title_sv, e.title_en, e.starts_at, e.ends_at, e.venue, e.featured_image_url, e.is_online,
            ec.name_sv as cat_sv, ec.name_en as cat_en, ec.slug as cat_slug,
-           COALESCE(
-             (SELECT json_agg(json_build_object('slug', ac.slug, 'name_sv', ac.name_sv, 'name_en', ac.name_en))
-              FROM event_category_assignments eca
-              JOIN event_categories ac ON eca.category_id = ac.id
-              WHERE eca.event_id = e.id),
-             '[]'::json
-           ) as extra_cats
+           '[]'::json as extra_cats
     FROM events e
     LEFT JOIN event_categories ec ON e.category_id = ec.id
     WHERE e.published = true
