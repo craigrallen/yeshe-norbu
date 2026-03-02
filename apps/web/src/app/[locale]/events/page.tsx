@@ -1,3 +1,4 @@
+import { PageHero } from '@/components/PageHero';
 import type { Metadata } from 'next';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -61,14 +62,10 @@ export default async function EventsPage({ params: { locale }, searchParams }: {
 
   return (
     <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A]">
-      <div className="bg-[#58595b] text-white py-16 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{sv ? 'Evenemang & Retreatter' : 'Events & Retreats'}</h1>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            {sv ? 'Välkommen till våra meditationskvällar, studiedagar och retreatter i Stockholm.' : 'Join us for meditation evenings, study days and retreats in Stockholm.'}
-          </p>
-        </div>
-      </div>
+      <PageHero
+        title={sv ? 'Evenemang & Retreatter' : 'Events & Retreats'}
+        subtitle={sv ? 'Välkommen till våra meditationskvällar, studiedagar och retreatter i Stockholm.' : 'Join us for meditation evenings, study days and retreats in Stockholm.'}
+      />
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Filters */}

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { PageHero } from '@/components/PageHero';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const sv = locale === 'sv';
@@ -11,12 +12,14 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default function Page({ params: { locale } }: { params: { locale: string } }) {
   const sv = locale === 'sv';
   return (
-    <div className="pt-[72px]">
-      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <h1 className="font-serif text-4xl lg:text-5xl font-bold text-charcoal dark:text-[#E8E4DE] mb-6">{sv ? 'Nyhetsbrev' : 'Newsletter'}</h1>
-        <div className="gold-bar mb-8" />
-        <div className="prose prose-lg text-charcoal-light leading-relaxed whitespace-pre-line">
-          {sv ? `Håll dig uppdaterad med det senaste från Yeshin Norbu. Prenumerera på vårt nyhetsbrev för att få information om kommande evenemang, kurser och nyheter.` : `Stay updated with the latest from Yeshin Norbu. Subscribe to our newsletter for information about upcoming events, courses and news.`}
+    <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A]">
+      <PageHero
+        title={sv ? 'Nyhetsbrev' : 'Newsletter'}
+        subtitle={sv ? 'Håll dig uppdaterad med det senaste från Yeshin Norbu' : 'Stay updated with the latest from Yeshin Norbu'}
+      />
+      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+        <div className="prose prose-lg dark:prose-invert text-charcoal-light dark:text-[#C0BAB0] leading-relaxed">
+          <p>{sv ? 'Prenumerera på vårt nyhetsbrev för att få information om kommande evenemang, kurser och nyheter.' : 'Subscribe to our newsletter for information about upcoming events, courses and news.'}</p>
         </div>
       </section>
     </div>

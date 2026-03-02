@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { headers } from 'next/headers';
 import { locales, type Locale } from '@/i18n';
 import { MobileMenu } from '@/components/MobileMenu';
+import { NavItemDropdown } from '@/components/NavDropdown';
 import { getSession } from '@/lib/auth';
 import { createDb, userRoles } from '@yeshe/db';
 import { eq } from 'drizzle-orm';
@@ -103,13 +104,29 @@ async function Header({ locale }: { locale: Locale }) {
   }
 
   const navItems = [
-    { href: `/${locale}/program`, label: sv ? 'Program' : 'Programme' },
+    { href: `/${locale}/program`, label: sv ? 'Program' : 'Programme', children: [
+      { href: `/${locale}/program/buddhism`, label: sv ? 'Buddhism' : 'Buddhism' },
+      { href: `/${locale}/program/mindfulness`, label: sv ? 'Mindfulness' : 'Mindfulness' },
+      { href: `/${locale}/program/yoga`, label: sv ? 'Yoga & Qigong' : 'Yoga & Qigong' },
+      { href: `/${locale}/events`, label: sv ? 'Kalender' : 'Calendar' },
+    ]},
     { href: `/${locale}/events`, label: sv ? 'Evenemang' : 'Events' },
-    { href: `/${locale}/om-oss`, label: sv ? 'Om oss' : 'About' },
-    { href: `/${locale}/stod-oss`, label: sv ? 'Stöd oss' : 'Support' },
-    { href: `/${locale}/besok-oss`, label: sv ? 'Besök oss' : 'Visit' },
+    { href: `/${locale}/om-oss`, label: sv ? 'Om oss' : 'About', children: [
+      { href: `/${locale}/om-oss`, label: sv ? 'Om oss' : 'About Us' },
+      { href: `/${locale}/om-oss#teachers`, label: sv ? 'Våra lärare' : 'Our Teachers' },
+      { href: `/${locale}/kontakt`, label: sv ? 'Kontakt' : 'Contact' },
+    ]},
+    { href: `/${locale}/stod-oss`, label: sv ? 'Stöd oss' : 'Support', children: [
+      { href: `/${locale}/bli-medlem`, label: sv ? 'Bli medlem' : 'Become a Member' },
+      { href: `/${locale}/donera`, label: sv ? 'Donera' : 'Donate' },
+      { href: `/${locale}/bli-volontar`, label: sv ? 'Bli volontär' : 'Volunteer' },
+      { href: `/${locale}/lokalhyra`, label: sv ? 'Lokalhyra' : 'Venue Hire' },
+    ]},
+    { href: `/${locale}/besok-oss`, label: sv ? 'Besök oss' : 'Visit', children: [
+      { href: `/${locale}/forsta-besoket`, label: sv ? 'Första besöket' : 'First Visit' },
+      { href: `/${locale}/besok-oss`, label: sv ? 'Besök oss' : 'Visit Us' },
+    ]},
     { href: `/${locale}/blog`, label: sv ? 'Blogg' : 'Blog' },
-    { href: `/${locale}/kontakt`, label: sv ? 'Kontakt' : 'Contact' },
   ];
 
   return (
@@ -120,9 +137,7 @@ async function Header({ locale }: { locale: Locale }) {
         </a>
         <nav className="hidden lg:flex items-center gap-7" aria-label="Main">
           {navItems.map((item) => (
-            <a key={item.href} href={item.href} className="text-[14px] font-medium text-charcoal dark:text-[#E8E4DE] hover:text-brand-dark transition-colors tracking-wide">
-              {item.label}
-            </a>
+            <NavItemDropdown key={item.href} item={item} />
           ))}
           <ThemeToggle />
           <a href={locale === 'sv' ? '/en' : '/sv'} className="text-xs text-charcoal-light dark:text-[#A0A0A0] hover:text-charcoal dark:hover:text-[#E8E4DE] border border-[#E8E4DE] dark:border-[#3D3D3D] rounded px-2.5 py-1 tracking-wide">

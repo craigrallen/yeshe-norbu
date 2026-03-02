@@ -1,3 +1,4 @@
+import { PageHero } from '@/components/PageHero';
 import { Pool } from 'pg';
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
@@ -56,7 +57,7 @@ export default async function CalendarPage({ params: { locale }, searchParams }:
 
   return (
     <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A]">
-      <div className="bg-[#58595b] text-white py-12 px-4"><div className="max-w-5xl mx-auto text-center"><h1 className="text-4xl font-bold">{sv ? 'Kalender' : 'Calendar'}</h1></div></div>
+      <PageHero title={sv ? 'Kalender' : 'Calendar'} />
 
       <div className="max-w-5xl mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-6">

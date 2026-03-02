@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { PageHero } from '@/components/PageHero';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const sv = locale === 'sv';
@@ -19,13 +20,18 @@ export default async function DonatePage({
 }) {
   const t = await getTranslations({ locale, namespace: 'donate' });
 
+  const sv = locale === 'sv';
   return (
-    <div className="max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold text-primary mb-4">{t('title')}</h1>
-      <p className="text-base text-muted mb-8">{t('description')}</p>
-
-      {/* Donation widget - client component */}
-      <DonationForm locale={locale as 'sv' | 'en'} />
+    <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A]">
+      <PageHero
+        title={t('title')}
+        subtitle={sv ? 'Stöd Yeshin Norbu med en donation' : 'Support Yeshin Norbu with a donation'}
+      />
+      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-2xl mx-auto">
+        <p className="text-base text-charcoal-light dark:text-[#C0BAB0] mb-8">{t('description')}</p>
+        {/* Donation widget - client component */}
+        <DonationForm locale={locale as 'sv' | 'en'} />
+      </section>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { PageHero } from '@/components/PageHero';
 import type { Metadata } from 'next';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -35,12 +36,10 @@ export default async function ShopPage({ params: { locale }, searchParams }: { p
 
   return (
     <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A]">
-      <div className="bg-[#58595b] text-white py-16 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{sv ? 'Butik' : 'Shop'}</h1>
-          <p className="text-lg text-gray-300">{sv ? 'Böcker, kursmaterial och tillbehör' : 'Books, course materials and accessories'}</p>
-        </div>
-      </div>
+      <PageHero
+        title={sv ? 'Butik' : 'Shop'}
+        subtitle={sv ? 'Böcker, kursmaterial och tillbehör' : 'Books, course materials and accessories'}
+      />
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex flex-wrap gap-2 mb-6">
