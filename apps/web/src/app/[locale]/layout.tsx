@@ -10,8 +10,12 @@ import { createDb, userRoles } from '@yeshe/db';
 import { eq } from 'drizzle-orm';
 import '../globals.css';
 import { OrganizationJsonLd } from '@/components/seo/JsonLd';
+import { Pool } from 'pg';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { CookieConsent } from '@/components/CookieConsent';
+import { BackToTop } from '@/components/BackToTop';
+import { AnnouncementBanner } from '@/components/AnnouncementBanner';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const sv = locale === 'sv';
@@ -54,16 +58,36 @@ export default async function LocaleLayout({ children, params: { locale } }: { c
     <html lang={locale} suppressHydrationWarning>
       <body className={`min-h-screen font-sans antialiased ${isAdmin ? 'bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100' : 'bg-cream dark:bg-[#1A1A1A] text-charcoal dark:text-[#E8E4DE]'}`}>
         {!isAdmin && <OrganizationJsonLd />}
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-white focus:text-gray-900 focus:rounded focus:shadow-lg focus:text-sm focus:font-medium">
+          Skip to content
+        </a>
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
+            {!isAdmin && <AnnouncementBannerServer locale={locale as Locale} />}
             {!isAdmin && <Header locale={locale as Locale} />}
-            <main className={isAdmin ? '' : 'pt-[72px] overflow-x-hidden'}>{children}</main>
+            <main id="main-content" className={isAdmin ? '' : 'pt-[72px] overflow-x-hidden'}>{children}</main>
             {!isAdmin && <Footer locale={locale as Locale} />}
+            {!isAdmin && <CookieConsent />}
+            {!isAdmin && <BackToTop />}
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>
   );
+}
+
+async function AnnouncementBannerServer({ locale }: { locale: Locale }) {
+  try {
+    const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+    const { rows } = await pool.query(`SELECT value FROM app_settings WHERE key = 'announcement' LIMIT 1`);
+    if (!rows.length) return null;
+    const data = rows[0].value;
+    const obj = typeof data === 'string' ? JSON.parse(data) : data;
+    if (!obj?.enabled || !obj?.text) return null;
+    return <AnnouncementBanner text={obj.text} color={obj.color || '#E8B817'} />;
+  } catch {
+    return null;
+  }
 }
 
 async function Header({ locale }: { locale: Locale }) {

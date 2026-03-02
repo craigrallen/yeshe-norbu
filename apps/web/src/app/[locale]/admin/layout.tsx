@@ -1,4 +1,5 @@
 import { Pool } from 'pg';
+import { AdminSidebar } from '@/components/AdminSidebar';
 import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth';
 import { SiteIcon } from '@/components/site-icon';
@@ -25,34 +26,9 @@ const adminNav: NavItem[] = [
   { href: '/admin/pages', label: 'Sidor', labelEn: 'Pages', icon: 'blog' as any, adminOnly: true },
   { href: '/admin/media', label: 'Media', labelEn: 'Media', icon: 'blog' as any },
   { href: '/admin/settings', label: 'Inställningar', labelEn: 'Settings', icon: 'settings', adminOnly: true },
+  { href: '/admin/audit-log', label: 'Aktivitetslogg', labelEn: 'Audit Log', icon: 'book' as any, adminOnly: true },
 ];
 
-function SidebarItem({ item, locale, sv }: { item: NavItem; locale: string; sv: boolean }) {
-  if (item.children) {
-    return (
-      <div>
-        <div className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider text-xs mt-3">
-          <SiteIcon name={item.icon} className="w-4 h-4" />
-          <span>{sv ? item.label : item.labelEn}</span>
-        </div>
-        <div className="ml-4 space-y-0.5">
-          {item.children.map((child) => (
-            <a key={child.href} href={`/${locale}${child.href}`} className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white transition-colors">
-              <SiteIcon name={child.icon} className="w-4 h-4" />
-              <span>{sv ? child.label : child.labelEn}</span>
-            </a>
-          ))}
-        </div>
-      </div>
-    );
-  }
-  return (
-    <a href={`/${locale}${item.href}`} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white transition-colors">
-      <SiteIcon name={item.icon} className="w-4 h-4" />
-      <span>{sv ? item.label : item.labelEn}</span>
-    </a>
-  );
-}
 
 export default async function AdminLayout({ children, params: { locale } }: { children: React.ReactNode; params: { locale: string } }) {
   const sv = locale === 'sv';
@@ -107,7 +83,7 @@ export default async function AdminLayout({ children, params: { locale } }: { ch
 
       <div className="flex">
         <aside className="w-56 min-h-screen bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 pt-6 hidden md:block shrink-0">
-          <nav className="px-3 space-y-0.5">{filteredNav.map((item) => <SidebarItem key={item.href + (item.children ? '-group' : '')} item={item} locale={locale} sv={sv} />)}</nav>
+          <AdminSidebar nav={filteredNav as any} locale={locale} sv={sv} />
         </aside>
         <main className="flex-1 min-w-0 overflow-x-auto">{children}</main>
       </div>

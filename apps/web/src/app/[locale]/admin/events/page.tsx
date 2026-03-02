@@ -1,6 +1,10 @@
 import { createDb, events, eventCategories } from '@yeshe/db';
+import { Pool } from 'pg';
+import { EventsBulkActions } from './EventsBulkActions';
 import { desc, eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 function slugify(s: string) {
   return (s || '')
@@ -61,6 +65,16 @@ async function deleteEvent(formData: FormData) {
   revalidatePath('/en/admin/events');
 }
 
+
+async function bulkDelete(formData: FormData) {
+  'use server';
+  const ids = formData.getAll('ids').map(String).filter(Boolean);
+  if (!ids.length) return;
+  await pool.query(`DELETE FROM events WHERE id = ANY($1::uuid[])`, [ids]);
+  revalidatePath('/sv/admin/events');
+  revalidatePath('/en/admin/events');
+}
+
 export default async function AdminEvents({ params: { locale } }: { params: { locale: string } }) {
   const sv = locale === 'sv';
   const db = createDb(process.env.DATABASE_URL!);
@@ -100,54 +114,8 @@ export default async function AdminEvents({ params: { locale } }: { params: { lo
         </form>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[980px]">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Titel' : 'Title'}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Datum' : 'Date'}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Plats' : 'Venue'}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{sv ? 'Kategori' : 'Category'}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th className="px-6 py-3"></th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {rows.map((e) => (
-                <tr key={e.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm">
-                    <a href={`/${locale}/admin/events/${e.id}`} className="font-medium text-blue-600 hover:underline">{sv ? e.titleSv : e.titleEn}</a>
-                    <div className="text-xs text-gray-400">/{e.slug}</div>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{new Date(e.startsAt).toLocaleString('sv-SE')}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{e.venue || '—'}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{(sv ? e.categoryNameSv : e.categoryNameEn) || '—'}</td>
-                  <td className="px-6 py-4">
-                    <span className={'px-2 py-1 text-xs rounded-full font-medium ' + (e.published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800')}>
-                      {e.published ? (sv ? 'Publicerad' : 'Published') : (sv ? 'Utkast' : 'Draft')}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex gap-2 justify-end">
-                      <form action={togglePublish}>
-                        <input type="hidden" name="id" value={e.id} />
-                        <input type="hidden" name="next" value={(!e.published).toString()} />
-                        <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">{e.published ? (sv ? 'Avpublicera' : 'Unpublish') : (sv ? 'Publicera' : 'Publish')}</button>
-                      </form>
-                      <form action={deleteEvent}>
-                        <input type="hidden" name="id" value={e.id} />
-                        <button className="text-red-600 hover:text-red-800 text-sm">{sv ? 'Ta bort' : 'Delete'}</button>
-                      </form>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-              {rows.length === 0 && <tr><td colSpan={6} className="px-6 py-12 text-center text-gray-400">{sv ? 'Inga evenemang ännu' : 'No events yet'}</td></tr>}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <EventsBulkActions rows={rows} locale={locale} sv={sv} togglePublish={togglePublish} deleteEvent={deleteEvent} bulkDelete={bulkDelete} />
+
     </div>
   );
 }
