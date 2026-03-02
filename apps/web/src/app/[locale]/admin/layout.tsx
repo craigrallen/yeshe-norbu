@@ -2,6 +2,7 @@ import { Pool } from 'pg';
 import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth';
 import { SiteIcon } from '@/components/site-icon';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
@@ -30,13 +31,13 @@ function SidebarItem({ item, locale, sv }: { item: NavItem; locale: string; sv: 
   if (item.children) {
     return (
       <div>
-        <div className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-500 uppercase tracking-wider text-xs mt-3">
+        <div className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider text-xs mt-3">
           <SiteIcon name={item.icon} className="w-4 h-4" />
           <span>{sv ? item.label : item.labelEn}</span>
         </div>
         <div className="ml-4 space-y-0.5">
           {item.children.map((child) => (
-            <a key={child.href} href={`/${locale}${child.href}`} className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+            <a key={child.href} href={`/${locale}${child.href}`} className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white transition-colors">
               <SiteIcon name={child.icon} className="w-4 h-4" />
               <span>{sv ? child.label : child.labelEn}</span>
             </a>
@@ -46,7 +47,7 @@ function SidebarItem({ item, locale, sv }: { item: NavItem; locale: string; sv: 
     );
   }
   return (
-    <a href={`/${locale}${item.href}`} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+    <a href={`/${locale}${item.href}`} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white transition-colors">
       <SiteIcon name={item.icon} className="w-4 h-4" />
       <span>{sv ? item.label : item.labelEn}</span>
     </a>
@@ -78,8 +79,8 @@ export default async function AdminLayout({ children, params: { locale } }: { ch
   const mobileNav = filteredNav.flatMap(item => item.children ? item.children : [item]);
 
   return (
-    <div className="min-h-screen bg-gray-50 -mt-8 -mx-4 sm:-mx-6 lg:-mx-8">
-      <div className="bg-gray-900 text-white px-4 md:px-6 py-3 flex justify-between items-center">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="bg-gray-900 dark:bg-gray-950 text-white px-4 md:px-6 py-3 flex justify-between items-center">
         <div className="flex items-center gap-2 md:gap-3 min-w-0">
           <span className="text-xs md:text-sm font-medium text-gray-400 truncate">Admin</span>
           <span className="text-gray-600 hidden md:inline">|</span>
@@ -87,15 +88,16 @@ export default async function AdminLayout({ children, params: { locale } }: { ch
           {!isAdmin && <span className="ml-2 text-xs px-2 py-0.5 bg-blue-800 rounded-full text-blue-200">{userRole}</span>}
         </div>
         <div className="flex items-center gap-3">
+          <ThemeToggle className="text-gray-400 hover:text-white dark:text-gray-400 dark:hover:text-white" />
           <a href={`/${locale}`} className="text-xs text-gray-400 hover:text-white whitespace-nowrap">{sv ? '← Sajten' : '← Site'}</a>
           <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#E8B817] flex items-center justify-center text-xs md:text-sm font-bold shrink-0 text-white">A</div>
         </div>
       </div>
 
-      <div className="md:hidden bg-white border-b border-gray-200 px-3 py-2 overflow-x-auto">
+      <div className="md:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-3 py-2 overflow-x-auto">
         <div className="flex gap-1 min-w-max">
           {mobileNav.map((item) => (
-            <a key={item.href} href={`/${locale}${item.href}`} className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-700 hover:bg-gray-100 whitespace-nowrap">
+            <a key={item.href} href={`/${locale}${item.href}`} className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 whitespace-nowrap">
               <SiteIcon name={item.icon} className="w-3.5 h-3.5" />
               <span>{sv ? item.label : item.labelEn}</span>
             </a>
@@ -104,7 +106,7 @@ export default async function AdminLayout({ children, params: { locale } }: { ch
       </div>
 
       <div className="flex">
-        <aside className="w-56 min-h-screen bg-white border-r border-gray-200 pt-6 hidden md:block shrink-0">
+        <aside className="w-56 min-h-screen bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 pt-6 hidden md:block shrink-0">
           <nav className="px-3 space-y-0.5">{filteredNav.map((item) => <SidebarItem key={item.href + (item.children ? '-group' : '')} item={item} locale={locale} sv={sv} />)}</nav>
         </aside>
         <main className="flex-1 min-w-0 overflow-x-auto">{children}</main>

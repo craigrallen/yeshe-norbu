@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { headers } from 'next/headers';
 import { locales, type Locale } from '@/i18n';
 import { MobileMenu } from '@/components/MobileMenu';
 import { getSession } from '@/lib/auth';
@@ -45,15 +46,19 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function LocaleLayout({ children, params: { locale } }: { children: React.ReactNode; params: { locale: string } }) {
   if (!locales.includes(locale as Locale)) notFound();
   const messages = await getMessages();
+  const headersList = headers();
+  const pathname = headersList.get('x-next-url') || headersList.get('x-invoke-path') || '';
+  const isAdmin = pathname.includes('/admin');
+
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className="min-h-screen bg-cream dark:bg-[#1A1A1A] font-sans antialiased text-charcoal dark:text-[#E8E4DE]">
-        <OrganizationJsonLd />
+      <body className={`min-h-screen font-sans antialiased ${isAdmin ? 'bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100' : 'bg-cream dark:bg-[#1A1A1A] text-charcoal dark:text-[#E8E4DE]'}`}>
+        {!isAdmin && <OrganizationJsonLd />}
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
-            <Header locale={locale as Locale} />
-            <main className="pt-[72px] overflow-x-hidden">{children}</main>
-            <Footer locale={locale as Locale} />
+            {!isAdmin && <Header locale={locale as Locale} />}
+            <main className={isAdmin ? '' : 'pt-[72px] overflow-x-hidden'}>{children}</main>
+            {!isAdmin && <Footer locale={locale as Locale} />}
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

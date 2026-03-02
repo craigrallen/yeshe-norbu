@@ -31,7 +31,10 @@ export default function middleware(request: NextRequest) {
     }
   }
 
-  return intlMiddleware(request);
+  const response = intlMiddleware(request);
+  // Pass pathname to server components for layout detection (e.g. admin)
+  response.headers.set('x-next-url', pathname);
+  return response;
 }
 
 export const config = {

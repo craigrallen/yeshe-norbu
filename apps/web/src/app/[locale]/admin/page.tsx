@@ -108,13 +108,13 @@ export default async function AdminDashboard({ params: { locale }, searchParams 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-500 text-sm mt-1">{sv ? 'Data från databasen i realtid.' : 'Real-time data from the database.'}</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+        <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">{sv ? 'Data från databasen i realtid.' : 'Real-time data from the database.'}</p>
       </div>
 
-      <div className="bg-white rounded-xl border p-5">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-700 p-5">
         <form className="flex items-center gap-2 flex-wrap">
-          <input name="q" defaultValue={q} placeholder={sv ? 'Global sök: användare, order, event, produkt...' : 'Global search: user, order, event, product...'} className="w-[420px] max-w-full border rounded-lg px-3 py-2 text-sm" />
+          <input name="q" defaultValue={q} placeholder={sv ? 'Global sök: användare, order, event, produkt...' : 'Global search: user, order, event, product...'} className="w-[420px] max-w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-700 dark:text-gray-100" />
           <button className="px-4 py-2 rounded-lg bg-[#58595b] text-white text-sm">{sv ? 'Sök' : 'Search'}</button>
           {q && <a href={`/${locale}/admin`} className="text-sm text-gray-500 hover:underline">{sv ? 'Rensa' : 'Clear'}</a>}
         </form>
@@ -122,43 +122,43 @@ export default async function AdminDashboard({ params: { locale }, searchParams 
 
       {q && search && (
         <div className="grid lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-xl border p-4"><h3 className="font-semibold mb-2">{sv ? 'Användare' : 'Users'} ({search.users.length})</h3>{search.users.map((u:any)=><a key={u.id} href={`/${locale}/admin/users/${u.id}`} className="block text-sm text-blue-600 hover:underline py-0.5">{u.first_name} {u.last_name} · {u.email}</a>)}{search.users.length===0&&<p className="text-sm text-gray-400">{sv?'Inga träffar':'No matches'}</p>}</div>
-          <div className="bg-white rounded-xl border p-4"><h3 className="font-semibold mb-2">{sv ? 'Ordrar' : 'Orders'} ({search.orders.length})</h3>{search.orders.map((o:any)=><a key={o.id} href={`/${locale}/admin/orders/${o.id}`} className="block text-sm text-blue-600 hover:underline py-0.5">#{o.order_number} · {Math.round(Number(o.total_sek))} kr</a>)}{search.orders.length===0&&<p className="text-sm text-gray-400">{sv?'Inga träffar':'No matches'}</p>}</div>
-          <div className="bg-white rounded-xl border p-4"><h3 className="font-semibold mb-2">{sv ? 'Evenemang' : 'Events'} ({search.events.length})</h3>{search.events.map((e:any)=><a key={e.id} href={`/${locale}/admin/events/${e.id}`} className="block text-sm text-blue-600 hover:underline py-0.5">{sv?e.title_sv:e.title_en}</a>)}{search.events.length===0&&<p className="text-sm text-gray-400">{sv?'Inga träffar':'No matches'}</p>}</div>
-          <div className="bg-white rounded-xl border p-4"><h3 className="font-semibold mb-2">{sv ? 'Produkter' : 'Products'} ({search.products.length})</h3>{search.products.map((p:any)=><a key={p.id} href={`/${locale}/admin/products?q=${encodeURIComponent(p.slug)}`} className="block text-sm text-blue-600 hover:underline py-0.5">{sv?p.name_sv:p.name_en} · {Math.round(Number(p.price_sek))} kr</a>)}{search.products.length===0&&<p className="text-sm text-gray-400">{sv?'Inga träffar':'No matches'}</p>}</div>
+          <div className="bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-700 p-4"><h3 className="font-semibold dark:text-white mb-2">{sv ? 'Användare' : 'Users'} ({search.users.length})</h3>{search.users.map((u:any)=><a key={u.id} href={`/${locale}/admin/users/${u.id}`} className="block text-sm text-blue-600 hover:underline py-0.5">{u.first_name} {u.last_name} · {u.email}</a>)}{search.users.length===0&&<p className="text-sm text-gray-400">{sv?'Inga träffar':'No matches'}</p>}</div>
+          <div className="bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-700 p-4"><h3 className="font-semibold dark:text-white mb-2">{sv ? 'Ordrar' : 'Orders'} ({search.orders.length})</h3>{search.orders.map((o:any)=><a key={o.id} href={`/${locale}/admin/orders/${o.id}`} className="block text-sm text-blue-600 hover:underline py-0.5">#{o.order_number} · {Math.round(Number(o.total_sek))} kr</a>)}{search.orders.length===0&&<p className="text-sm text-gray-400">{sv?'Inga träffar':'No matches'}</p>}</div>
+          <div className="bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-700 p-4"><h3 className="font-semibold dark:text-white mb-2">{sv ? 'Evenemang' : 'Events'} ({search.events.length})</h3>{search.events.map((e:any)=><a key={e.id} href={`/${locale}/admin/events/${e.id}`} className="block text-sm text-blue-600 hover:underline py-0.5">{sv?e.title_sv:e.title_en}</a>)}{search.events.length===0&&<p className="text-sm text-gray-400">{sv?'Inga träffar':'No matches'}</p>}</div>
+          <div className="bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-700 p-4"><h3 className="font-semibold dark:text-white mb-2">{sv ? 'Produkter' : 'Products'} ({search.products.length})</h3>{search.products.map((p:any)=><a key={p.id} href={`/${locale}/admin/products?q=${encodeURIComponent(p.slug)}`} className="block text-sm text-blue-600 hover:underline py-0.5">{sv?p.name_sv:p.name_en} · {Math.round(Number(p.price_sek))} kr</a>)}{search.products.length===0&&<p className="text-sm text-gray-400">{sv?'Inga träffar':'No matches'}</p>}</div>
         </div>
       )}
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4"><p className="text-3xl font-bold text-blue-900">{memberCount.count}</p><p className="text-sm text-blue-700">{sv ? 'Aktiva medlemmar' : 'Active members'}</p></div>
-        <div className="bg-green-50 border border-green-200 rounded-xl p-4"><p className="text-3xl font-bold text-green-900">{eventCount.count}</p><p className="text-sm text-green-700">{sv ? 'Kommande evenemang' : 'Upcoming events'}</p></div>
-        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4"><p className="text-3xl font-bold text-yellow-900">{orderCount.count}</p><p className="text-sm text-yellow-700">{sv ? 'Ordrar (30 dagar)' : 'Orders (30 days)'}</p></div>
-        <div className="bg-purple-50 border border-purple-200 rounded-xl p-4"><p className="text-3xl font-bold text-purple-900">{userCount.count}</p><p className="text-sm text-purple-700">{sv ? 'Totalt användare' : 'Total users'}</p></div>
+        <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-xl p-4"><p className="text-3xl font-bold text-blue-900 dark:text-blue-100">{memberCount.count}</p><p className="text-sm text-blue-700 dark:text-blue-300">{sv ? 'Aktiva medlemmar' : 'Active members'}</p></div>
+        <div className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-xl p-4"><p className="text-3xl font-bold text-green-900 dark:text-green-100">{eventCount.count}</p><p className="text-sm text-green-700 dark:text-green-300">{sv ? 'Kommande evenemang' : 'Upcoming events'}</p></div>
+        <div className="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4"><p className="text-3xl font-bold text-yellow-900 dark:text-yellow-100">{orderCount.count}</p><p className="text-sm text-yellow-700 dark:text-yellow-300">{sv ? 'Ordrar (30 dagar)' : 'Orders (30 days)'}</p></div>
+        <div className="bg-purple-50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-800 rounded-xl p-4"><p className="text-3xl font-bold text-purple-900 dark:text-purple-100">{userCount.count}</p><p className="text-sm text-purple-700 dark:text-purple-300">{sv ? 'Totalt användare' : 'Total users'}</p></div>
       </div>
 
-      <div className="bg-white rounded-xl border p-5">
-        <h2 className="font-semibold text-gray-900 mb-3">{sv ? 'Commerce datakvalitet' : 'Commerce Data Quality'}</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-700 p-5">
+        <h2 className="font-semibold text-gray-900 dark:text-white mb-3">{sv ? 'Commerce datakvalitet' : 'Commerce Data Quality'}</h2>
         <div className="grid md:grid-cols-3 gap-3 mb-4">
-          <div className="rounded-lg border bg-gray-50 px-4 py-3"><p className="text-xs text-gray-500 uppercase">{sv ? 'Länkade ordrar' : 'Linked Orders'}</p><p className="text-xl font-semibold">{linkedOrders.count}</p></div>
-          <div className="rounded-lg border bg-gray-50 px-4 py-3"><p className="text-xs text-gray-500 uppercase">Payments</p><p className="text-xl font-semibold">{paymentCount.count}</p></div>
-          <div className="rounded-lg border bg-gray-50 px-4 py-3"><p className="text-xs text-gray-500 uppercase">Order Items</p><p className="text-xl font-semibold">{itemCount.count}</p></div>
+          <div className="rounded-lg border dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3"><p className="text-xs text-gray-500 dark:text-gray-400 uppercase">{sv ? 'Länkade ordrar' : 'Linked Orders'}</p><p className="text-xl font-semibold dark:text-gray-100">{linkedOrders.count}</p></div>
+          <div className="rounded-lg border dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3"><p className="text-xs text-gray-500 dark:text-gray-400 uppercase">Payments</p><p className="text-xl font-semibold dark:text-gray-100">{paymentCount.count}</p></div>
+          <div className="rounded-lg border dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3"><p className="text-xs text-gray-500 dark:text-gray-400 uppercase">Order Items</p><p className="text-xl font-semibold dark:text-gray-100">{itemCount.count}</p></div>
         </div>
         <form action={runStripeSync} className="flex items-center gap-2">
-          <input type="number" name="limit" defaultValue={500} min={10} max={5000} className="w-28 border rounded-lg px-3 py-2 text-sm" />
+          <input type="number" name="limit" defaultValue={500} min={10} max={5000} className="w-28 border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-700 dark:text-gray-100" />
           <button className="px-4 py-2 rounded-lg bg-[#58595b] text-white text-sm font-medium hover:bg-[#444]">{sv ? 'Synka Stripe nu' : 'Sync Stripe now'}</button>
-          <span className="text-xs text-gray-500">{sv ? 'Läser charges från Stripe API och lägger in saknade betalningar.' : 'Reads charges from Stripe API and inserts missing payments.'}</span>
+          <span className="text-xs text-gray-500 dark:text-gray-400">{sv ? 'Läser charges från Stripe API och lägger in saknade betalningar.' : 'Reads charges from Stripe API and inserts missing payments.'}</span>
         </form>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center"><h2 className="font-semibold text-gray-900">{sv ? 'Senaste ordrar' : 'Recent Orders'}</h2><a href={`/${locale}/admin/orders`} className="text-sm text-blue-600 hover:underline">{sv ? 'Visa alla' : 'View all'}</a></div>
-          <table className="w-full"><tbody className="divide-y divide-gray-50">{recentOrders.map((o) => (<tr key={o.id} className="hover:bg-gray-50"><td className="px-6 py-3 text-sm text-gray-500">#{o.orderNumber}</td><td className="px-6 py-3 text-sm text-gray-900">{o.firstName} {o.lastName}</td><td className="px-6 py-3 text-sm text-gray-600">{Math.round(Number(o.totalSek))} kr</td><td className="px-6 py-3 text-sm font-medium">{statusMap[o.status] || o.status}</td></tr>))}</tbody></table>
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center"><h2 className="font-semibold text-gray-900 dark:text-white">{sv ? 'Senaste ordrar' : 'Recent Orders'}</h2><a href={`/${locale}/admin/orders`} className="text-sm text-blue-600 hover:underline">{sv ? 'Visa alla' : 'View all'}</a></div>
+          <table className="w-full"><tbody className="divide-y divide-gray-50 dark:divide-gray-700">{recentOrders.map((o) => (<tr key={o.id} className="hover:bg-gray-50 dark:hover:bg-gray-700"><td className="px-6 py-3 text-sm text-gray-500 dark:text-gray-400">#{o.orderNumber}</td><td className="px-6 py-3 text-sm text-gray-900 dark:text-gray-100">{o.firstName} {o.lastName}</td><td className="px-6 py-3 text-sm text-gray-600 dark:text-gray-300">{Math.round(Number(o.totalSek))} kr</td><td className="px-6 py-3 text-sm font-medium dark:text-gray-200">{statusMap[o.status] || o.status}</td></tr>))}</tbody></table>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center"><h2 className="font-semibold text-gray-900">{sv ? 'Kommande evenemang' : 'Upcoming Events'}</h2><a href={`/${locale}/admin/events`} className="text-sm text-blue-600 hover:underline">{sv ? 'Visa alla' : 'View all'}</a></div>
-          <div className="divide-y divide-gray-50">{upcomingEvents.map((e) => (<div key={e.id} className="px-6 py-3 flex justify-between items-center hover:bg-gray-50"><div><p className="text-sm font-medium text-gray-900">{sv ? e.titleSv : e.titleEn}</p><p className="text-xs text-gray-500">{e.venue || ''}</p></div><p className="text-sm text-gray-500">{new Date(e.startsAt).toLocaleDateString('sv-SE')}</p></div>))}</div>
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center"><h2 className="font-semibold text-gray-900 dark:text-white">{sv ? 'Kommande evenemang' : 'Upcoming Events'}</h2><a href={`/${locale}/admin/events`} className="text-sm text-blue-600 hover:underline">{sv ? 'Visa alla' : 'View all'}</a></div>
+          <div className="divide-y divide-gray-50 dark:divide-gray-700">{upcomingEvents.map((e) => (<div key={e.id} className="px-6 py-3 flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-700"><div><p className="text-sm font-medium text-gray-900 dark:text-gray-100">{sv ? e.titleSv : e.titleEn}</p><p className="text-xs text-gray-500 dark:text-gray-400">{e.venue || ''}</p></div><p className="text-sm text-gray-500 dark:text-gray-400">{new Date(e.startsAt).toLocaleDateString('sv-SE')}</p></div>))}</div>
         </div>
       </div>
     </div>
