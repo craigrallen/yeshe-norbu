@@ -31,8 +31,11 @@ export default function middleware(request: NextRequest) {
     }
   }
 
-  const response = intlMiddleware(request);
-  // Pass pathname to server components for layout detection (e.g. admin)
+  // Clone request with pathname header so server components can detect admin routes
+  const reqHeaders = new Headers(request.headers);
+  reqHeaders.set('x-next-url', pathname);
+  const modifiedRequest = new NextRequest(request.url, { headers: reqHeaders });
+  const response = intlMiddleware(modifiedRequest);
   response.headers.set('x-next-url', pathname);
   return response;
 }

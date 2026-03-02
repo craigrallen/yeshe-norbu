@@ -51,7 +51,7 @@ export default async function LocaleLayout({ children, params: { locale } }: { c
   if (!locales.includes(locale as Locale)) notFound();
   const messages = await getMessages();
   const headersList = headers();
-  const pathname = headersList.get('x-next-url') || headersList.get('x-invoke-path') || '';
+  const pathname = headersList.get('x-next-url') || '';
   const isAdmin = pathname.includes('/admin');
 
   return (

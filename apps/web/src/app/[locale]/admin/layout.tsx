@@ -56,6 +56,15 @@ export default async function AdminLayout({ children, params: { locale } }: { ch
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Hide public site header/footer and reset padding when in admin */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        body > div > header.fixed { display: none !important; }
+        body > div > footer { display: none !important; }
+        #main-content { padding-top: 0 !important; }
+        body > div > .announcement-banner { display: none !important; }
+        body > div > .cookie-consent { display: none !important; }
+        body > div > .back-to-top { display: none !important; }
+      ` }} />
       <div className="bg-gray-900 dark:bg-gray-950 text-white px-4 md:px-6 py-3 flex justify-between items-center">
         <div className="flex items-center gap-2 md:gap-3 min-w-0">
           <span className="text-xs md:text-sm font-medium text-gray-400 truncate">Admin</span>
@@ -85,7 +94,7 @@ export default async function AdminLayout({ children, params: { locale } }: { ch
         <aside className="w-56 min-h-screen bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 pt-6 hidden md:block shrink-0">
           <AdminSidebar nav={filteredNav as any} locale={locale} sv={sv} />
         </aside>
-        <main className="flex-1 min-w-0 overflow-x-auto">{children}</main>
+        <main className="flex-1 min-w-0 overflow-x-auto p-6">{children}</main>
       </div>
     </div>
   );
