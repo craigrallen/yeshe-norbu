@@ -66,7 +66,7 @@ export default async function LocaleLayout({ children, params: { locale } }: { c
           <ThemeProvider>
             {!isAdmin && <AnnouncementBannerServer locale={locale as Locale} />}
             {!isAdmin && <Header locale={locale as Locale} />}
-            <main id="main-content" className={isAdmin ? '' : 'pt-[72px] overflow-x-hidden'}>{children}</main>
+            <main id="main-content" className={isAdmin ? '' : 'overflow-x-hidden'} style={isAdmin ? undefined : { paddingTop: 'calc(72px + var(--banner-height, 0px))' }}>{children}</main>
             {!isAdmin && <Footer locale={locale as Locale} />}
             {!isAdmin && <CookieConsent />}
             {!isAdmin && <BackToTop />}
@@ -130,7 +130,7 @@ async function Header({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-[#1A1A1A] border-b border-[#E8E4DE] dark:border-[#3D3D3D] transition-all">
+    <header className="fixed left-0 right-0 z-50 bg-white dark:bg-[#1A1A1A] border-b border-[#E8E4DE] dark:border-[#3D3D3D] transition-all" style={{ top: "var(--banner-height, 0px)" }}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-[72px]">
         <a href={`/${locale}`} className="flex items-center">
           <img src="/brand/logo-no-tag.png" alt="Yeshin Norbu" className="h-10 w-auto dark:brightness-[10]" />

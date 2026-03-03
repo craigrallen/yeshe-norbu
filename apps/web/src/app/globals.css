@@ -10,6 +10,7 @@ html, body {
 }
 
 :root {
+  --banner-height: 0px;
   --gold: #E8B817;
   --gold-dark: #C49A0E;
   --gold-light: #F5D660;
