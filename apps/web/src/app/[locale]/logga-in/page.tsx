@@ -29,24 +29,24 @@ export default function LoggaInPage({ params: { locale } }: { params: { locale: 
   }
 
   return (
-    <div className="min-h-screen bg-[#F9F7F4] flex items-center justify-center px-4 py-16">
+    <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A] flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="text-4xl mb-3"></div>
-          <h1 className="text-3xl font-bold text-[#58595b]">{sv ? 'Logga in' : 'Sign in'}</h1>
-          <p className="text-gray-500 mt-2">{sv ? 'Välkommen tillbaka' : 'Welcome back'}</p>
+          <h1 className="text-3xl font-bold text-[#58595b] dark:text-[#E8E4DE]">{sv ? 'Logga in' : 'Sign in'}</h1>
+          <p className="text-gray-500 dark:text-[#A0A0A0] mt-2">{sv ? 'Välkommen tillbaka' : 'Welcome back'}</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div className="bg-white dark:bg-[#2A2A2A] rounded-2xl shadow-sm border border-gray-100 dark:border-[#3D3D3D] p-8">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-[#E8E4DE] mb-1">
                 {sv ? 'E-post eller användarnamn' : 'Email or username'}
               </label>
               <input
                 type="text" value={identifier} onChange={e => setIdentifier(e.target.value)}
                 required autoComplete="username"
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00] focus:border-transparent"
+                className="w-full border border-gray-300 dark:border-[#3D3D3D] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00] focus:border-transparent"
                 placeholder={sv ? 'din@email.se eller användarnamn' : 'your@email.com or username'}
               />
             </div>
@@ -60,7 +60,7 @@ export default function LoggaInPage({ params: { locale } }: { params: { locale: 
               <input
                 type="password" value={password} onChange={e => setPassword(e.target.value)}
                 required autoComplete="current-password"
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00] focus:border-transparent"
+                className="w-full border border-gray-300 dark:border-[#3D3D3D] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00] focus:border-transparent"
                 placeholder="••••••••"
               />
             </div>
@@ -79,7 +79,7 @@ export default function LoggaInPage({ params: { locale } }: { params: { locale: 
             </button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-gray-500">
+          <div className="mt-6 text-center text-sm text-gray-500 dark:text-[#A0A0A0]">
             {sv ? 'Har du inget konto?' : "Don't have an account?"}{' '}
             <Link href={`/${locale}/registrera`} className="text-[#f5ca00] font-medium hover:underline">
               {sv ? 'Skapa konto' : 'Create account'}
@@ -87,7 +87,7 @@ export default function LoggaInPage({ params: { locale } }: { params: { locale: 
           </div>
         </div>
 
-        <p className="text-center text-xs text-gray-400 mt-6">
+        <p className="text-center text-xs text-gray-400 dark:text-[#8F8F8F] mt-6">
           {sv
             ? 'Om du hade ett konto på gamla webbplatsen, använd "Glömt lösenord" för att komma åt ditt konto.'
             : 'If you had an account on the old site, use "Forgot password" to access your account.'}

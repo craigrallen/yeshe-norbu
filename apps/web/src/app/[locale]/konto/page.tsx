@@ -30,8 +30,8 @@ export default function KontoPage({ params: { locale } }: { params: { locale: st
   }
 
   if (loading) return (
-    <div className="min-h-screen bg-[#F9F7F4] flex items-center justify-center">
-      <div className="text-gray-400">{sv ? 'Laddar...' : 'Loading...'}</div>
+    <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A] flex items-center justify-center">
+      <div className="text-gray-400 dark:text-[#8F8F8F]">{sv ? 'Laddar...' : 'Loading...'}</div>
     </div>
   );
 
@@ -43,32 +43,32 @@ export default function KontoPage({ params: { locale } }: { params: { locale: st
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-[#58595b]">
+            <h1 className="text-3xl font-bold text-[#58595b] dark:text-[#E8E4DE]">
               {sv ? `Hej, ${user.first_name}!` : `Hello, ${user.first_name}!`}
             </h1>
-            <p className="text-gray-500 mt-1">{user.email}</p>
+            <p className="text-gray-500 dark:text-[#A0A0A0] mt-1">{user.email}</p>
           </div>
           <button onClick={handleLogout}
-            className="text-sm text-gray-500 hover:text-red-500 border border-gray-200 px-4 py-2 rounded-xl transition-colors">
+            className="text-sm text-gray-500 dark:text-[#A0A0A0] hover:text-red-500 border border-gray-200 dark:border-[#3D3D3D] px-4 py-2 rounded-xl transition-colors">
             {sv ? 'Logga ut' : 'Sign out'}
           </button>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Membership card */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h2 className="font-semibold text-[#58595b] mb-4">{sv ? 'Ditt medlemskap' : 'Your membership'}</h2>
+          <div className="bg-white dark:bg-[#2A2A2A] rounded-2xl shadow-sm border border-gray-100 dark:border-[#3D3D3D] p-6">
+            <h2 className="font-semibold text-[#58595b] dark:text-[#E8E4DE] mb-4">{sv ? 'Ditt medlemskap' : 'Your membership'}</h2>
             {user.membership_status === 'active' ? (
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <span className="w-2 h-2 rounded-full bg-green-400 inline-block"></span>
                   <span className="text-green-600 font-medium text-sm">{sv ? 'Aktivt' : 'Active'}</span>
                 </div>
-                <p className="text-xl font-bold text-[#58595b]">{user.plan_name}</p>
+                <p className="text-xl font-bold text-[#58595b] dark:text-[#E8E4DE]">{user.plan_name}</p>
               </div>
             ) : (
               <div>
-                <p className="text-gray-500 text-sm mb-4">{sv ? 'Du har inget aktivt medlemskap.' : 'No active membership.'}</p>
+                <p className="text-gray-500 dark:text-[#A0A0A0] text-sm mb-4">{sv ? 'Du har inget aktivt medlemskap.' : 'No active membership.'}</p>
                 <Link href={`/${locale}/bli-medlem`}
                   className="inline-block bg-[#f5ca00] text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-[#d4af00] transition-colors text-sm">
                   {sv ? 'Bli medlem' : 'Become a member'}
@@ -78,8 +78,8 @@ export default function KontoPage({ params: { locale } }: { params: { locale: st
           </div>
 
           {/* Quick links */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h2 className="font-semibold text-[#58595b] mb-4">{sv ? 'Snabblänkar' : 'Quick links'}</h2>
+          <div className="bg-white dark:bg-[#2A2A2A] rounded-2xl shadow-sm border border-gray-100 dark:border-[#3D3D3D] p-6">
+            <h2 className="font-semibold text-[#58595b] dark:text-[#E8E4DE] mb-4">{sv ? 'Snabblänkar' : 'Quick links'}</h2>
             <div className="space-y-2">
               {[
                 { href: `/${locale}/events`, label: sv ? 'Kommande evenemang' : 'Upcoming events' },
@@ -88,7 +88,7 @@ export default function KontoPage({ params: { locale } }: { params: { locale: st
                 { href: `/${locale}/admin`, label: sv ? 'Adminpanel' : 'Admin panel' },
               ].map(link => (
                 <Link key={link.href} href={link.href}
-                  className="flex items-center gap-3 p-3 rounded-xl hover:bg-[#F9F7F4] transition-colors text-[#58595b]">
+                  className="flex items-center gap-3 p-3 rounded-xl hover:bg-[#F9F7F4] transition-colors text-[#58595b] dark:text-[#E8E4DE]">
                   {link.label}
                 </Link>
               ))}
@@ -96,19 +96,19 @@ export default function KontoPage({ params: { locale } }: { params: { locale: st
           </div>
 
           {/* Account info */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:col-span-2">
-            <h2 className="font-semibold text-[#58595b] mb-4">{sv ? 'Kontoinformation' : 'Account info'}</h2>
+          <div className="bg-white dark:bg-[#2A2A2A] rounded-2xl shadow-sm border border-gray-100 dark:border-[#3D3D3D] p-6 md:col-span-2">
+            <h2 className="font-semibold text-[#58595b] dark:text-[#E8E4DE] mb-4">{sv ? 'Kontoinformation' : 'Account info'}</h2>
             <div className="grid md:grid-cols-3 gap-4 text-sm">
               <div>
-                <p className="text-gray-400 mb-1">{sv ? 'Namn' : 'Name'}</p>
+                <p className="text-gray-400 dark:text-[#8F8F8F] mb-1">{sv ? 'Namn' : 'Name'}</p>
                 <p className="font-medium">{user.first_name} {user.last_name}</p>
               </div>
               <div>
-                <p className="text-gray-400 mb-1">{sv ? 'E-post' : 'Email'}</p>
+                <p className="text-gray-400 dark:text-[#8F8F8F] mb-1">{sv ? 'E-post' : 'Email'}</p>
                 <p className="font-medium">{user.email}</p>
               </div>
               <div>
-                <p className="text-gray-400 mb-1">{sv ? 'Språk' : 'Language'}</p>
+                <p className="text-gray-400 dark:text-[#8F8F8F] mb-1">{sv ? 'Språk' : 'Language'}</p>
                 <p className="font-medium">{user.locale === 'sv' ? 'Svenska' : 'English'}</p>
               </div>
             </div>

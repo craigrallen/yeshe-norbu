@@ -81,20 +81,20 @@ export default async function EventsPage({ params: { locale }, searchParams }: {
         {/* Filters */}
         <div className="flex flex-wrap gap-3 mb-6 items-center">
           <span className="text-sm text-gray-500 dark:text-[#A0A0A0]">{sv ? 'Filter:' : 'Filter:'}</span>
-          <a href={`/${locale}/events`} className={"px-3 py-1.5 rounded-full text-sm font-medium border " + (!catFilter && !showPast ? 'bg-[#58595b] text-white border-[#58595b]' : 'bg-white dark:bg-[#2A2A2A] text-gray-700 dark:text-[#E8E4DE] border-gray-200 dark:border-[#3D3D3D] hover:bg-gray-50 dark:hover:bg-[#333]')}>
+          <a href={`/${locale}/events`} className={"px-3 py-1.5 rounded-full text-sm font-medium border " + (!catFilter && !showPast ? 'bg-[#58595b] text-white border-[#58595b]' : 'bg-white dark:bg-[#2A2A2A] text-gray-700 dark:text-[#E8E4DE] border-gray-200 dark:border-[#3D3D3D] hover:bg-gray-50 dark:hover:bg-[#333333]')}>
             {sv ? 'Kommande' : 'Upcoming'}
           </a>
           {categories.map((c: any) => (
-            <a key={c.slug} href={`/${locale}/events?cat=${c.slug}`} className={"px-3 py-1.5 rounded-full text-sm font-medium border " + (catFilter === c.slug ? 'bg-[#58595b] text-white border-[#58595b]' : 'bg-white dark:bg-[#2A2A2A] text-gray-700 dark:text-[#E8E4DE] border-gray-200 dark:border-[#3D3D3D] hover:bg-gray-50 dark:hover:bg-[#333]')}>
+            <a key={c.slug} href={`/${locale}/events?cat=${c.slug}`} className={"px-3 py-1.5 rounded-full text-sm font-medium border " + (catFilter === c.slug ? 'bg-[#58595b] text-white border-[#58595b]' : 'bg-white dark:bg-[#2A2A2A] text-gray-700 dark:text-[#E8E4DE] border-gray-200 dark:border-[#3D3D3D] hover:bg-gray-50 dark:hover:bg-[#333333]')}>
               {sv ? c.name_sv : c.name_en}
             </a>
           ))}
-          <a href={`/${locale}/events?past=1`} className={"px-3 py-1.5 rounded-full text-sm font-medium border " + (showPast ? 'bg-[#58595b] text-white border-[#58595b]' : 'bg-white dark:bg-[#2A2A2A] text-gray-700 dark:text-[#E8E4DE] border-gray-200 dark:border-[#3D3D3D] hover:bg-gray-50 dark:hover:bg-[#333]')}>
+          <a href={`/${locale}/events?past=1`} className={"px-3 py-1.5 rounded-full text-sm font-medium border " + (showPast ? 'bg-[#58595b] text-white border-[#58595b]' : 'bg-white dark:bg-[#2A2A2A] text-gray-700 dark:text-[#E8E4DE] border-gray-200 dark:border-[#3D3D3D] hover:bg-gray-50 dark:hover:bg-[#333333]')}>
             {sv ? 'Tidigare' : 'Past'}
           </a>
           <span className="flex-1" />
           <a href={`/${locale}/calendar`} className="text-sm text-blue-600 hover:underline">{sv ? 'Kalendervy' : 'Calendar view'} &rarr;</a>
-          <a href="/api/events/ical" className="text-sm text-gray-500 hover:text-gray-700 border border-gray-200 rounded-lg px-3 py-1.5">
+          <a href="/api/events/ical" className="text-sm text-gray-500 dark:text-[#A0A0A0] hover:text-gray-700 border border-gray-200 dark:border-[#3D3D3D] rounded-lg px-3 py-1.5">
             {sv ? 'Exportera iCal' : 'Export iCal'}
           </a>
         </div>
@@ -102,7 +102,7 @@ export default async function EventsPage({ params: { locale }, searchParams }: {
         {featuredEvents.length > 0 && !showPast && !catFilter && (
           <section className="mb-8">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-xl font-semibold text-[#58595b]">{sv ? 'Utvalda evenemang' : 'Featured events'}</h2>
+              <h2 className="text-xl font-semibold text-[#58595b] dark:text-[#E8E4DE]">{sv ? 'Utvalda evenemang' : 'Featured events'}</h2>
               <a href={`/${locale}/events`} className="text-sm text-blue-600 hover:underline">{sv ? 'Visa alla' : 'Show all'} →</a>
             </div>
             <div className="grid md:grid-cols-3 gap-4">
@@ -119,7 +119,7 @@ export default async function EventsPage({ params: { locale }, searchParams }: {
           </section>
         )}
 
-        <div className="text-sm text-gray-400 mb-4">{events.length} {sv ? 'evenemang' : 'events'}</div>
+        <div className="text-sm text-gray-400 dark:text-[#8F8F8F] mb-4">{events.length} {sv ? 'evenemang' : 'events'}</div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map((event: any, i: number) => (
@@ -128,7 +128,7 @@ export default async function EventsPage({ params: { locale }, searchParams }: {
               <img src={event.featured_image_url || fallbackImage(i)} alt={sv ? event.title_sv : event.title_en} className="w-full h-44 object-cover" loading="lazy" />
               <div className="p-5 flex flex-col flex-1">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-semibold uppercase tracking-wide text-[#f5ca00] bg-[#FFF9EE] px-2 py-1 rounded-full">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-[#f5ca00] bg-[#FFF9EE] dark:bg-[#3A311A] px-2 py-1 rounded-full">
                     {(() => {
                       const primary = sv ? event.cat_sv : event.cat_en;
                       const extras: Array<{slug: string; name_sv: string; name_en: string}> = event.extra_cats || [];
@@ -136,7 +136,7 @@ export default async function EventsPage({ params: { locale }, searchParams }: {
                       return allCats.length > 0 ? allCats.join(' · ') : (sv ? 'Evenemang' : 'Event');
                     })()}
                   </span>
-                  {event.is_online && <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Online</span>}
+                  {event.is_online && <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">Online</span>}
                 </div>
                 <h2 className="font-bold text-[#58595b] dark:text-[#E8E4DE] text-lg mb-2 leading-snug">{sv ? event.title_sv : event.title_en}</h2>
                 <div className="text-sm text-gray-500 dark:text-[#A0A0A0] space-y-1 mb-4">
@@ -150,7 +150,7 @@ export default async function EventsPage({ params: { locale }, searchParams }: {
             </a>
           ))}
           {events.length === 0 && (
-            <p className="col-span-3 text-center text-gray-400 dark:text-[#A0A0A0] py-12">{sv ? 'Inga evenemang hittades' : 'No events found'}</p>
+            <p className="col-span-3 text-center text-gray-400 dark:text-[#8F8F8F] dark:text-[#A0A0A0] py-12">{sv ? 'Inga evenemang hittades' : 'No events found'}</p>
           )}
         </div>
       </div>

@@ -76,9 +76,9 @@ function CheckoutContent() {
 
   if (!item.amountSek) {
     return (
-      <div className="min-h-screen bg-[#F9F7F4] flex items-center justify-center">
+      <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-semibold text-[#58595b]">Ingen betalning vald</h1>
+          <h1 className="text-2xl font-semibold text-[#58595b] dark:text-[#E8E4DE]">Ingen betalning vald</h1>
           <button onClick={() => router.push('/')} className="mt-4 text-[#f5ca00] hover:underline">
             Tillbaka till startsidan
           </button>
@@ -92,70 +92,70 @@ function CheckoutContent() {
       <div className="max-w-2xl mx-auto px-4 py-16">
         {/* Header */}
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-[#58595b] mb-2">Kassa</h1>
-          <p className="text-gray-500">Säker betalning</p>
+          <h1 className="text-3xl font-bold text-[#58595b] dark:text-[#E8E4DE] mb-2">Kassa</h1>
+          <p className="text-gray-500 dark:text-[#A0A0A0]">Säker betalning</p>
         </div>
 
         {/* Order summary */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="font-semibold text-[#58595b] mb-4">Din beställning</h2>
+        <div className="bg-white dark:bg-[#2A2A2A] rounded-2xl shadow-sm border border-gray-100 dark:border-[#3D3D3D] p-6 mb-6">
+          <h2 className="font-semibold text-[#58595b] dark:text-[#E8E4DE] mb-4">Din beställning</h2>
           <div className="flex justify-between items-start">
             <div>
               <p className="font-medium">{item.name}</p>
-              {item.description && <p className="text-sm text-gray-500 mt-1">{item.description}</p>}
-              {item.quantity > 1 && <p className="text-sm text-gray-400">{item.quantity} × {item.amountSek} kr</p>}
+              {item.description && <p className="text-sm text-gray-500 dark:text-[#A0A0A0] mt-1">{item.description}</p>}
+              {item.quantity > 1 && <p className="text-sm text-gray-400 dark:text-[#8F8F8F]">{item.quantity} × {item.amountSek} kr</p>}
             </div>
             <p className="font-semibold text-lg">{total.toLocaleString('sv-SE')} kr</p>
           </div>
           <div className="border-t mt-4 pt-4 flex justify-between">
             <span className="font-semibold">Totalt</span>
-            <span className="font-bold text-xl text-[#58595b]">{total.toLocaleString('sv-SE')} kr</span>
+            <span className="font-bold text-xl text-[#58595b] dark:text-[#E8E4DE]">{total.toLocaleString('sv-SE')} kr</span>
           </div>
         </div>
 
         {/* Payment method selector */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="font-semibold text-[#58595b] mb-4">Välj betalmetod</h2>
+        <div className="bg-white dark:bg-[#2A2A2A] rounded-2xl shadow-sm border border-gray-100 dark:border-[#3D3D3D] p-6 mb-6">
+          <h2 className="font-semibold text-[#58595b] dark:text-[#E8E4DE] mb-4">Välj betalmetod</h2>
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={() => setMethod('stripe')}
               className={`p-4 rounded-xl border-2 transition-all text-center ${
-                method === 'stripe' ? 'border-[#f5ca00] bg-[#FFF9EE]' : 'border-gray-200 hover:border-gray-300'
+                method === 'stripe' ? 'border-[#f5ca00] bg-[#FFF9EE]' : 'border-gray-200 dark:border-[#3D3D3D] hover:border-gray-300 dark:border-[#3D3D3D]'
               }`}
             >
               <div className="text-2xl mb-1"></div>
               <div className="font-medium text-sm">Kort</div>
-              <div className="text-xs text-gray-400">Visa, Mastercard</div>
+              <div className="text-xs text-gray-400 dark:text-[#8F8F8F]">Visa, Mastercard</div>
             </button>
             <button
               onClick={() => setMethod('swish')}
               className={`p-4 rounded-xl border-2 transition-all text-center ${
-                method === 'swish' ? 'border-[#f5ca00] bg-[#FFF9EE]' : 'border-gray-200 hover:border-gray-300'
+                method === 'swish' ? 'border-[#f5ca00] bg-[#FFF9EE]' : 'border-gray-200 dark:border-[#3D3D3D] hover:border-gray-300 dark:border-[#3D3D3D]'
               }`}
             >
               <div className="text-2xl mb-1"></div>
               <div className="font-medium text-sm">Swish</div>
-              <div className="text-xs text-gray-400">Mobil betalning</div>
+              <div className="text-xs text-gray-400 dark:text-[#8F8F8F]">Mobil betalning</div>
             </button>
           </div>
         </div>
 
         {/* Payment form */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-white dark:bg-[#2A2A2A] rounded-2xl shadow-sm border border-gray-100 dark:border-[#3D3D3D] p-6">
           {method === 'stripe' ? (
             <div>
-              <h2 className="font-semibold text-[#58595b] mb-4">Kortbetalning</h2>
+              <h2 className="font-semibold text-[#58595b] dark:text-[#E8E4DE] mb-4">Kortbetalning</h2>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">E-postadress</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-[#E8E4DE] mb-1">E-postadress</label>
                 <input
                   type="email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   placeholder="din@email.se"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#f5ca00] focus:border-transparent"
+                  className="w-full border border-gray-300 dark:border-[#3D3D3D] rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#f5ca00] focus:border-transparent"
                 />
               </div>
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-sm text-gray-500 dark:text-[#A0A0A0] mb-4">
                 Du skickas till Stripes säkra betalningssida. Vi accepterar Visa, Mastercard, Apple Pay och Google Pay.
               </p>
               {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
@@ -166,14 +166,14 @@ function CheckoutContent() {
               >
                 {loading ? 'Behandlar...' : `Betala ${total.toLocaleString('sv-SE')} kr`}
               </button>
-              <p className="text-xs text-gray-400 text-center mt-3">Säker betalning via Stripe</p>
+              <p className="text-xs text-gray-400 dark:text-[#8F8F8F] text-center mt-3">Säker betalning via Stripe</p>
             </div>
           ) : swishData ? (
             <div className="text-center">
-              <h2 className="font-semibold text-[#58595b] mb-4">Swish-betalning</h2>
+              <h2 className="font-semibold text-[#58595b] dark:text-[#E8E4DE] mb-4">Swish-betalning</h2>
               <div className="bg-[#FFF9EE] rounded-xl p-6 mb-4">
                 <p className="text-sm text-gray-600 mb-2">Swishnummer:</p>
-                <p className="text-3xl font-bold text-[#58595b] mb-2">{swishData.swishNumber}</p>
+                <p className="text-3xl font-bold text-[#58595b] dark:text-[#E8E4DE] mb-2">{swishData.swishNumber}</p>
                 <p className="text-lg font-semibold">{swishData.amount.toLocaleString('sv-SE')} kr</p>
               </div>
               <a
@@ -182,23 +182,23 @@ function CheckoutContent() {
               >
                  Öppna Swish-appen
               </a>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-[#A0A0A0]">
                 Har du inte appen? Swisha manuellt till <strong>{swishData.swishNumber}</strong>
               </p>
             </div>
           ) : (
             <div>
-              <h2 className="font-semibold text-[#58595b] mb-4">Swish</h2>
+              <h2 className="font-semibold text-[#58595b] dark:text-[#E8E4DE] mb-4">Swish</h2>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Ditt mobilnummer</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-[#E8E4DE] mb-1">Ditt mobilnummer</label>
                 <input
                   type="tel"
                   value={phone}
                   onChange={e => setPhone(e.target.value)}
                   placeholder="07X XXX XX XX"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#f5ca00] focus:border-transparent"
+                  className="w-full border border-gray-300 dark:border-[#3D3D3D] rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#f5ca00] focus:border-transparent"
                 />
-                <p className="text-xs text-gray-400 mt-1">Det nummer du betalar med via Swish</p>
+                <p className="text-xs text-gray-400 dark:text-[#8F8F8F] mt-1">Det nummer du betalar med via Swish</p>
               </div>
               {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
               <button
@@ -218,7 +218,7 @@ function CheckoutContent() {
 
 export default function CheckoutPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#F9F7F4] flex items-center justify-center"><p>Laddar...</p></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A] flex items-center justify-center"><p>Laddar...</p></div>}>
       <CheckoutContent />
     </Suspense>
   );

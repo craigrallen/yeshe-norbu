@@ -29,41 +29,41 @@ export default function RegistreraPage({ params: { locale } }: { params: { local
   }
 
   return (
-    <div className="min-h-screen bg-[#F9F7F4] flex items-center justify-center px-4 py-16">
+    <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A] flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="text-4xl mb-3"></div>
-          <h1 className="text-3xl font-bold text-[#58595b]">{sv ? 'Skapa konto' : 'Create account'}</h1>
-          <p className="text-gray-500 mt-2">{sv ? 'Gå med i vår gemenskap' : 'Join our community'}</p>
+          <h1 className="text-3xl font-bold text-[#58595b] dark:text-[#E8E4DE]">{sv ? 'Skapa konto' : 'Create account'}</h1>
+          <p className="text-gray-500 dark:text-[#A0A0A0] mt-2">{sv ? 'Gå med i vår gemenskap' : 'Join our community'}</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div className="bg-white dark:bg-[#2A2A2A] rounded-2xl shadow-sm border border-gray-100 dark:border-[#3D3D3D] p-8">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{sv ? 'Förnamn' : 'First name'}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-[#E8E4DE] mb-1">{sv ? 'Förnamn' : 'First name'}</label>
                 <input type="text" value={form.firstName} onChange={set('firstName')} required
-                  className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00]"
+                  className="w-full border border-gray-300 dark:border-[#3D3D3D] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00]"
                   placeholder={sv ? 'Anna' : 'Anna'} />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{sv ? 'Efternamn' : 'Last name'}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-[#E8E4DE] mb-1">{sv ? 'Efternamn' : 'Last name'}</label>
                 <input type="text" value={form.lastName} onChange={set('lastName')}
-                  className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00]"
+                  className="w-full border border-gray-300 dark:border-[#3D3D3D] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00]"
                   placeholder={sv ? 'Svensson' : 'Svensson'} />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{sv ? 'E-postadress' : 'Email'}</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-[#E8E4DE] mb-1">{sv ? 'E-postadress' : 'Email'}</label>
               <input type="email" value={form.email} onChange={set('email')} required autoComplete="email"
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00]"
+                className="w-full border border-gray-300 dark:border-[#3D3D3D] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00]"
                 placeholder="din@email.se" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{sv ? 'Lösenord' : 'Password'}</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-[#E8E4DE] mb-1">{sv ? 'Lösenord' : 'Password'}</label>
               <input type="password" value={form.password} onChange={set('password')} required minLength={8}
                 autoComplete="new-password"
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00]"
+                className="w-full border border-gray-300 dark:border-[#3D3D3D] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#f5ca00]"
                 placeholder={sv ? 'Minst 8 tecken' : 'At least 8 characters'} />
             </div>
 
@@ -75,13 +75,13 @@ export default function RegistreraPage({ params: { locale } }: { params: { local
             </button>
           </form>
 
-          <p className="text-xs text-gray-400 text-center mt-4">
+          <p className="text-xs text-gray-400 dark:text-[#8F8F8F] text-center mt-4">
             {sv
               ? 'Genom att skapa ett konto godkänner du vår integritetspolicy och GDPR-regler.'
               : 'By creating an account you agree to our privacy policy and GDPR terms.'}
           </p>
 
-          <div className="mt-4 text-center text-sm text-gray-500">
+          <div className="mt-4 text-center text-sm text-gray-500 dark:text-[#A0A0A0]">
             {sv ? 'Har du redan ett konto?' : 'Already have an account?'}{' '}
             <Link href={`/${locale}/logga-in`} className="text-[#f5ca00] font-medium hover:underline">
               {sv ? 'Logga in' : 'Sign in'}

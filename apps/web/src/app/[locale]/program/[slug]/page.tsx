@@ -82,13 +82,13 @@ export default async function ProgramTrackPage({ params: { locale, slug } }: { p
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {events.map((event: any, i: number) => (
-              <a key={event.id} href={`/${locale}/events/${event.slug}`} className="block rounded-lg border border-border bg-white overflow-hidden hover:shadow-md transition-shadow">
+              <a key={event.id} href={`/${locale}/events/${event.slug}`} className="block rounded-lg border border-border bg-white dark:bg-[#2A2A2A] overflow-hidden hover:shadow-md transition-shadow">
                 <img src={event.featured_image_url || (i % 2 === 0 ? '/events/wisdom-retreat.jpg' : '/events/geshe-sherab.jpg')} alt={sv ? event.title_sv : (event.title_en || event.title_sv)} className="w-full h-44 object-cover" />
                 <div className="p-5">
                   <p className="text-xs text-brand font-medium mb-1">{sv ? event.cat_sv : (event.cat_en || event.cat_sv)}</p>
-                  <h3 className="text-base font-semibold text-primary mb-2">{sv ? event.title_sv : (event.title_en || event.title_sv)}</h3>
-                  <p className="text-sm text-muted">{new Date(event.starts_at).toLocaleDateString(sv ? 'sv-SE' : 'en-GB', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}</p>
-                  <p className="text-sm text-muted">{event.venue || 'Yeshin Norbu'}</p>
+                  <h3 className="text-base font-semibold text-primary dark:text-[#E8E4DE] mb-2">{sv ? event.title_sv : (event.title_en || event.title_sv)}</h3>
+                  <p className="text-sm text-muted dark:text-[#A0A0A0]">{new Date(event.starts_at).toLocaleDateString(sv ? 'sv-SE' : 'en-GB', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}</p>
+                  <p className="text-sm text-muted dark:text-[#A0A0A0]">{event.venue || 'Yeshin Norbu'}</p>
                 </div>
               </a>
             ))}
