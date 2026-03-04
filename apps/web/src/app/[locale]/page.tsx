@@ -20,14 +20,34 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 }
 
 export default async function HomePage({ params: { locale } }: { params: { locale: string } }) {
-  const t = await getTranslations({ locale, namespace: 'home' });
+  await getTranslations({ locale, namespace: 'home' });
   const sv = locale === 'sv';
 
-  const { rows: featuredSettingRows } = await pool.query("SELECT value FROM app_settings WHERE key='events.featured_ids' LIMIT 1");
-  const featuredIds: string[] = featuredSettingRows?.[0]?.value || [];
+  let featuredIds: string[] = [];
+  let upcomingEvents: any[] = [];
+  let plans: any[] = [];
 
-  const featuredEvents = featuredIds.length
-    ? (await pool.query(
+  try {
+    const { rows: featuredSettingRows } = await pool.query("SELECT value FROM app_settings WHERE key='events.featured_ids' LIMIT 1");
+    featuredIds = featuredSettingRows?.[0]?.value || [];
+
+    const featuredEvents = featuredIds.length
+      ? (await pool.query(
+        `SELECT e.id, e.slug,
+                COALESCE(NULLIF(e.title_sv,''), e.title_en) as title,
+                COALESCE(NULLIF(e.title_en,''), e.title_sv) as title_en,
+                e.starts_at, e.ends_at, e.venue, e.featured_image_url,
+                COALESCE(NULLIF(ec.name_sv,''), ec.name_en) as cat_sv,
+                COALESCE(NULLIF(ec.name_en,''), ec.name_sv) as cat_en
+         FROM events e
+         LEFT JOIN event_categories ec ON e.category_id = ec.id
+         WHERE e.published = true AND e.starts_at >= now() AND e.id = ANY($1::uuid[])
+         ORDER BY e.starts_at ASC LIMIT 3`,
+        [featuredIds]
+      )).rows
+      : [];
+
+    upcomingEvents = featuredEvents.length ? featuredEvents : (await pool.query(
       `SELECT e.id, e.slug,
               COALESCE(NULLIF(e.title_sv,''), e.title_en) as title,
               COALESCE(NULLIF(e.title_en,''), e.title_sv) as title_en,
@@ -36,29 +56,20 @@ export default async function HomePage({ params: { locale } }: { params: { local
               COALESCE(NULLIF(ec.name_en,''), ec.name_sv) as cat_en
        FROM events e
        LEFT JOIN event_categories ec ON e.category_id = ec.id
-       WHERE e.published = true AND e.starts_at >= now() AND e.id = ANY($1::uuid[])
-       ORDER BY e.starts_at ASC LIMIT 3`,
-      [featuredIds]
-    )).rows
-    : [];
+       WHERE e.published = true AND e.starts_at >= now()
+       ORDER BY e.starts_at ASC LIMIT 3`
+    )).rows;
 
-  const upcomingEvents = featuredEvents.length ? featuredEvents : (await pool.query(
-    `SELECT e.id, e.slug,
-            COALESCE(NULLIF(e.title_sv,''), e.title_en) as title,
-            COALESCE(NULLIF(e.title_en,''), e.title_sv) as title_en,
-            e.starts_at, e.ends_at, e.venue, e.featured_image_url,
-            COALESCE(NULLIF(ec.name_sv,''), ec.name_en) as cat_sv,
-            COALESCE(NULLIF(ec.name_en,''), ec.name_sv) as cat_en
-     FROM events e
-     LEFT JOIN event_categories ec ON e.category_id = ec.id
-     WHERE e.published = true AND e.starts_at >= now()
-     ORDER BY e.starts_at ASC LIMIT 3`
-  )).rows;
-
-  const { rows: plans } = await pool.query(
-    `SELECT id, slug, name_sv, name_en, price_sek, interval_months
-     FROM membership_plans WHERE active = true ORDER BY price_sek ASC`
-  );
+    const plansRes = await pool.query(
+      `SELECT id, slug, name_sv, name_en, price_sek, interval_months
+       FROM membership_plans WHERE active = true ORDER BY price_sek ASC`
+    );
+    plans = plansRes.rows;
+  } catch {
+    featuredIds = [];
+    upcomingEvents = [];
+    plans = [];
+  }
 
   const categories = [
     { title: 'Buddhism', titleEn: 'Buddhism', sub: 'Kurser · Retreats · Drop-in', subEn: 'Courses · Retreats · Drop-in', img: '/brand/buddhism.jpg', href: `/${locale}/program` },
@@ -131,7 +142,7 @@ fetch('/seasons/manifest.json').then(r=>r.json()).then(d=>{
         </div>
         <div className="grid gap-6 md:grid-cols-3">
           {upcomingEvents.map((e: any) => (
-            <a key={e.id} href={e.slug ? `/${locale}/events/${e.slug}` : `/${locale}/events`} className="bg-white rounded-2xl overflow-hidden border border-[#E8E4DE] hover:-translate-y-1 hover:shadow-xl transition-all block group">
+            <a key={e.id} href={e.slug ? `/${locale}/events/${e.slug}` : `/${locale}/events`} className="bg-white dark:bg-[#2A2A2A] rounded-2xl overflow-hidden border border-[#E8E4DE] dark:border-[#3D3D3D] hover:-translate-y-1 hover:shadow-xl transition-all block group">
               <div className="h-[200px] overflow-hidden relative">
                 <img src={e.featured_image_url || '/brand/courses.jpg'} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                 {featuredIds.includes(e.id) && <span className="absolute top-3 left-3 bg-brand text-charcoal text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-wider">{sv ? 'Utvald' : 'Featured'}</span>}
@@ -147,6 +158,9 @@ fetch('/seasons/manifest.json').then(r=>r.json()).then(d=>{
             </a>
           ))}
         </div>
+        {upcomingEvents.length === 0 && (
+          <p className="text-center text-charcoal-light dark:text-[#A0A0A0] py-10">{sv ? 'Inga kommande höjdpunkter just nu.' : 'No upcoming highlights at the moment.'}</p>
+        )}
         <div className="text-center mt-8">
           <a href={`/${locale}/events`} className="btn-outline">{sv ? 'Visa alla evenemang →' : 'View all events →'}</a>
         </div>

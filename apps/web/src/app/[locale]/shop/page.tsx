@@ -17,22 +17,30 @@ export default async function ShopPage({ params: { locale }, searchParams }: { p
   const sv = locale === 'sv';
   const catFilter = searchParams.cat || '';
 
-  let query = `SELECT id, slug, name_sv, name_en, price_sek, regular_price_sek, sale_price_sek, 
-               featured_image_url, categories, product_type, stock_status
-               FROM products WHERE published = true`;
-  const params: any[] = [];
+  let rows: any[] = [];
+  let cats: string[] = [];
 
-  if (catFilter) {
-    params.push(`%${catFilter}%`);
-    query += ` AND categories::text ILIKE $${params.length}`;
+  try {
+    let query = `SELECT id, slug, name_sv, name_en, price_sek, regular_price_sek, sale_price_sek, 
+                 featured_image_url, categories, product_type, stock_status
+                 FROM products WHERE published = true`;
+    const params: any[] = [];
+
+    if (catFilter) {
+      params.push(`%${catFilter}%`);
+      query += ` AND categories::text ILIKE $${params.length}`;
+    }
+
+    query += ' ORDER BY name_sv LIMIT 100';
+    const productsRes = await pool.query(query, params);
+    rows = productsRes.rows;
+
+    const allProdsRes = await pool.query("SELECT DISTINCT jsonb_array_elements_text(categories) as cat FROM products WHERE published = true ORDER BY cat");
+    cats = allProdsRes.rows.map((r: any) => r.cat).filter(Boolean);
+  } catch {
+    rows = [];
+    cats = [];
   }
-
-  query += ' ORDER BY name_sv LIMIT 100';
-  const { rows } = await pool.query(query, params);
-
-  // Get unique categories
-  const { rows: allProds } = await pool.query("SELECT DISTINCT jsonb_array_elements_text(categories) as cat FROM products WHERE published = true ORDER BY cat");
-  const cats = allProds.map((r: any) => r.cat).filter(Boolean);
 
   return (
     <div className="min-h-screen bg-[#F9F7F4] dark:bg-[#1A1A1A]">
@@ -43,12 +51,12 @@ export default async function ShopPage({ params: { locale }, searchParams }: { p
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex flex-wrap gap-2 mb-6">
-          <a href={`/${locale}/shop`} className={"px-3 py-1.5 rounded-full text-sm border " + (!catFilter ? 'bg-[#58595b] text-white' : 'bg-white text-gray-700 border-gray-200')}>
+          <a href={`/${locale}/shop`} className={"px-3 py-1.5 rounded-full text-sm border " + (!catFilter ? 'bg-[#58595b] text-white' : 'bg-white dark:bg-[#2A2A2A] text-gray-700 dark:text-[#E8E4DE] border-gray-200 dark:border-[#3D3D3D]')}>
             {sv ? 'Alla' : 'All'}
           </a>
           {cats.map((c: string) => (
             <a key={c} href={`/${locale}/shop?cat=${encodeURIComponent(c)}`}
-               className={"px-3 py-1.5 rounded-full text-sm border " + (catFilter === c ? 'bg-[#58595b] text-white' : 'bg-white text-gray-700 border-gray-200')}>
+               className={"px-3 py-1.5 rounded-full text-sm border " + (catFilter === c ? 'bg-[#58595b] text-white' : 'bg-white dark:bg-[#2A2A2A] text-gray-700 dark:text-[#E8E4DE] border-gray-200 dark:border-[#3D3D3D]')}>
               {c}
             </a>
           ))}
@@ -56,14 +64,14 @@ export default async function ShopPage({ params: { locale }, searchParams }: { p
 
         <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
           {rows.map((p: any) => (
-            <div key={p.id} className="bg-white rounded-xl border overflow-hidden hover:shadow-md transition-shadow">
+            <div key={p.id} className="bg-white dark:bg-[#2A2A2A] rounded-xl border dark:border-[#3D3D3D] overflow-hidden hover:shadow-md transition-shadow">
               {p.featured_image_url ? (
                 <img src={p.featured_image_url} alt={sv ? p.name_sv : p.name_en} className="w-full h-48 object-cover" loading="lazy" />
               ) : (
                 <div className="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-300 text-4xl"></div>
               )}
               <div className="p-4">
-                <h3 className="font-medium text-gray-900 text-sm mb-2 line-clamp-2">{sv ? p.name_sv : p.name_en}</h3>
+                <h3 className="font-medium text-gray-900 dark:text-[#E8E4DE] text-sm mb-2 line-clamp-2">{sv ? p.name_sv : p.name_en}</h3>
                 <div className="flex items-center justify-between">
                   {p.sale_price_sek ? (
                     <div>
@@ -71,14 +79,14 @@ export default async function ShopPage({ params: { locale }, searchParams }: { p
                       <span className="text-red-600 font-bold ml-2">{Math.round(Number(p.sale_price_sek))} kr</span>
                     </div>
                   ) : (
-                    <span className="font-bold text-gray-900">{Number(p.price_sek) > 0 ? `${Math.round(Number(p.price_sek))} kr` : (sv ? 'Gratis' : 'Free')}</span>
+                    <span className="font-bold text-gray-900 dark:text-[#E8E4DE]">{Number(p.price_sek) > 0 ? `${Math.round(Number(p.price_sek))} kr` : (sv ? 'Gratis' : 'Free')}</span>
                   )}
                   {p.stock_status === 'outofstock' && <span className="text-xs text-red-600">{sv ? 'Slut' : 'Sold out'}</span>}
                 </div>
               </div>
             </div>
           ))}
-          {rows.length === 0 && <p className="col-span-4 text-center text-gray-400 py-12">{sv ? 'Inga produkter' : 'No products'}</p>}
+          {rows.length === 0 && <p className="col-span-4 text-center text-gray-400 dark:text-[#A0A0A0] py-12">{sv ? 'Inga produkter' : 'No products'}</p>}
         </div>
       </div>
     </div>

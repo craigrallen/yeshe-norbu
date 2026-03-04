@@ -19,7 +19,12 @@ export async function generateMetadata({ params: { locale, slug } }: { params: {
 export default async function CmsPage({ params: { locale, slug } }: { params: { locale: string; slug: string } }) {
   const sv = locale === 'sv';
   const db = createDb(process.env.DATABASE_URL!);
-  const [p] = await db.select().from(pages).where(and(eq(pages.slug, slug), eq(pages.published, true))).limit(1);
+  let p: any;
+  try {
+    [p] = await db.select().from(pages).where(and(eq(pages.slug, slug), eq(pages.published, true))).limit(1);
+  } catch {
+    notFound();
+  }
   if (!p) notFound();
 
   const title = sv ? p.titleSv : p.titleEn;

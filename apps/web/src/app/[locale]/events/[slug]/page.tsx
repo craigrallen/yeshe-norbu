@@ -5,25 +5,29 @@ const metaPool = new (require('pg').Pool)({ connectionString: process.env.DATABA
 
 export async function generateMetadata({ params: { locale, slug } }: { params: { locale: string; slug: string } }): Promise<Metadata> {
   const sv = locale === 'sv';
-  const { rows } = await metaPool.query(
-    `SELECT COALESCE(NULLIF(title_sv,''), title_en) as title, COALESCE(NULLIF(title_en,''), title_sv) as title_en,
-            COALESCE(NULLIF(description_sv,''), description_en) as desc_sv, COALESCE(NULLIF(description_en,''), description_sv) as desc_en,
-            featured_image_url, starts_at
-     FROM events WHERE slug = $1 LIMIT 1`, [slug]
-  );
-  const e = rows[0];
-  if (!e) return { title: 'Event' };
-  const title = sv ? e.title : e.title_en;
-  const desc = (sv ? e.desc_sv : e.desc_en || '').replace(/<[^>]+>/g, '').slice(0, 160);
-  return {
-    title,
-    description: desc || title,
-    openGraph: {
-      title, description: desc || title,
-      images: e.featured_image_url ? [{ url: e.featured_image_url }] : [{ url: '/brand/church-01.jpg' }],
-      type: 'article',
-    },
-  };
+  try {
+    const { rows } = await metaPool.query(
+      `SELECT COALESCE(NULLIF(title_sv,''), title_en) as title, COALESCE(NULLIF(title_en,''), title_sv) as title_en,
+              COALESCE(NULLIF(description_sv,''), description_en) as desc_sv, COALESCE(NULLIF(description_en,''), description_sv) as desc_en,
+              featured_image_url, starts_at
+       FROM events WHERE slug = $1 LIMIT 1`, [slug]
+    );
+    const e = rows[0];
+    if (!e) return { title: 'Event' };
+    const title = sv ? e.title : e.title_en;
+    const desc = (sv ? e.desc_sv : e.desc_en || '').replace(/<[^>]+>/g, '').slice(0, 160);
+    return {
+      title,
+      description: desc || title,
+      openGraph: {
+        title, description: desc || title,
+        images: e.featured_image_url ? [{ url: e.featured_image_url }] : [{ url: '/brand/church-01.jpg' }],
+        type: 'article',
+      },
+    };
+  } catch {
+    return { title: 'Event' };
+  }
 }
 
 import { Pool } from 'pg';
@@ -35,32 +39,40 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 export default async function EventDetailPage({ params: { locale, slug } }: { params: { locale: string; slug: string } }) {
   const sv = locale === 'sv';
 
-  const { rows: [event] } = await pool.query(
-    `SELECT e.*, ec.name_sv as cat_sv, ec.name_en as cat_en,
-            v.name as venue_name, v.address as venue_address, v.city as venue_city,
-            o.name as org_name, o.email as org_email, o.phone as org_phone
-     FROM events e
-     LEFT JOIN event_categories ec ON e.category_id = ec.id
-     LEFT JOIN venues v ON e.venue_id = v.id
-     LEFT JOIN organizers o ON e.organizer_id = o.id
-     WHERE e.slug = $1 LIMIT 1`,
-    [slug]
-  );
-
-  if (!event) notFound();
-
-  const { rows: tickets } = await pool.query(
-    'SELECT * FROM ticket_types WHERE event_id = $1 ORDER BY price_sek', [event.id]
-  );
-
-  const session = await getSession();
+  let event: any = null;
+  let tickets: any[] = [];
   let hasActiveMembership = false;
-  if (session?.userId) {
-    const { rows } = await pool.query(
-      `SELECT 1 FROM memberships WHERE user_id = $1 AND status = 'active' AND current_period_end >= now() LIMIT 1`,
-      [session.userId]
+
+  try {
+    const eventRes = await pool.query(
+      `SELECT e.*, ec.name_sv as cat_sv, ec.name_en as cat_en,
+              v.name as venue_name, v.address as venue_address, v.city as venue_city,
+              o.name as org_name, o.email as org_email, o.phone as org_phone
+       FROM events e
+       LEFT JOIN event_categories ec ON e.category_id = ec.id
+       LEFT JOIN venues v ON e.venue_id = v.id
+       LEFT JOIN organizers o ON e.organizer_id = o.id
+       WHERE e.slug = $1 LIMIT 1`,
+      [slug]
     );
-    hasActiveMembership = Boolean(rows[0]);
+    event = eventRes.rows[0];
+    if (!event) notFound();
+
+    const ticketsRes = await pool.query(
+      'SELECT * FROM ticket_types WHERE event_id = $1 ORDER BY price_sek', [event.id]
+    );
+    tickets = ticketsRes.rows;
+
+    const session = await getSession();
+    if (session?.userId) {
+      const { rows } = await pool.query(
+        `SELECT 1 FROM memberships WHERE user_id = $1 AND status = 'active' AND current_period_end >= now() LIMIT 1`,
+        [session.userId]
+      );
+      hasActiveMembership = Boolean(rows[0]);
+    }
+  } catch {
+    notFound();
   }
 
   const memberEligibleFree = Boolean(event.member_included) && hasActiveMembership;
@@ -102,16 +114,16 @@ export default async function EventDetailPage({ params: { locale, slug } }: { pa
 
         {catName && <span className="inline-block text-xs font-semibold uppercase tracking-wide text-[#f5ca00] bg-[#FFF9EE] px-3 py-1 rounded-full mb-3">{catName}</span>}
 
-        <h1 className="text-3xl md:text-4xl font-bold text-[#58595b] mb-4">{title}</h1>
+        <h1 className="text-3xl md:text-4xl font-bold text-[#58595b] dark:text-[#E8E4DE] mb-4">{title}</h1>
 
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div className="md:col-span-2">
-            {desc && <div className="prose prose-gray max-w-none text-gray-700 leading-relaxed whitespace-pre-line">{stripHtml(desc)}</div>}
+            {desc && <div className="prose prose-gray dark:prose-invert max-w-none text-gray-700 dark:text-[#C0BAB0] leading-relaxed whitespace-pre-line">{stripHtml(desc)}</div>}
           </div>
 
           <div className="space-y-4">
-            <div className="bg-white rounded-xl border p-5">
-              <h3 className="font-semibold text-gray-900 mb-3">{sv ? 'Detaljer' : 'Details'}</h3>
+            <div className="bg-white dark:bg-[#2A2A2A] rounded-xl border dark:border-[#3D3D3D] p-5">
+              <h3 className="font-semibold text-gray-900 dark:text-[#E8E4DE] mb-3">{sv ? 'Detaljer' : 'Details'}</h3>
               <div className="space-y-3 text-sm">
                 <div><p className="text-gray-400 text-xs uppercase">{sv ? 'Datum' : 'Date'}</p><p className="font-medium">{startDate.toLocaleDateString('sv-SE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p></div>
                 <div>
@@ -130,8 +142,8 @@ export default async function EventDetailPage({ params: { locale, slug } }: { pa
             </div>
 
             {tickets.length > 0 && (
-              <div className="bg-white rounded-xl border p-5">
-                <h3 className="font-semibold text-gray-900 mb-3">{sv ? 'Biljetter & bokning' : 'Tickets & booking'}</h3>
+              <div className="bg-white dark:bg-[#2A2A2A] rounded-xl border dark:border-[#3D3D3D] p-5">
+                <h3 className="font-semibold text-gray-900 dark:text-[#E8E4DE] mb-3">{sv ? 'Biljetter & bokning' : 'Tickets & booking'}</h3>
                 <div className="space-y-3">
                   {tickets.map((t: any) => {
                     const full = Number(t.price_sek || 0);
