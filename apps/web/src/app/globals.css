@@ -82,6 +82,20 @@ html, body {
     border-color: var(--gold);
     color: var(--gold-dark);
   }
+  html.dark .btn-outline {
+    border-color: #8A8A8A;
+    color: #E8E4DE;
+    background: transparent;
+  }
+  html.dark .btn-outline:hover {
+    border-color: var(--gold);
+    color: var(--gold-light);
+  }
+  html.dark .btn-charcoal {
+    background: #2A2A2A;
+    color: var(--gold-light);
+    border: 1px solid #3D3D3D;
+  }
   .gold-bar {
     width: 48px; height: 3px; background: var(--gold); border-radius: 2px;
   }
@@ -100,7 +114,7 @@ html.dark body {
   color: #E8E4DE;
 }
 
-html.dark :root {
+html.dark {
   --cream: #1A1A1A;
   --surface: #2A2A2A;
   --background: #1A1A1A;

@@ -108,15 +108,15 @@ export default async function BliMedlemPage({
         <div className="grid grid-cols-3 gap-4 mb-16 max-w-lg mx-auto text-center">
           <div>
             <p className="text-3xl font-bold text-[#f5ca00]">56</p>
-            <p className="text-sm text-gray-500">{isSv ? 'Aktiva medlemmar' : 'Active members'}</p>
+            <p className="text-sm text-gray-500 dark:text-[#A0A0A0]">{isSv ? 'Aktiva medlemmar' : 'Active members'}</p>
           </div>
           <div>
             <p className="text-3xl font-bold text-[#f5ca00]">215</p>
-            <p className="text-sm text-gray-500">{isSv ? 'Evenemang totalt' : 'Events total'}</p>
+            <p className="text-sm text-gray-500 dark:text-[#A0A0A0]">{isSv ? 'Evenemang totalt' : 'Events total'}</p>
           </div>
           <div>
             <p className="text-3xl font-bold text-[#f5ca00]">2004</p>
-            <p className="text-sm text-gray-500">{isSv ? 'Grundat' : 'Founded'}</p>
+            <p className="text-sm text-gray-500 dark:text-[#A0A0A0]">{isSv ? 'Grundat' : 'Founded'}</p>
           </div>
         </div>
 
@@ -127,8 +127,8 @@ export default async function BliMedlemPage({
               key={tier.id}
               className={`rounded-2xl border-2 p-6 flex flex-col transition-shadow hover:shadow-md ${
                 tier.highlight
-                  ? 'border-[#f5ca00] bg-[#FFF9EE] shadow-lg relative'
-                  : 'border-gray-200 bg-white'
+                  ? 'border-[#f5ca00] bg-[#FFF9EE] dark:bg-[#3A311A] shadow-lg relative'
+                  : 'border-gray-200 dark:border-[#3D3D3D] bg-white dark:bg-[#2A2A2A]'
               }`}
             >
               {tier.highlight && (
@@ -137,23 +137,23 @@ export default async function BliMedlemPage({
                 </div>
               )}
 
-              <h2 className="font-bold text-[#58595b] text-lg mb-2">{tier.name}</h2>
-              <p className="text-sm text-gray-500 mb-4">{tier.description}</p>
+              <h2 className="font-bold text-[#58595b] dark:text-[#E8E4DE] text-lg mb-2">{tier.name}</h2>
+              <p className="text-sm text-gray-500 dark:text-[#A0A0A0] mb-4">{tier.description}</p>
 
               <div className="mb-6">
                 {tier.priceSek === 0 ? (
-                  <p className="text-3xl font-bold text-[#58595b]">{isSv ? 'Gratis' : 'Free'}</p>
+                  <p className="text-3xl font-bold text-[#58595b] dark:text-[#E8E4DE]">{isSv ? 'Gratis' : 'Free'}</p>
                 ) : (
                   <>
-                    <span className="text-3xl font-bold text-[#58595b]">{tier.priceSek.toLocaleString('sv-SE')}</span>
-                    <span className="text-gray-400 ml-1 text-sm">kr/{tier.period}</span>
+                    <span className="text-3xl font-bold text-[#58595b] dark:text-[#E8E4DE]">{tier.priceSek.toLocaleString('sv-SE')}</span>
+                    <span className="text-gray-400 dark:text-[#A0A0A0] ml-1 text-sm">kr/{tier.period}</span>
                   </>
                 )}
               </div>
 
               <ul className="space-y-2 mb-6 flex-1">
                 {tier.features.map((f, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-[#C0BAB0]">
                     <span className="text-[#f5ca00] mt-0.5">•</span>
                     {f}
                   </li>
@@ -169,7 +169,7 @@ export default async function BliMedlemPage({
                 className={`block text-center font-semibold py-3 rounded-xl transition-colors ${
                   tier.highlight
                     ? 'bg-[#f5ca00] text-white hover:bg-[#d4af00]'
-                    : 'bg-[#58595b] text-white hover:bg-[#6b6c6e]'
+                    : 'bg-[#58595b] dark:bg-[#333333] text-white hover:bg-[#6b6c6e]'
                 }`}
               >
                 {tier.priceSek === 0
@@ -182,7 +182,7 @@ export default async function BliMedlemPage({
 
         {/* FAQ */}
         <div className="mt-20 max-w-2xl mx-auto">
-          <h2 className="text-2xl font-bold text-[#58595b] mb-8 text-center">
+          <h2 className="text-2xl font-bold text-[#58595b] dark:text-[#E8E4DE] mb-8 text-center">
             {isSv ? 'Vanliga frågor' : 'FAQ'}
           </h2>
           <div className="space-y-4">
@@ -200,9 +200,9 @@ export default async function BliMedlemPage({
                 a: isSv ? 'Ja, Yeshin Norbu är ett FPMT-center (Foundation for the Preservation of the Mahayana Tradition).' : 'Yes, Yeshin Norbu is an FPMT center (Foundation for the Preservation of the Mahayana Tradition).',
               },
             ].map((item, i) => (
-              <div key={i} className="bg-white rounded-xl p-5 border border-gray-100">
-                <h3 className="font-semibold text-[#58595b] mb-2">{item.q}</h3>
-                <p className="text-gray-500 text-sm">{item.a}</p>
+              <div key={i} className="bg-white dark:bg-[#2A2A2A] rounded-xl p-5 border border-gray-100 dark:border-[#3D3D3D]">
+                <h3 className="font-semibold text-[#58595b] dark:text-[#E8E4DE] mb-2">{item.q}</h3>
+                <p className="text-gray-500 dark:text-[#A0A0A0] text-sm">{item.a}</p>
               </div>
             ))}
           </div>
