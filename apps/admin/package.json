@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "payload dev",
-    "build": "payload build",
+    "build": "payload generate:types",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

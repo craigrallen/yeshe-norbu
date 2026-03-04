@@ -1,13 +1,11 @@
 import { buildConfig } from 'payload';
 import { postgresAdapter } from '@payloadcms/db-postgres';
-import { lexicalEditor } from '@payloadcms/richtext-lexical';
 
 /** Payload CMS v3 configuration for Yeshin Norbu admin. */
 export default buildConfig({
   admin: {
     user: 'admins',
   },
-  editor: lexicalEditor({}),
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URL! },
   }),
@@ -25,8 +23,8 @@ export default buildConfig({
         { name: 'titleSv', type: 'text', required: true, label: 'Titel (svenska)' },
         { name: 'titleEn', type: 'text', required: true, label: 'Title (English)' },
         { name: 'slug', type: 'text', required: true, unique: true },
-        { name: 'contentSv', type: 'richText', label: 'Innehåll (svenska)' },
-        { name: 'contentEn', type: 'richText', label: 'Content (English)' },
+        { name: 'contentSv', type: 'textarea', label: 'Innehåll (svenska)' },
+        { name: 'contentEn', type: 'textarea', label: 'Content (English)' },
         { name: 'metaDescriptionSv', type: 'textarea', label: 'Meta (svenska)' },
         { name: 'metaDescriptionEn', type: 'textarea', label: 'Meta (English)' },
         { name: 'published', type: 'checkbox', defaultValue: false },
@@ -38,8 +36,8 @@ export default buildConfig({
         { name: 'titleSv', type: 'text', required: true },
         { name: 'titleEn', type: 'text', required: true },
         { name: 'slug', type: 'text', required: true, unique: true },
-        { name: 'contentSv', type: 'richText' },
-        { name: 'contentEn', type: 'richText' },
+        { name: 'contentSv', type: 'textarea' },
+        { name: 'contentEn', type: 'textarea' },
         { name: 'featuredImage', type: 'upload', relationTo: 'media' },
         { name: 'published', type: 'checkbox', defaultValue: false },
         { name: 'publishedAt', type: 'date' },
@@ -51,8 +49,8 @@ export default buildConfig({
         { name: 'titleSv', type: 'text', required: true },
         { name: 'titleEn', type: 'text', required: true },
         { name: 'slug', type: 'text', required: true, unique: true },
-        { name: 'descriptionSv', type: 'richText' },
-        { name: 'descriptionEn', type: 'richText' },
+        { name: 'descriptionSv', type: 'textarea' },
+        { name: 'descriptionEn', type: 'textarea' },
         { name: 'category', type: 'text' },
         { name: 'startsAt', type: 'date', required: true },
         { name: 'endsAt', type: 'date' },
@@ -78,8 +76,8 @@ export default buildConfig({
       fields: [
         { name: 'nameSv', type: 'text', required: true },
         { name: 'nameEn', type: 'text', required: true },
-        { name: 'bioSv', type: 'richText' },
-        { name: 'bioEn', type: 'richText' },
+        { name: 'bioSv', type: 'textarea' },
+        { name: 'bioEn', type: 'textarea' },
         { name: 'photo', type: 'upload', relationTo: 'media' },
       ],
     },
