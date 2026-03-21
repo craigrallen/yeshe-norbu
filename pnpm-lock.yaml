@@ -37,13 +37,13 @@ importers:
         version: 3.77.0(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(postgres@3.4.8)
       '@payloadcms/richtext-lexical':
         specifier: ^3.0.0
-        version: 3.77.0(@faceless-ui/modal@3.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@faceless-ui/scroll-info@2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@payloadcms/next@3.77.0(@types/react@18.3.28)(graphql@16.13.0)(monaco-editor@0.55.1)(next@15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3))(@types/react@18.3.28)(monaco-editor@0.55.1)(next@15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(yjs@13.6.29)
+        version: 3.77.0(@faceless-ui/modal@3.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@faceless-ui/scroll-info@2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@payloadcms/next@3.77.0(@types/react@18.3.28)(graphql@16.13.0)(monaco-editor@0.55.1)(next@15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3))(@types/react@18.3.28)(monaco-editor@0.55.1)(next@15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(yjs@13.6.29)
       '@yeshe/db':
         specifier: workspace:*
         version: link:../../packages/db
       next:
-        specifier: ^15.5.10
-        version: 15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4)
+        specifier: ^15.5.14
+        version: 15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4)
       payload:
         specifier: ^3.0.0
         version: 3.77.0(graphql@16.13.0)(typescript@5.9.3)
@@ -79,8 +79,8 @@ importers:
         specifier: ^0.30.0
         version: 0.30.10(@types/pg@8.16.0)(@types/react@18.3.28)(pg@8.19.0)(postgres@3.4.8)(react@18.3.1)
       next:
-        specifier: ^15.5.10
-        version: 15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4)
+        specifier: ^15.5.14
+        version: 15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4)
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -152,11 +152,11 @@ importers:
         specifier: ^9.0.3
         version: 9.0.3
       next:
-        specifier: ^15.5.10
-        version: 15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4)
+        specifier: ^15.5.14
+        version: 15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4)
       next-intl:
         specifier: ^3.11.0
-        version: 3.26.5(next@15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(react@18.3.1)
+        version: 3.26.5(next@15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(react@18.3.1)
       nodemailer:
         specifier: ^8.0.1
         version: 8.0.1
@@ -222,8 +222,8 @@ importers:
         specifier: ^5.2.0
         version: 5.10.0
       next:
-        specifier: ^15.5.10
-        version: 15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4)
+        specifier: ^15.5.14
+        version: 15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4)
       otplib:
         specifier: ^12.0.1
         version: 12.0.1
@@ -377,6 +377,11 @@ packages:
 
   '@babel/parser@7.29.0':
     resolution: {integrity: sha512-IyDgFV5GeDUVX4YdF/3CPULtVGSXXMLh1xVIgdCgxApktqnQV0r7/8Nqthg+8YLGaAtdyIlo2qIdZrbCv4+7ww==}
+    engines: {node: '>=6.0.0'}
+    hasBin: true
+
+  '@babel/parser@7.29.2':
+    resolution: {integrity: sha512-4GgRzy/+fsBa72/RZVJmGKPmZu9Byn8o4MoLpmNe1m8ZfYnz5emHLQz3U4gLud6Zwl0RZIcgiLD7Uq7ySFuDLA==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -1521,56 +1526,56 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  '@next/env@15.5.10':
-    resolution: {integrity: sha512-plg+9A/KoZcTS26fe15LHg+QxReTazrIOoKKUC3Uz4leGGeNPgLHdevVraAAOX0snnUs3WkRx3eUQpj9mreG6A==}
-
   '@next/env@15.5.12':
     resolution: {integrity: sha512-pUvdJN1on574wQHjaBfNGDt9Mz5utDSZFsIIQkMzPgNS8ZvT4H2mwOrOIClwsQOb6EGx5M76/CZr6G8i6pSpLg==}
 
-  '@next/swc-darwin-arm64@15.5.7':
-    resolution: {integrity: sha512-IZwtxCEpI91HVU/rAUOOobWSZv4P2DeTtNaCdHqLcTJU4wdNXgAySvKa/qJCgR5m6KI8UsKDXtO2B31jcaw1Yw==}
+  '@next/env@15.5.14':
+    resolution: {integrity: sha512-aXeirLYuASxEgi4X4WhfXsShCFxWDfNn/8ZeC5YXAS2BB4A8FJi1kwwGL6nvMVboE7fZCzmJPNdMvVHc8JpaiA==}
+
+  '@next/swc-darwin-arm64@15.5.14':
+    resolution: {integrity: sha512-Y9K6SPzobnZvrRDPO2s0grgzC+Egf0CqfbdvYmQVaztV890zicw8Z8+4Vqw8oPck8r1TjUHxVh8299Cg4TrxXg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
 
-  '@next/swc-darwin-x64@15.5.7':
-    resolution: {integrity: sha512-UP6CaDBcqaCBuiq/gfCEJw7sPEoX1aIjZHnBWN9v9qYHQdMKvCKcAVs4OX1vIjeE+tC5EIuwDTVIoXpUes29lg==}
+  '@next/swc-darwin-x64@15.5.14':
+    resolution: {integrity: sha512-aNnkSMjSFRTOmkd7qoNI2/rETQm/vKD6c/Ac9BZGa9CtoOzy3c2njgz7LvebQJ8iPxdeTuGnAjagyis8a9ifBw==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
 
-  '@next/swc-linux-arm64-gnu@15.5.7':
-    resolution: {integrity: sha512-NCslw3GrNIw7OgmRBxHtdWFQYhexoUCq+0oS2ccjyYLtcn1SzGzeM54jpTFonIMUjNbHmpKpziXnpxhSWLcmBA==}
+  '@next/swc-linux-arm64-gnu@15.5.14':
+    resolution: {integrity: sha512-tjlpia+yStPRS//6sdmlVwuO1Rioern4u2onafa5n+h2hCS9MAvMXqpVbSrjgiEOoCs0nJy7oPOmWgtRRNSM5Q==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
 
-  '@next/swc-linux-arm64-musl@15.5.7':
-    resolution: {integrity: sha512-nfymt+SE5cvtTrG9u1wdoxBr9bVB7mtKTcj0ltRn6gkP/2Nu1zM5ei8rwP9qKQP0Y//umK+TtkKgNtfboBxRrw==}
+  '@next/swc-linux-arm64-musl@15.5.14':
+    resolution: {integrity: sha512-8B8cngBaLadl5lbDRdxGCP1Lef8ipD6KlxS3v0ElDAGil6lafrAM3B258p1KJOglInCVFUjk751IXMr2ixeQOQ==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
 
-  '@next/swc-linux-x64-gnu@15.5.7':
-    resolution: {integrity: sha512-hvXcZvCaaEbCZcVzcY7E1uXN9xWZfFvkNHwbe/n4OkRhFWrs1J1QV+4U1BN06tXLdaS4DazEGXwgqnu/VMcmqw==}
+  '@next/swc-linux-x64-gnu@15.5.14':
+    resolution: {integrity: sha512-bAS6tIAg8u4Gn3Nz7fCPpSoKAexEt2d5vn1mzokcqdqyov6ZJ6gu6GdF9l8ORFrBuRHgv3go/RfzYz5BkZ6YSQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
 
-  '@next/swc-linux-x64-musl@15.5.7':
-    resolution: {integrity: sha512-4IUO539b8FmF0odY6/SqANJdgwn1xs1GkPO5doZugwZ3ETF6JUdckk7RGmsfSf7ws8Qb2YB5It33mvNL/0acqA==}
+  '@next/swc-linux-x64-musl@15.5.14':
+    resolution: {integrity: sha512-mMxv/FcrT7Gfaq4tsR22l17oKWXZmH/lVqcvjX0kfp5I0lKodHYLICKPoX1KRnnE+ci6oIUdriUhuA3rBCDiSw==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
 
-  '@next/swc-win32-arm64-msvc@15.5.7':
-    resolution: {integrity: sha512-CpJVTkYI3ZajQkC5vajM7/ApKJUOlm6uP4BknM3XKvJ7VXAvCqSjSLmM0LKdYzn6nBJVSjdclx8nYJSa3xlTgQ==}
+  '@next/swc-win32-arm64-msvc@15.5.14':
+    resolution: {integrity: sha512-OTmiBlYThppnvnsqx0rBqjDRemlmIeZ8/o4zI7veaXoeO1PVHoyj2lfTfXTiiGjCyRDhA10y4h6ZvZvBiynr2g==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
 
-  '@next/swc-win32-x64-msvc@15.5.7':
-    resolution: {integrity: sha512-gMzgBX164I6DN+9/PGA+9dQiwmTkE4TloBNx8Kv9UiGARsr9Nba7IpcBRA1iTV9vwlYnrE3Uy6I7Aj6qLjQuqw==}
+  '@next/swc-win32-x64-msvc@15.5.14':
+    resolution: {integrity: sha512-+W7eFf3RS7m4G6tppVTOSyP9Y6FsJXfOuKzav1qKniiFm3KFByQfPEcouHdjlZmysl4zJGuGLQ/M9XyVeyeNEg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
@@ -2258,6 +2263,9 @@ packages:
     resolution: {integrity: sha512-HVyk8nj2m+jcFRNazzqyVKiZezyhDKrGUA3jlEcg/nZ6Ms+qHwocba1Y/AaVaznJTAM9xpdFSh+ptbNrhOGvZA==}
     deprecated: This is a stub types definition. uuid provides its own type definitions, so you do not need this installed.
 
+  '@types/ws@8.18.1':
+    resolution: {integrity: sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==}
+
   '@typescript-eslint/eslint-plugin@7.18.0':
     resolution: {integrity: sha512-94EQTWZ40mzBc42ATNIBimBEDltSJ9RQHCC8vc/PDbxi4k8dVwUAv4o98dk50M1zB+JGFxp43FP7f8+FP8R6Sw==}
     engines: {node: ^18.18.0 || >=20.0.0}
@@ -2498,6 +2506,9 @@ packages:
 
   caniuse-lite@1.0.30001774:
     resolution: {integrity: sha512-DDdwPGz99nmIEv216hKSgLD+D4ikHQHjBC/seF98N9CPqRX4M5mSxT9eTV6oyisnJcuzxtZy4n17yKKQYmYQOA==}
+
+  caniuse-lite@1.0.30001780:
+    resolution: {integrity: sha512-llngX0E7nQci5BPJDqoZSbuZ5Bcs9F5db7EtgfwBerX9XGtkkiO4NwfDDIRzHTTwcYC8vC7bmeUEPGrKlR/TkQ==}
 
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
@@ -2990,8 +3001,8 @@ packages:
     resolution: {integrity: sha512-HqD3yTBfnBxIrbnM1DoD6Pcq8NECnh8d4As1Qgh0z5Gg3jRRIqijury0CL3ghu/edArpUYiYqQiDUQBIs4np3Q==}
     engines: {node: '>=10.0.0'}
 
-  engine.io@6.6.5:
-    resolution: {integrity: sha512-2RZdgEbXmp5+dVbRm0P7HQUImZpICccJy7rN7Tv+SFa55pH+lxnuw6/K1ZxxBfHoYpSkHLAO92oa8O4SwFXA2A==}
+  engine.io@6.6.6:
+    resolution: {integrity: sha512-U2SN0w3OpjFRVlrc17E6TMDmH58Xl9rai1MblNjAdwWp07Kk+llmzX0hjDpQdrDGzwmvOtgM5yI+meYX6iZ2xA==}
     engines: {node: '>=10.2.0'}
 
   entities@4.5.0:
@@ -3349,8 +3360,8 @@ packages:
     engines: {node: '>=16.x'}
     hasBin: true
 
-  immutable@4.3.7:
-    resolution: {integrity: sha512-1hqclzwYwjRDFLjcFxOM5AYkkG0rpFPpr1RLPMEuGczoS7YA8gLhy8SWXYRAA/XwfEHpfo3cw5JGioS32fnMRw==}
+  immutable@4.3.8:
+    resolution: {integrity: sha512-d/Ld9aLbKpNwyl0KiM2CT1WYvkitQ1TSvmRtkcV8FKStiDoA7Slzgjmb/1G2yhKM1p0XeNOieaTbFZmU1d3Xuw==}
 
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
@@ -3871,8 +3882,8 @@ packages:
   next-tick@1.1.0:
     resolution: {integrity: sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==}
 
-  next@15.5.10:
-    resolution: {integrity: sha512-r0X65PNwyDDyOrWNKpQoZvOatw7BcsTPRKdwEqtc9cj3wv7mbBIk9tKed4klRaFXJdX0rugpuMTHslDrAU1bBg==}
+  next@15.5.14:
+    resolution: {integrity: sha512-M6S+4JyRjmKic2Ssm7jHUPkE6YUJ6lv4507jprsSZLulubz0ihO2E+S4zmQK3JZ2ov81JrugukKU4Tz0ivgqqQ==}
     engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
     hasBin: true
     peerDependencies:
@@ -4534,8 +4545,8 @@ packages:
   socket.io-adapter@2.5.6:
     resolution: {integrity: sha512-DkkO/dz7MGln0dHn5bmN3pPy+JmywNICWrJqVWiVOyvXjWQFIv9c2h24JrQLLFJ2aQVQf/Cvl1vblnd4r2apLQ==}
 
-  socket.io-parser@4.2.5:
-    resolution: {integrity: sha512-bPMmpy/5WWKHea5Y/jYAP6k74A+hvmRCQaJuJB6I/ML5JZq/KfNieUVo/3Mh7SAqn7TyFdIo6wqYHInG1MU1bQ==}
+  socket.io-parser@4.2.6:
+    resolution: {integrity: sha512-asJqbVBDsBCJx0pTqw3WfesSY0iRX+2xzWEWzrpcH7L6fLzrhyF8WPI8UaeM4YCuDfpwA/cgsdugMsmtz8EJeg==}
     engines: {node: '>=10.0.0'}
 
   socket.io@4.8.3:
@@ -4695,8 +4706,8 @@ packages:
     resolution: {integrity: sha512-wFH7+SEAcKfJpfLPkrgMPvvwnEtj8W4IurvEyrKsDleXnKLCDw71w8jltvfLa8Rm4qQxxT4jmDBYbJG/z7qoww==}
     engines: {node: '>=0.12'}
 
-  tinyexec@1.0.2:
-    resolution: {integrity: sha512-W/KYk+NFhkmsYpuHq5JykngiOCnxeVL8v8dFnqxSD8qEEdRfXk1SDM6JzNqcERbcGYj9tMrDQBYV9cjgnunFIg==}
+  tinyexec@1.0.4:
+    resolution: {integrity: sha512-u9r3uZC0bdpGOXtlxUIdwf9pkmvhqJdrVCH9fapQtgy/OeTTMZ1nqH7agtvEfmGui6e1XxjcdrlxvxJvc3sMqw==}
     engines: {node: '>=18'}
 
   tinyglobby@0.2.15:
@@ -4794,8 +4805,8 @@ packages:
     resolution: {integrity: sha512-Ne+eE4r0/iWnpAxD852z3A+N0Bt5RN//NjJwRd2VFHEmrywxf5vsZlh4R6lixl6B+wz/8d+maTSAkN1FIkI3LQ==}
     engines: {node: '>=10'}
 
-  type-fest@5.4.4:
-    resolution: {integrity: sha512-JnTrzGu+zPV3aXIUhnyWJj4z/wigMsdYajGLIYakqyOW1nPllzXEJee0QQbHj+CTIQtXGlAjuK0UY+2xTyjVAw==}
+  type-fest@5.5.0:
+    resolution: {integrity: sha512-PlBfpQwiUvGViBNX84Yxwjsdhd1TUlXr6zjX7eoirtCPIr08NAmxwa+fcYBTeRQxHo9YC9wwF3m9i700sHma8g==}
     engines: {node: '>=20'}
 
   type@2.7.3:
@@ -5055,6 +5066,10 @@ snapshots:
   '@babel/helper-validator-identifier@7.28.5': {}
 
   '@babel/parser@7.29.0':
+    dependencies:
+      '@babel/types': 7.29.0
+
+  '@babel/parser@7.29.2':
     dependencies:
       '@babel/types': 7.29.0
 
@@ -5967,32 +5982,32 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@next/env@15.5.10': {}
-
   '@next/env@15.5.12': {}
 
-  '@next/swc-darwin-arm64@15.5.7':
+  '@next/env@15.5.14': {}
+
+  '@next/swc-darwin-arm64@15.5.14':
     optional: true
 
-  '@next/swc-darwin-x64@15.5.7':
+  '@next/swc-darwin-x64@15.5.14':
     optional: true
 
-  '@next/swc-linux-arm64-gnu@15.5.7':
+  '@next/swc-linux-arm64-gnu@15.5.14':
     optional: true
 
-  '@next/swc-linux-arm64-musl@15.5.7':
+  '@next/swc-linux-arm64-musl@15.5.14':
     optional: true
 
-  '@next/swc-linux-x64-gnu@15.5.7':
+  '@next/swc-linux-x64-gnu@15.5.14':
     optional: true
 
-  '@next/swc-linux-x64-musl@15.5.7':
+  '@next/swc-linux-x64-musl@15.5.14':
     optional: true
 
-  '@next/swc-win32-arm64-msvc@15.5.7':
+  '@next/swc-win32-arm64-msvc@15.5.14':
     optional: true
 
-  '@next/swc-win32-x64-msvc@15.5.7':
+  '@next/swc-win32-x64-msvc@15.5.14':
     optional: true
 
   '@nodelib/fs.scandir@2.1.5':
@@ -6126,14 +6141,14 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@payloadcms/next@3.77.0(@types/react@18.3.28)(graphql@16.13.0)(monaco-editor@0.55.1)(next@15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)':
+  '@payloadcms/next@3.77.0(@types/react@18.3.28)(graphql@16.13.0)(monaco-editor@0.55.1)(next@15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)':
     dependencies:
       '@dnd-kit/core': 6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@dnd-kit/modifiers': 9.0.0(@dnd-kit/core@6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@dnd-kit/sortable': 10.0.0(@dnd-kit/core@6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@payloadcms/graphql': 3.77.0(graphql@16.13.0)(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(typescript@5.9.3)
       '@payloadcms/translations': 3.77.0
-      '@payloadcms/ui': 3.77.0(@types/react@18.3.28)(monaco-editor@0.55.1)(next@15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
+      '@payloadcms/ui': 3.77.0(@types/react@18.3.28)(monaco-editor@0.55.1)(next@15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
       busboy: 1.6.0
       dequal: 2.0.3
       file-type: 19.3.0
@@ -6141,7 +6156,7 @@ snapshots:
       graphql-http: 1.22.4(graphql@16.13.0)
       graphql-playground-html: 1.6.30
       http-status: 2.1.0
-      next: 15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4)
+      next: 15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4)
       path-to-regexp: 6.3.0
       payload: 3.77.0(graphql@16.13.0)(typescript@5.9.3)
       qs-esm: 7.0.2
@@ -6155,7 +6170,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@payloadcms/richtext-lexical@3.77.0(@faceless-ui/modal@3.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@faceless-ui/scroll-info@2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@payloadcms/next@3.77.0(@types/react@18.3.28)(graphql@16.13.0)(monaco-editor@0.55.1)(next@15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3))(@types/react@18.3.28)(monaco-editor@0.55.1)(next@15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(yjs@13.6.29)':
+  '@payloadcms/richtext-lexical@3.77.0(@faceless-ui/modal@3.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@faceless-ui/scroll-info@2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@payloadcms/next@3.77.0(@types/react@18.3.28)(graphql@16.13.0)(monaco-editor@0.55.1)(next@15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3))(@types/react@18.3.28)(monaco-editor@0.55.1)(next@15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(yjs@13.6.29)':
     dependencies:
       '@faceless-ui/modal': 3.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@faceless-ui/scroll-info': 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -6170,9 +6185,9 @@ snapshots:
       '@lexical/selection': 0.35.0
       '@lexical/table': 0.35.0
       '@lexical/utils': 0.35.0
-      '@payloadcms/next': 3.77.0(@types/react@18.3.28)(graphql@16.13.0)(monaco-editor@0.55.1)(next@15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
+      '@payloadcms/next': 3.77.0(@types/react@18.3.28)(graphql@16.13.0)(monaco-editor@0.55.1)(next@15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
       '@payloadcms/translations': 3.77.0
-      '@payloadcms/ui': 3.77.0(@types/react@18.3.28)(monaco-editor@0.55.1)(next@15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
+      '@payloadcms/ui': 3.77.0(@types/react@18.3.28)(monaco-editor@0.55.1)(next@15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
       '@types/uuid': 10.0.0
       acorn: 8.12.1
       bson-objectid: 2.0.4
@@ -6203,7 +6218,7 @@ snapshots:
     dependencies:
       date-fns: 4.1.0
 
-  '@payloadcms/ui@3.77.0(@types/react@18.3.28)(monaco-editor@0.55.1)(next@15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)':
+  '@payloadcms/ui@3.77.0(@types/react@18.3.28)(monaco-editor@0.55.1)(next@15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(payload@3.77.0(graphql@16.13.0)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)':
     dependencies:
       '@date-fns/tz': 1.2.0
       '@dnd-kit/core': 6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -6218,7 +6233,7 @@ snapshots:
       date-fns: 4.1.0
       dequal: 2.0.3
       md5: 2.3.0
-      next: 15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4)
+      next: 15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4)
       object-to-formdata: 4.5.1
       payload: 3.77.0(graphql@16.13.0)(typescript@5.9.3)
       qs-esm: 7.0.2
@@ -6840,6 +6855,10 @@ snapshots:
     dependencies:
       uuid: 13.0.0
 
+  '@types/ws@8.18.1':
+    dependencies:
+      '@types/node': 20.19.35
+
   '@typescript-eslint/eslint-plugin@7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)':
     dependencies:
       '@eslint-community/regexpp': 4.12.2
@@ -7046,7 +7065,7 @@ snapshots:
   browserslist@4.28.1:
     dependencies:
       baseline-browser-mapping: 2.10.0
-      caniuse-lite: 1.0.30001774
+      caniuse-lite: 1.0.30001780
       electron-to-chromium: 1.5.302
       node-releases: 2.0.27
       update-browserslist-db: 1.2.3(browserslist@4.28.1)
@@ -7083,6 +7102,8 @@ snapshots:
   camelcase@5.3.1: {}
 
   caniuse-lite@1.0.30001774: {}
+
+  caniuse-lite@1.0.30001780: {}
 
   ccount@2.0.1: {}
 
@@ -7341,7 +7362,7 @@ snapshots:
 
   dot-prop@10.1.0:
     dependencies:
-      type-fest: 5.4.4
+      type-fest: 5.5.0
 
   dreamopt@0.8.0:
     dependencies:
@@ -7417,10 +7438,11 @@ snapshots:
 
   engine.io-parser@5.2.3: {}
 
-  engine.io@6.6.5:
+  engine.io@6.6.6:
     dependencies:
       '@types/cors': 2.8.19
       '@types/node': 20.19.35
+      '@types/ws': 8.18.1
       accepts: 1.3.8
       base64id: 2.0.0
       cookie: 0.7.2
@@ -7938,7 +7960,7 @@ snapshots:
 
   image-size@2.0.2: {}
 
-  immutable@4.3.7: {}
+  immutable@4.3.8: {}
 
   import-fresh@3.3.1:
     dependencies:
@@ -8543,34 +8565,34 @@ snapshots:
 
   negotiator@1.0.0: {}
 
-  next-intl@3.26.5(next@15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(react@18.3.1):
+  next-intl@3.26.5(next@15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4))(react@18.3.1):
     dependencies:
       '@formatjs/intl-localematcher': 0.5.10
       negotiator: 1.0.0
-      next: 15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4)
+      next: 15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4)
       react: 18.3.1
       use-intl: 3.26.5(react@18.3.1)
 
   next-tick@1.1.0: {}
 
-  next@15.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4):
+  next@15.5.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.4):
     dependencies:
-      '@next/env': 15.5.10
+      '@next/env': 15.5.14
       '@swc/helpers': 0.5.15
-      caniuse-lite: 1.0.30001774
+      caniuse-lite: 1.0.30001780
       postcss: 8.4.31
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       styled-jsx: 5.1.6(react@18.3.1)
     optionalDependencies:
-      '@next/swc-darwin-arm64': 15.5.7
-      '@next/swc-darwin-x64': 15.5.7
-      '@next/swc-linux-arm64-gnu': 15.5.7
-      '@next/swc-linux-arm64-musl': 15.5.7
-      '@next/swc-linux-x64-gnu': 15.5.7
-      '@next/swc-linux-x64-musl': 15.5.7
-      '@next/swc-win32-arm64-msvc': 15.5.7
-      '@next/swc-win32-x64-msvc': 15.5.7
+      '@next/swc-darwin-arm64': 15.5.14
+      '@next/swc-darwin-x64': 15.5.14
+      '@next/swc-linux-arm64-gnu': 15.5.14
+      '@next/swc-linux-arm64-musl': 15.5.14
+      '@next/swc-linux-x64-gnu': 15.5.14
+      '@next/swc-linux-x64-musl': 15.5.14
+      '@next/swc-win32-arm64-msvc': 15.5.14
+      '@next/swc-win32-x64-msvc': 15.5.14
       sass: 1.77.4
       sharp: 0.34.5
     transitivePeerDependencies:
@@ -8593,7 +8615,7 @@ snapshots:
       consola: 3.4.2
       pathe: 2.0.3
       pkg-types: 2.3.0
-      tinyexec: 1.0.2
+      tinyexec: 1.0.4
 
   object-assign@4.1.1: {}
 
@@ -9010,7 +9032,7 @@ snapshots:
 
   react-email@5.2.8:
     dependencies:
-      '@babel/parser': 7.29.0
+      '@babel/parser': 7.29.2
       '@babel/traverse': 7.29.0
       chokidar: 4.0.3
       commander: 13.1.0
@@ -9178,7 +9200,7 @@ snapshots:
   sass@1.77.4:
     dependencies:
       chokidar: 3.6.0
-      immutable: 4.3.7
+      immutable: 4.3.8
       source-map-js: 1.2.1
 
   scheduler@0.23.2:
@@ -9322,7 +9344,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  socket.io-parser@4.2.5:
+  socket.io-parser@4.2.6:
     dependencies:
       '@socket.io/component-emitter': 3.1.2
       debug: 4.4.3
@@ -9335,9 +9357,9 @@ snapshots:
       base64id: 2.0.0
       cors: 2.8.6
       debug: 4.4.3
-      engine.io: 6.6.5
+      engine.io: 6.6.6
       socket.io-adapter: 2.5.6
-      socket.io-parser: 4.2.5
+      socket.io-parser: 4.2.6
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -9502,7 +9524,7 @@ snapshots:
       es5-ext: 0.10.64
       next-tick: 1.1.0
 
-  tinyexec@1.0.2: {}
+  tinyexec@1.0.4: {}
 
   tinyglobby@0.2.15:
     dependencies:
@@ -9591,7 +9613,7 @@ snapshots:
 
   type-fest@0.20.2: {}
 
-  type-fest@5.4.4:
+  type-fest@5.5.0:
     dependencies:
       tagged-tag: 1.0.0
 

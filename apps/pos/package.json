@@ -13,7 +13,7 @@
     "@yeshe/db": "workspace:*",
     "@yeshe/payments": "workspace:*",
     "@yeshe/ui": "workspace:*",
-    "next": "^15.5.10",
+    "next": "^15.5.14",
     "drizzle-orm": "^0.30.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
