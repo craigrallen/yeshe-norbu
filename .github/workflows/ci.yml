@@ -23,11 +23,13 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Lint (web app)
+      # Known lint debt: keep lint visible but non-blocking until backlog is addressed.
+      - name: Lint (web app, known debt - non-blocking)
         run: pnpm --filter @yeshe/web lint
         continue-on-error: true
 
-      - name: Typecheck (web app)
+      # Known typecheck debt: keep typecheck visible but non-blocking until the Next 15 async params and Drizzle type backlog is addressed.
+      - name: Typecheck (web app, known debt - non-blocking)
         run: pnpm --filter @yeshe/web typecheck
         continue-on-error: true
 
