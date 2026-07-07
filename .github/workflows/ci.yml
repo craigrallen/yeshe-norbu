@@ -33,5 +33,5 @@ jobs:
         run: pnpm --filter @yeshe/web typecheck
         continue-on-error: true
 
-      - name: Build check
-        run: echo "Build check skipped in CI — Railway handles full build on deploy"
+      - name: Build check (web app, strict)
+        run: pnpm --filter @yeshe/web build
