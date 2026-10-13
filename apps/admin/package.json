@@ -8,7 +8,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "payload": "^3.0.0",
+    "payload": "^3.90.0",
     "@payloadcms/db-postgres": "^3.0.0",
     "@payloadcms/richtext-lexical": "^3.0.0",
     "@yeshe/db": "workspace:*",
